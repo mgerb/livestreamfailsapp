@@ -13,7 +13,7 @@ import Player
 import XCDYouTubeKit
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    private let videos = ["z6A2LHGx8_A", "hKvbaZTAQN0", "mLq_P0K4jvA", "U1KiC0AXhHg", "62M8V-KQnJA"]
+    private let videos = ["z6A2LHGx8_A", "hKvbaZTAQN0", "mLq_P0K4jvA", "U1KiC0AXhHg", "62M8V-KQnJA", "xzonQoON9eo", "6tgAJtvRP70", "GlycSbfP_1M", "MVJtwRAc8ew", "0oK_BYXlHxM"]
     private var data: [PlayerView] = []
     private var myTableView: UITableView!
     private var currentPlayingIndex: Int?
@@ -21,7 +21,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
-        
+
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: Notification.Name.UIApplicationWillResignActive, object: nil)
+
         let barHeight: CGFloat = UIApplication.shared.statusBarFrame.size.height
         let displayWidth: CGFloat = self.view.frame.width
         let displayHeight: CGFloat = self.view.frame.height
@@ -33,10 +36,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.myTableView.delegate = self
         self.myTableView.estimatedRowHeight = 80
         self.myTableView.rowHeight = UITableViewAutomaticDimension
+        self.myTableView.separatorStyle = .none
         
         self.view.addSubview(self.myTableView)
         
         self.loadObjects()
+    }
+
+    // video gets paused when entering background so reset current playing
+    @objc func appMovedToBackground() {
+        self.currentPlayingIndex = nil
     }
     
     func loadObjects() {
@@ -46,15 +55,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 let player = Player()
                 player.url = info?.streamURLs[22]
                 let playerView = PlayerView()
-                playerView.initView(player)
-                self.data.append(playerView)
-                self.myTableView.reloadData()
+                playerView.player = player
+                playerView.isReady = { () in
+                    self.data.append(playerView)
+                    self.myTableView.reloadData()
+                    // stop listening after set
+                    playerView.isReady = nil
+                }
             }
         }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200
+        return data[indexPath.row].getHeight(self.view.frame.width) + 20
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
