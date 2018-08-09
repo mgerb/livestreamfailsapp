@@ -37,6 +37,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.myTableView.estimatedRowHeight = 80
         self.myTableView.rowHeight = UITableViewAutomaticDimension
         self.myTableView.separatorStyle = .none
+        self.myTableView.showsVerticalScrollIndicator = false
         
         self.view.addSubview(self.myTableView)
         
@@ -48,24 +49,29 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.currentPlayingIndex = nil
     }
     
+    // TODO: move this stuff into PlayerView
     func loadObjects() {
-        let client = XCDYouTubeClient.default()
-        self.videos.forEach{id in
-            client.getVideoWithIdentifier(id) { (info, err) -> Void in
-                let player = Player()
-                player.url = info?.streamURLs[22]
-                let playerView = PlayerView()
-                playerView.player = player
-                playerView.isReady = { () in
-                    self.data.append(playerView)
-                    self.myTableView.reloadData()
-                    // stop listening after set
-                    playerView.isReady = nil
+        RedditService.shared.getHaikus{ idList in
+            idList.forEach{ id in
+                let client = XCDYouTubeClient.default()
+                client.getVideoWithIdentifier(id) { (info, err) -> Void in
+                    let player = Player()
+                    player.url = info?.streamURLs[22]
+                    let playerView = PlayerView(player: player)
+                    playerView.isReady = { () in
+                        self.data.append(playerView)
+                        self.myTableView.reloadData()
+                        // stop listening after set
+                        playerView.isReady = nil
+                    }
                 }
             }
         }
+        
     }
     
+    // TODO: size might just automatically update when video loads asynchronously
+    // may have to call tableView.beginUpdates/tablewView.endUpdates
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return data[indexPath.row].getHeight(self.view.frame.width) + 20
     }

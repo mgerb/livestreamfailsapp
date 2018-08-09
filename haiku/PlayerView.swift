@@ -11,24 +11,25 @@ import Player
 class PlayerView: UIView, PlayerDelegate, PlayerPlaybackDelegate {
     
     var isReady: (() -> Void)?
-    
-    public var player: Player! {
-        didSet {
-            self.player.playerDelegate = self
-            self.player.playbackDelegate = self
-            
-            self.player.playbackLoops = true
-            self.player.playbackResumesWhenBecameActive = false
-            self.player.playbackResumesWhenEnteringForeground = false
-            self.player.playbackFreezesAtEnd = true
-            
-            self.backgroundColor = .white
-            self.addSubview(self.player.view)
-            
-            // constraints
-            self.player.view.snp.makeConstraints{ (make) -> Void in
-                make.edges.equalTo(self)
-            }
+    public var player: Player!
+
+    convenience init(player: Player) {
+        self.init()
+        self.player = player
+        self.player.playerDelegate = self
+        self.player.playbackDelegate = self
+        
+        self.player.playbackLoops = true
+        self.player.playbackResumesWhenBecameActive = false
+        self.player.playbackResumesWhenEnteringForeground = false
+        self.player.playbackFreezesAtEnd = true
+        
+        self.backgroundColor = .white
+        self.addSubview(self.player.view)
+        
+        // constraints
+        self.player.view.snp.makeConstraints{ (make) -> Void in
+            make.edges.equalTo(self)
         }
     }
 
