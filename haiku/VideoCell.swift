@@ -20,8 +20,7 @@ class VideoCell: UITableViewCell {
         self.selectionStyle = .none
         self.contentView.addSubview(self.playerView!)
         self.playerView!.snp.makeConstraints{ (make) -> Void in
-            make.width.equalTo(self.contentView)
-            make.height.equalTo(self.playerView!.getHeight(self.contentView.frame.width))
+            make.edges.equalTo(self.contentView)
         }
     }
     

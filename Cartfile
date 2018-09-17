@@ -1,6 +1,6 @@
 github "SnapKit/SnapKit" ~> 4.0.0
 github "0xced/XCDYouTubeKit" ~> 2.5
-github "piemonte/Player" ~> 0.9.0
+github "piemonte/Player" ~> 0.12.0
 github "Alamofire/Alamofire" ~> 4.7
 
 

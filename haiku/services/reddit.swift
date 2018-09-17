@@ -41,11 +41,12 @@ struct RedditChildren: Codable {
 struct RedditPost: Codable {
     let title: String
     let url: String?
-    var test: String?
+    let id: String
 
     private enum CodingKeys: String, CodingKey {
         case title
         case url
+        case id
     }
 }
 
@@ -69,13 +70,18 @@ class RedditService {
     static let shared = RedditService()
 
     // returns a list of youtube ID's from youtube haiku
-    func getHaikus(closure: @escaping (_ data: [String]) -> Void) {
-        Alamofire.request("https://reddit.com/r/youtubehaiku.json").responseData{ response in
+    func getHaikus(after: String?, closure: @escaping (_ data: [RedditPost]) -> Void) {
+        var url = "https://reddit.com/r/youtubehaiku.json"
+        if (after != nil) {
+            url = url + ("?after=" + after!)
+        }
+        
+        Alamofire.request(url).responseData{ response in
             switch response.result {
             case .success(let res):
                 if let data = try? JSONDecoder().decode(RedditData.self, from: res) {
-                    let newData = data.data.children.compactMap{ c in
-                        return c.data.url?.youtubeID
+                    let newData = data.data.children.map{ c in
+                        return c.data
                     }
                     closure(newData)
                 }
