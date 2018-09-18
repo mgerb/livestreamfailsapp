@@ -42,11 +42,13 @@ struct RedditPost: Codable {
     let title: String
     let url: String?
     let id: String
+    let name: String
 
     private enum CodingKeys: String, CodingKey {
         case title
         case url
         case id
+        case name
     }
 }
 

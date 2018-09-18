@@ -17,14 +17,17 @@ class PlayerView: UIView, PlayerDelegate, PlayerPlaybackDelegate {
     
     let playerContainer: UIView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = .red
         return view
     }()
+    
+    var label: UILabel = UILabel()
 
-    convenience init(_ id: String) {
+    convenience init(_ id: String, redditPost: RedditPost) {
         self.init()
         self.backgroundColor = .white
-        self.addSubview(self.playerContainer)
+        self.redditPost = redditPost
+//        self.addSubview(self.playerContainer)
 
         let player = Player()
         self.player = player
@@ -36,7 +39,15 @@ class PlayerView: UIView, PlayerDelegate, PlayerPlaybackDelegate {
         self.player.playbackFreezesAtEnd = true
 
         self.addSubview(self.player.view)
-
+        
+        self.label.text = self.redditPost!.title
+        self.addSubview(self.label)
+        
+        self.label.snp.makeConstraints{(make) -> Void in
+            make.top.equalTo(self).offset(5)
+            make.left.equalTo(self).offset(5)
+            make.right.equalTo(self).offset(-5)
+        }
 
         self.initializePlayer(id)
     }
@@ -48,14 +59,19 @@ class PlayerView: UIView, PlayerDelegate, PlayerPlaybackDelegate {
         }
     }
 
+    func getMaxHeight() -> CGFloat {
+        let width = UIScreen.main.bounds.width
+        return (width * 9 / 16)
+    }
+
     // returns aspect height based on width
-    public func getHeight(_ width: CGFloat) -> CGFloat {
-        if (self.player.naturalSize.height > 0) {
-            let newHeight = width * self.player.naturalSize.height / self.player.naturalSize.width
-            let maxHeight = (width * 9 / 16)
+    public func getVideoHeight() -> CGFloat {
+        if (self.player.url != nil && self.player.naturalSize.height > 0) {
+            let newHeight = UIScreen.main.bounds.width * self.player.naturalSize.height / self.player.naturalSize.width
+            let maxHeight = self.getMaxHeight()
             return newHeight > maxHeight ? maxHeight : newHeight
         } else {
-            return 0;
+            return self.getMaxHeight();
         }
     }
     
@@ -65,13 +81,15 @@ class PlayerView: UIView, PlayerDelegate, PlayerPlaybackDelegate {
 
     // set contstraints after player is ready
     func playerReady(_ player: Player) {
-        self.playerContainer.snp.makeConstraints { (make) -> Void in
-            make.width.equalTo(self)
-            make.height.equalTo(self.getHeight(self.frame.width))
-        }
+//        self.playerContainer.snp.makeConstraints { (make) -> Void in
+//            make.width.equalTo(self)
+//            make.height.equalTo(self.getVideoHeight())
+//        }
         self.player.view.snp.makeConstraints{ (make) -> Void in
+            make.top.equalTo(self.label.snp.bottom).offset(5)
             make.width.equalTo(self)
-            make.height.equalTo(self.playerContainer)
+//            make.height.equalTo(self.playerContainer)
+            make.height.equalTo(self.getVideoHeight())
         }
         
         self.isReady?()
