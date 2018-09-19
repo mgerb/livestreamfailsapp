@@ -51,7 +51,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         self.view.addSubview(self.myTableView)
         
-        self.loadObjects(after: nil)
+        self.fetchHaikus()
     }
 
     // video gets paused when entering background so reset current playing
@@ -60,21 +60,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     @objc func loadNewObjects() {
-        self.loadObjects(after: nil)
+        self.fetchHaikus()
     }
     
-    func loadObjects(after: String?) {
-        
+    func fetchHaikus(_ after: String? = nil) {
         if (self.contentLoading) {
             return
         }
-        
         self.contentLoading = true
         self.pauseCurrentTrack()
         self.refreshControl.beginRefreshing()
         
         RedditService.shared.getHaikus(after: after){ redditPosts in
-
+            
             var playerViews: [PlayerView] = redditPosts.compactMap{ post in
                 if post.url?.youtubeID == nil {
                     return nil
@@ -82,58 +80,68 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 let newPlayer = PlayerView(post.url!.youtubeID!, redditPost: post)
                 return newPlayer
             }
-
+            
             if (after != nil) {
                 playerViews = self.data + playerViews
             }
-
-            var indexPaths: [IndexPath] = []
-
-            // diff the new data with current and create Index Paths
-            for (index, view) in playerViews.enumerated() {
-                if (!self.data.indices.contains(index) || self.data[index].redditPost?.id != view.redditPost?.id) {
-                    indexPaths.append(IndexPath(row: index, section: 0))
-                }
-            }
-
-            if (indexPaths.count > 0) {
-                self.myTableView.beginUpdates()
-                // delete the old rows
-                if (after == nil && self.data.count > 0) {
-                    self.myTableView.deleteRows(at: indexPaths, with: .fade)
-                }
-                self.data = playerViews
-                self.myTableView.insertRows(at: indexPaths, with: .fade)
-                self.myTableView.endUpdates()
-
-                // reload row when player view is ready
-                for (index, post) in self.data.enumerated() {
-                    post.isReady = { () in
-                        // stop listening after set
-                        post.isReady = nil
-//                        DispatchQueue.main.async{
-                            self.myTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .fade)
-//                        }
-                    }
-                }
-            }
-
-            // wait at least 1 second
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                if (self.refreshControl.isRefreshing) {
-                    self.refreshControl.endRefreshing()
-                }
-                self.contentLoading = false
-            }
-
             
+            self.renderPlayerViews(playerViews)
         }
     }
     
+    func renderPlayerViews(_ playerViews: [PlayerView]) {
+        var insertIndexPaths: [IndexPath] = []
+        var deletetIndexPaths: [IndexPath] = []
+        
+        // diff the new data with current and create Index Paths
+        for (index, view) in playerViews.enumerated() {
+            if (!self.data.indices.contains(index) || self.data[index].redditPost?.id != view.redditPost?.id) {
+                insertIndexPaths.append(IndexPath(row: index, section: 0))
+            }
+            if (self.data.indices.contains(index) && self.data[index].redditPost?.id != view.redditPost?.id) {
+                deletetIndexPaths.append(IndexPath(row: index, section: 0))
+            }
+        }
+        
+        if (insertIndexPaths.count > 0) {
+            self.myTableView.beginUpdates()
+            // delete the old rows
+            if (deletetIndexPaths.count > 0) {
+                self.myTableView.deleteRows(at: deletetIndexPaths, with: .fade)
+            }
+            self.data = playerViews
+            self.myTableView.insertRows(at: insertIndexPaths, with: .fade)
+            self.myTableView.endUpdates()
+            
+            // reload row when player view is ready
+            for (index, post) in self.data.enumerated() {
+                if (!post.doneLoadingPlayer) {
+                    post.onReady = { (error) in
+                        if (!error) {
+                            DispatchQueue.main.async {
+                                self.myTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .fade)
+                            }
+                        } else {
+                            // TODO: error
+                        }
+                        post.onReady = nil
+                    }
+                }
+            }
+        }
+        
+        // wait at least 1 second
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if (self.refreshControl.isRefreshing) {
+                self.refreshControl.endRefreshing()
+            }
+            self.contentLoading = false
+        }
+    }
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let playerView: PlayerView = data[indexPath.row]
-//       return playerView.player.url != nil ? playerView.getVideoHeight() + 20 : 0
-         return playerView.getVideoHeight() + 20
+        return playerView.getTotalViewHeight()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -160,21 +168,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     // currently not working
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let  height = scrollView.frame.size.height
-//        let contentYoffset = scrollView.contentOffset.y
-//        let distanceFromBottom = scrollView.contentSize.height - contentYoffset
-//        if distanceFromBottom < height && data.count > 0 && !self.refreshControl.isRefreshing {
-//            if let name = data[data.count - 1].redditPost?.name {
-//                print("loading more data")
-//                self.loadObjects(after: name)
-//            }
-//        }
-//    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let  height = scrollView.frame.size.height
+        let contentYoffset = scrollView.contentOffset.y
+        let distanceFromBottom = scrollView.contentSize.height - contentYoffset
+        if distanceFromBottom < height && data.count > 10 && !self.refreshControl.isRefreshing {
+            if let name = data[data.count - 1].redditPost?.name {
+                self.fetchHaikus(name)
+            }
+        }
+    }
 
     func pauseCurrentTrack() {
         if (self.currentPlayingIndex != nil) {
-            self.data[self.currentPlayingIndex!].player.pause()
+            self.data[self.currentPlayingIndex!].player?.pause()
             self.currentPlayingIndex = nil
         }
     }

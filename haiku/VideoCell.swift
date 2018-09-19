@@ -16,7 +16,10 @@ class VideoCell: UITableViewCell {
 
     public func load(playerView: PlayerView) {
         self.playerView = playerView
-        self.playerView?.isHidden = false
+//        self.playerView?.isHidden = false
+        if (self.playerView?.player == nil) {
+            self.playerView?.initializePlayer()
+        }
         self.selectionStyle = .none
         self.contentView.addSubview(self.playerView!)
         self.playerView!.snp.makeConstraints{ (make) -> Void in
@@ -24,10 +27,15 @@ class VideoCell: UITableViewCell {
         }
     }
     
+    // TODO: move this logic to view controller
+    // manually reset video references based on which cell
+    // is currently shown - maybe render +- 10 on each side?
     override func prepareForReuse() {
         // prevent videos from showing up in other cells
         if self.contentView.subviews.contains(self.playerView!) {
-            self.playerView?.isHidden = true
+//            self.playerView?.isHidden = true
+            self.playerView?.removeFromSuperview()
+            self.playerView?.resetPlayer()
         }
     }
     
