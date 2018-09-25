@@ -35,7 +35,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.myTableView.register(VideoCell.self, forCellReuseIdentifier: "VideoCell")
         self.myTableView.dataSource = self
         self.myTableView.delegate = self
-        self.myTableView.estimatedRowHeight = 80
         self.myTableView.rowHeight = UITableViewAutomaticDimension
         self.myTableView.separatorStyle = .none
         self.myTableView.showsVerticalScrollIndicator = false
@@ -161,6 +160,33 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return data.count
     }
     
+    
+     private var nextVisibleIndex = 0
+    
+     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+         if indexPath.row > self.nextVisibleIndex  {
+             // scrolling down
+             if self.data.indices.contains(indexPath.row + 10) && self.data[indexPath.row + 10].player == nil {
+                 self.data[indexPath.row + 10].initializePlayer()
+             }
+             if self.data.indices.contains(indexPath.row - 10) {
+                 self.data[indexPath.row - 10].resetPlayer()
+             }
+             print("scrolling down")
+         } else  {
+         // scrolling up
+             if self.data.indices.contains(indexPath.row + 10) {
+                 self.data[indexPath.row + 10].resetPlayer()
+             }
+             if self.data.indices.contains(indexPath.row - 10) && self.data[indexPath.row - 10].player == nil {
+                 self.data[indexPath.row - 10].initializePlayer()
+             }
+             print("scrolling up")
+         }
+        
+         self.nextVisibleIndex = indexPath.row
+     }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "VideoCell", for: indexPath as IndexPath) as! VideoCell
         cell.load(playerView: data[indexPath.row])
