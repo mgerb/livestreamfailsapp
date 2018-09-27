@@ -8,6 +8,7 @@
 
 import IGListKit
 import UIKit
+import AVKit
 
 final class DisplaySectionController: ListSectionController, ListDisplayDelegate, ListWorkingRangeDelegate {
 
@@ -22,21 +23,39 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
     }
     
     override func numberOfItems() -> Int {
-        return 1
+        return 2
     }
     
     override func sizeForItem(at index: Int) -> CGSize {
         let width = UIScreen.main.bounds.width
-        let height = (width * 9 / 16)
-        return CGSize(width: width, height: height)
+        if index == 0 {
+            return CGSize(width: width, height: 30)
+        } else if index == 1 {
+            let height = (width * 9 / 16)
+            return CGSize(width: width, height: height)
+        }
+        return CGSize(width: width, height: 10)
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        guard let cell = collectionContext?.dequeueReusableCell(of: PlayerCell.self, for: self, at: index) as? PlayerCell else {
-            fatalError()
+        if index == 0 {
+            guard let cell = collectionContext?.dequeueReusableCell(of: TitleCollectionViewCell.self, for: self, at: index) as? TitleCollectionViewCell else {
+                fatalError()
+            }
+            cell.text = redditPost.title
+            return cell
+        } else if index == 1 {
+            guard let cell = collectionContext?.dequeueReusableCell(of: PlayerCell.self, for: self, at: index) as? PlayerCell else {
+                fatalError()
+            }
+            
+            cell.setThumbnail(self.redditPost!.thumbnail)
+            cell.setPlayerItem(self.redditPost!.playerItem)
+
+            return cell
         }
-        cell.setPlayer(self.redditPost!.player)
-        return cell
+        
+        return collectionContext?.dequeueReusableCell(of: UICollectionViewCell.self, for: self, at: index) as! UICollectionViewCell
     }
     
     override func didUpdate(to object: Any) {
@@ -47,7 +66,8 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {
         if let controller = sectionController as? DisplaySectionController {
-            controller.redditPost.loadAVPlayerItem()
+            // pre load player item
+            controller.redditPost!.getPlayerItem{item in}
         }
     }
     
