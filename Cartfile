@@ -3,4 +3,5 @@ github "0xced/XCDYouTubeKit" ~> 2.5
 github "Alamofire/Alamofire" ~> 4.7
 github "Instagram/IGListKit" ~> 3.0
 github "onevcat/Kingfisher" ~> 4.0
+github "ReactiveX/RxSwift" ~> 4.0
 

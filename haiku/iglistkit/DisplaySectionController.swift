@@ -50,7 +50,10 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
             }
             
             cell.setThumbnail(self.redditPost!.thumbnail)
-            cell.setPlayerItem(self.redditPost!.playerItem)
+            
+            self.redditPost!.getPlayerItem().subscribe(onNext: { item in
+                cell.setPlayerItem(self.redditPost!.playerItem)
+            })
 
             return cell
         }
@@ -67,7 +70,7 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {
         if let controller = sectionController as? DisplaySectionController {
             // pre load player item
-            controller.redditPost!.getPlayerItem{item in}
+            controller.redditPost!.getPlayerItem().subscribe{}
         }
     }
     

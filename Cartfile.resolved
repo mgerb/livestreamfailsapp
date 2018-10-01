@@ -1,5 +1,6 @@
 github "0xced/XCDYouTubeKit" "2.5.6"
 github "Alamofire/Alamofire" "4.7.3"
 github "Instagram/IGListKit" "3.4.0"
+github "ReactiveX/RxSwift" "4.3.1"
 github "SnapKit/SnapKit" "4.0.1"
 github "onevcat/Kingfisher" "4.10.0"

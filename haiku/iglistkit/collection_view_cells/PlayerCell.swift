@@ -32,10 +32,10 @@ class PlayerCell: UICollectionViewCell {
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTap))
         self.contentView.addGestureRecognizer(tap)
     }
-    
+
     func setPlayerItem(_ item: AVPlayerItem?) {
         self.playerItem = item
-        if item === GlobalPlayer.shared.player.currentItem {
+        if item != nil && item === GlobalPlayer.shared.player.currentItem {
             self.playerView.playerLayer.player = GlobalPlayer.shared.player
             self.thumbnail.isHidden = true
             self.playerView.isHidden = false

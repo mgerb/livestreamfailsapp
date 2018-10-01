@@ -8,6 +8,7 @@
 
 import IGListKit
 import XCDYouTubeKit
+import RxSwift
 
 struct RedditData: Codable {
     let kind: String
@@ -60,37 +61,38 @@ class RedditPost: Codable {
     let name: String
     var thumbnailURL: URL?
     let thumbnail = UIImageView()
-    var streamURL: URL?
-    var playerItem: AVPlayerItem? = nil
+    var playerItem: CachingPlayerItem? = nil
 
-    func getPlayerItem(closure: @escaping (_ playerItem: AVPlayerItem?) -> Void) {
-        self.getPlayerUrl{ url in
-            if let u = url {
-                self.playerItem = AVPlayerItem(url: u)
-                closure(self.playerItem)
-            } else {
-                closure(nil)
-            }
+    func getPlayerItem() -> Observable<CachingPlayerItem?> {
+        return Observable<CachingPlayerItem?>.create { observer in
+            self.fetchYoutubeStuff().subscribe( onCompleted: {
+                observer.onNext(self.playerItem)
+                observer.onCompleted()
+            })
         }
     }
     
-    func getPlayerUrl(closure: @escaping (_ url: URL?) -> Void) {
-        if let id = self.url?.youtubeID {
-            let client = XCDYouTubeClient.default()
-            client.getVideoWithIdentifier(id) { (info, err) -> Void in
-                if let streamUrl = info?.streamURLs[XCDYouTubeVideoQuality.HD720.rawValue]
-                    ?? info?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue]
-                    ?? info?.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] {
-                    self.thumbnailURL = info?.smallThumbnailURL
-                    self.thumbnail.kf.setImage(with: self.thumbnailURL)
-                    self.streamURL = streamUrl
-                    closure(streamUrl)
-                } else {
-                    closure(nil)
+    func fetchYoutubeStuff() -> Observable<Any?> {
+        if self.playerItem != nil {
+            return Observable.of().share()
+        }
+        
+        return Observable.create{ observer in
+            if let id = self.url?.youtubeID {
+                let client = XCDYouTubeClient.default()
+                client.getVideoWithIdentifier(id) { (info, err) -> Void in
+                    if let streamUrl = info?.streamURLs[XCDYouTubeVideoQuality.HD720.rawValue]
+                        ?? info?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue]
+                        ?? info?.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] {
+                        self.thumbnail.kf.setImage(with: info?.smallThumbnailURL)
+                        self.playerItem = CachingPlayerItem(url: streamUrl, customFileExtension: "mp4")
+                    }
+                    observer.onCompleted()
                 }
+            } else {
+                observer.onCompleted()
             }
-        } else {
-            closure(nil)
+            return Disposables.create()
         }
     }
     

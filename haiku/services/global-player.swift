@@ -12,7 +12,7 @@ import AVFoundation
 /**
  * Keep state of current playing video because only one can play at a time
  */
-class GlobalPlayer {
+class GlobalPlayer: NSObject {
     static let shared = GlobalPlayer()
     lazy var player: AVPlayer = {
         let player = AVPlayer()
@@ -23,6 +23,7 @@ class GlobalPlayer {
     var playing = false
 
     func replaceItem(_ item: AVPlayerItem) {
+        self.pause()
         self.player.replaceCurrentItem(with: item)
         self.player.play()
     }

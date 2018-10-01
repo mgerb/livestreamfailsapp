@@ -15,12 +15,17 @@
 		A25285772159E5BE00DCA537 /* global-player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285762159E5BE00DCA537 /* global-player.swift */; };
 		A252857A2159F8B900DCA537 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A25285782159F89900DCA537 /* Kingfisher.framework */; };
 		A252857B2159F8B900DCA537 /* Kingfisher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A25285782159F89900DCA537 /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A2591251211BD28200B09D73 /* reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2591250211BD28200B09D73 /* reddit.swift */; };
+		A252857E215C655600DCA537 /* TitleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A252857D215C655600DCA537 /* TitleCollectionViewCell.swift */; };
+		A2528581215C6E9C00DCA537 /* reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2528580215C6E9C00DCA537 /* reddit.swift */; };
+		A2528584215C6F6B00DCA537 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2528583215C6F6B00DCA537 /* String.swift */; };
+		A25285AA21615AC800DCA537 /* CachingPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285A921615AC700DCA537 /* CachingPlayerItem.swift */; };
+		A25285AD2161A0AC00DCA537 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A25285AB2161A09C00DCA537 /* RxSwift.framework */; };
+		A25285AE2161A0AC00DCA537 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A25285AB2161A09C00DCA537 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A2591251211BD28200B09D73 /* reddit.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2591250211BD28200B09D73 /* reddit.service.swift */; };
 		A2591254211BD32900B09D73 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2591252211BD31700B09D73 /* Alamofire.framework */; };
 		A2591255211BD32900B09D73 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2591252211BD31700B09D73 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A288A12C215344D000000733 /* MyPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A288A12B215344D000000733 /* MyPlayerView.swift */; };
 		A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29CD0052119363900A5A6EC /* AppDelegate.swift */; };
-		A29CD0082119363900A5A6EC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29CD0072119363900A5A6EC /* ViewController.swift */; };
 		A29CD00D2119363C00A5A6EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A29CD00C2119363C00A5A6EC /* Assets.xcassets */; };
 		A29CD0102119363C00A5A6EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */; };
 		A29CD02521193DC300A5A6EC /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29CD02021193DB900A5A6EC /* Player.framework */; };
@@ -29,8 +34,6 @@
 		A29CD02821193DC300A5A6EC /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A29CD02121193DB900A5A6EC /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A29CD02921193DC300A5A6EC /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29CD01F21193DB800A5A6EC /* XCDYouTubeKit.framework */; };
 		A29CD02A21193DC300A5A6EC /* XCDYouTubeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A29CD01F21193DB800A5A6EC /* XCDYouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A29CD02C2119495800A5A6EC /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29CD02B2119495800A5A6EC /* VideoCell.swift */; };
-		A29CD02E21194F5800A5A6EC /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29CD02D21194F5800A5A6EC /* PlayerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,6 +45,7 @@
 			files = (
 				A29CD02621193DC300A5A6EC /* Player.framework in Embed Frameworks */,
 				A29CD02A21193DC300A5A6EC /* XCDYouTubeKit.framework in Embed Frameworks */,
+				A25285AE2161A0AC00DCA537 /* RxSwift.framework in Embed Frameworks */,
 				A29CD02821193DC300A5A6EC /* SnapKit.framework in Embed Frameworks */,
 				A2591255211BD32900B09D73 /* Alamofire.framework in Embed Frameworks */,
 				A252857B2159F8B900DCA537 /* Kingfisher.framework in Embed Frameworks */,
@@ -59,20 +63,22 @@
 		A25285742159CA2E00DCA537 /* DisplaySectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySectionController.swift; sourceTree = "<group>"; };
 		A25285762159E5BE00DCA537 /* global-player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "global-player.swift"; sourceTree = "<group>"; };
 		A25285782159F89900DCA537 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = SOURCE_ROOT; };
-		A2591250211BD28200B09D73 /* reddit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reddit.swift; sourceTree = "<group>"; };
+		A252857D215C655600DCA537 /* TitleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCollectionViewCell.swift; sourceTree = "<group>"; };
+		A2528580215C6E9C00DCA537 /* reddit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reddit.swift; sourceTree = "<group>"; };
+		A2528583215C6F6B00DCA537 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		A25285A921615AC700DCA537 /* CachingPlayerItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingPlayerItem.swift; sourceTree = "<group>"; };
+		A25285AB2161A09C00DCA537 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = SOURCE_ROOT; };
+		A2591250211BD28200B09D73 /* reddit.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reddit.service.swift; sourceTree = "<group>"; };
 		A2591252211BD31700B09D73 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = SOURCE_ROOT; };
 		A288A12B215344D000000733 /* MyPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlayerView.swift; sourceTree = "<group>"; };
 		A29CD0022119363900A5A6EC /* haiku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = haiku.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A29CD0052119363900A5A6EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A29CD0072119363900A5A6EC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A29CD00C2119363C00A5A6EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A29CD00F2119363C00A5A6EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A29CD0112119363C00A5A6EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A29CD01F21193DB800A5A6EC /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/iOS/XCDYouTubeKit.framework; sourceTree = SOURCE_ROOT; };
 		A29CD02021193DB900A5A6EC /* Player.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Player.framework; path = Carthage/Build/iOS/Player.framework; sourceTree = SOURCE_ROOT; };
 		A29CD02121193DB900A5A6EC /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = SOURCE_ROOT; };
-		A29CD02B2119495800A5A6EC /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
-		A29CD02D21194F5800A5A6EC /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +88,7 @@
 			files = (
 				A29CD02521193DC300A5A6EC /* Player.framework in Frameworks */,
 				A29CD02921193DC300A5A6EC /* XCDYouTubeKit.framework in Frameworks */,
+				A25285AD2161A0AC00DCA537 /* RxSwift.framework in Frameworks */,
 				A29CD02721193DC300A5A6EC /* SnapKit.framework in Frameworks */,
 				A2591254211BD32900B09D73 /* Alamofire.framework in Frameworks */,
 				A252857A2159F8B900DCA537 /* Kingfisher.framework in Frameworks */,
@@ -92,10 +99,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A252857C215C652E00DCA537 /* collection_view_cells */ = {
+			isa = PBXGroup;
+			children = (
+				A240BA252159BD74004E8419 /* PlayerCell.swift */,
+				A252857D215C655600DCA537 /* TitleCollectionViewCell.swift */,
+			);
+			path = collection_view_cells;
+			sourceTree = "<group>";
+		};
+		A252857F215C6E8C00DCA537 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				A2528580215C6E9C00DCA537 /* reddit.swift */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		A2528582215C6F5B00DCA537 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A2528583215C6F6B00DCA537 /* String.swift */,
+			);
+			path = extensions;
+			sourceTree = "<group>";
+		};
 		A259124F211BD26700B09D73 /* services */ = {
 			isa = PBXGroup;
 			children = (
-				A2591250211BD28200B09D73 /* reddit.swift */,
+				A2591250211BD28200B09D73 /* reddit.service.swift */,
 				A25285762159E5BE00DCA537 /* global-player.swift */,
 			);
 			path = services;
@@ -121,15 +153,15 @@
 		A29CD0042119363900A5A6EC /* haiku */ = {
 			isa = PBXGroup;
 			children = (
+				A25285A921615AC700DCA537 /* CachingPlayerItem.swift */,
+				A2528582215C6F5B00DCA537 /* extensions */,
+				A252857F215C6E8C00DCA537 /* model */,
 				A2A186D32159AB2100474ABC /* iglistkit */,
 				A259124F211BD26700B09D73 /* services */,
 				A29CD0052119363900A5A6EC /* AppDelegate.swift */,
 				A29CD00C2119363C00A5A6EC /* Assets.xcassets */,
 				A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */,
 				A29CD0112119363C00A5A6EC /* Info.plist */,
-				A29CD0072119363900A5A6EC /* ViewController.swift */,
-				A29CD02B2119495800A5A6EC /* VideoCell.swift */,
-				A29CD02D21194F5800A5A6EC /* PlayerView.swift */,
 			);
 			path = haiku;
 			sourceTree = "<group>";
@@ -137,6 +169,7 @@
 		A29CD01E21193BD800A5A6EC /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A25285AB2161A09C00DCA537 /* RxSwift.framework */,
 				A25285782159F89900DCA537 /* Kingfisher.framework */,
 				A240BA1B2159AE5C004E8419 /* IGListKit.framework */,
 				A2591252211BD31700B09D73 /* Alamofire.framework */,
@@ -150,8 +183,8 @@
 		A2A186D32159AB2100474ABC /* iglistkit */ = {
 			isa = PBXGroup;
 			children = (
+				A252857C215C652E00DCA537 /* collection_view_cells */,
 				A288A12B215344D000000733 /* MyPlayerView.swift */,
-				A240BA252159BD74004E8419 /* PlayerCell.swift */,
 				A25285722159C9FC00DCA537 /* DisplayViewController.swift */,
 				A25285742159CA2E00DCA537 /* DisplaySectionController.swift */,
 			);
@@ -229,16 +262,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A29CD0082119363900A5A6EC /* ViewController.swift in Sources */,
-				A2591251211BD28200B09D73 /* reddit.swift in Sources */,
+				A2528584215C6F6B00DCA537 /* String.swift in Sources */,
+				A2591251211BD28200B09D73 /* reddit.service.swift in Sources */,
 				A25285732159C9FC00DCA537 /* DisplayViewController.swift in Sources */,
-				A29CD02C2119495800A5A6EC /* VideoCell.swift in Sources */,
 				A288A12C215344D000000733 /* MyPlayerView.swift in Sources */,
+				A252857E215C655600DCA537 /* TitleCollectionViewCell.swift in Sources */,
 				A25285752159CA2E00DCA537 /* DisplaySectionController.swift in Sources */,
 				A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */,
 				A25285772159E5BE00DCA537 /* global-player.swift in Sources */,
 				A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */,
-				A29CD02E21194F5800A5A6EC /* PlayerView.swift in Sources */,
+				A25285AA21615AC800DCA537 /* CachingPlayerItem.swift in Sources */,
+				A2528581215C6E9C00DCA537 /* reddit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
