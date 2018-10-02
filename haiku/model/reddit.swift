@@ -59,8 +59,14 @@ class RedditPost: Codable {
     let url: String?
     let id: String
     let name: String
-    var thumbnailURL: URL?
-    let thumbnail = UIImageView()
+    lazy var thumbnail: UIImageView = {
+        let view = UIImageView()
+        if let youtubeID = self.url?.youtubeID {
+            // cache thumbnail with KF
+            view.kf.setImage(with: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")!)
+        }
+        return view
+    }()
     var playerItem: CachingPlayerItem? = nil
 
     func getPlayerItem() -> Observable<CachingPlayerItem?> {
@@ -81,10 +87,8 @@ class RedditPost: Codable {
             if let id = self.url?.youtubeID {
                 let client = XCDYouTubeClient.default()
                 client.getVideoWithIdentifier(id) { (info, err) -> Void in
-                    if let streamUrl = info?.streamURLs[XCDYouTubeVideoQuality.HD720.rawValue]
-                        ?? info?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue]
+                    if let streamUrl =  info?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue]
                         ?? info?.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] {
-                        self.thumbnail.kf.setImage(with: info?.smallThumbnailURL)
                         self.playerItem = CachingPlayerItem(url: streamUrl, customFileExtension: "mp4")
                     }
                     observer.onCompleted()
@@ -95,7 +99,6 @@ class RedditPost: Codable {
             return Disposables.create()
         }
     }
-    
 }
 
 extension RedditPost: ListDiffable {

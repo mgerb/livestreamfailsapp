@@ -7,7 +7,7 @@ class RedditService {
 
     // returns a list of youtube ID's from youtube haiku
     func getHaikus(after: String?, closure: @escaping (_ data: [RedditPost]) -> Void) {
-        var url = "https://reddit.com/r/youtubehaiku.json?limit=100"
+        var url = "https://reddit.com/r/youtubehaiku.json?limit=25"
         if (after != nil) {
             url = url + ("&after=" + after!)
         }

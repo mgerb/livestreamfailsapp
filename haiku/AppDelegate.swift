@@ -18,10 +18,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
-//        self.window!.rootViewController = ViewController();
-//        self.window!.rootViewController = VideoTableViewController();
-        self.window!.rootViewController = DisplayViewController();
-        self.window?.makeKeyAndVisible();
+        let tc = UITabBarController()
+        tc.title = "Yaiku"
+        let firstViewController = DisplayViewController()
+        firstViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
+        let secondViewController = DisplayViewController()
+        secondViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 1)
+        
+        tc.viewControllers = [firstViewController, secondViewController]
+        
+        self.window!.rootViewController = UINavigationController(rootViewController: tc)
+        self.window?.makeKeyAndVisible()
         
         return true
     }

@@ -9,30 +9,56 @@
 import IGListKit
 import UIKit
 
-class DisplayViewController: UIViewController, ListAdapterDataSource {
-    var data: [ListDiffable] = []
+
+extension UIScrollView {
+    var isAtBottom: Bool {
+        return contentOffset.y >= verticalOffsetForBottom
+    }
     
+    var verticalOffsetForBottom: CGFloat {
+        let scrollViewHeight = bounds.height
+        let scrollContentSizeHeight = contentSize.height
+        let bottomInset = contentInset.bottom
+        let scrollViewBottomOffset = scrollContentSizeHeight + bottomInset - scrollViewHeight
+        return scrollViewBottomOffset
+    }
+}
+
+class DisplayViewController: UIViewController, ListAdapterDataSource, UIScrollViewDelegate {
+    var data: [ListDiffable] = []
+    let refreshControl = UIRefreshControl()
+
     lazy var adapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 10)
     }()
     
-    let collectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         view.backgroundColor = .white
+        if #available(iOS 10, *) {
+            UICollectionView.appearance().isPrefetchingEnabled = false
+        }
         return view
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(collectionView)
-        adapter.collectionView = collectionView
-        adapter.dataSource = self
-        self.fetchHaikus()
+        self.view.addSubview(self.collectionView)
+        self.adapter.collectionView = self.collectionView
+        self.adapter.scrollViewDelegate = self
+        self.adapter.dataSource = self
+        if #available(iOS 10.0, *) {
+            self.collectionView.refreshControl = refreshControl
+        } else {
+            self.collectionView.addSubview(refreshControl)
+        }
+        self.refreshControl.addTarget(self, action: #selector(fetchInitial(_:)), for: .valueChanged)
+        self.fetchInitial()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        collectionView.frame = view.bounds
+        self.collectionView.frame = self.view.bounds
     }
     
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
@@ -46,10 +72,28 @@ class DisplayViewController: UIViewController, ListAdapterDataSource {
     func emptyView(for listAdapter: ListAdapter) -> UIView? { return nil }
     
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.isAtBottom && !self.refreshControl.isRefreshing {
+            if let redditPost = self.data[self.data.count - 1] as? RedditPost {
+                self.refreshControl.beginRefreshing()
+                self.fetchHaikus(redditPost.name)
+            }
+        }
+    }
+
+    @objc func fetchInitial(_ sender: Any? = nil) {
+        if !self.refreshControl.isRefreshing {
+            self.refreshControl.beginRefreshing()
+        }
+        self.fetchHaikus()
+    }
+    
     func fetchHaikus(_ after: String? = nil) {
         RedditService.shared.getHaikus(after: after){ redditPosts in
-            self.data = redditPosts
-            self.adapter.performUpdates(animated: true, completion: nil)
+            self.data = after == nil ? redditPosts : self.data + redditPosts
+            self.adapter.performUpdates(animated: true, completion: { _ in
+                self.refreshControl.endRefreshing()
+            })
         }
     }
 }
