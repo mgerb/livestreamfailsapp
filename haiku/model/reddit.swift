@@ -9,6 +9,7 @@
 import IGListKit
 import XCDYouTubeKit
 import RxSwift
+import Cache
 
 struct RedditData: Codable {
     let kind: String
@@ -67,38 +68,63 @@ class RedditPost: Codable {
         }
         return view
     }()
-    var playerItem: CachingPlayerItem? = nil
+    private var cachedPlayerItem: CachingPlayerItem? = nil
+    lazy var playerItemObservable: Observable<CachingPlayerItem?> = self.getPlayerItem()
 
     func getPlayerItem() -> Observable<CachingPlayerItem?> {
-        return Observable<CachingPlayerItem?>.create { observer in
-            self.fetchYoutubeStuff().subscribe( onCompleted: {
-                observer.onNext(self.playerItem)
+        return Observable.create { observer in
+            let dispose = Disposables.create()
+
+            if self.cachedPlayerItem == nil {
+                if let storedItemData = StorageService.shared.getCachedVideo(id: self.id) {
+                    self.cachedPlayerItem = CachingPlayerItem(data: storedItemData, mimeType: "video/mp4", fileExtension: "mp4")
+                }
+            }
+
+            if self.cachedPlayerItem != nil {
+                observer.onNext(self.cachedPlayerItem)
                 observer.onCompleted()
-            })
-        }
-    }
-    
-    func fetchYoutubeStuff() -> Observable<Any?> {
-        if self.playerItem != nil {
-            return Observable.of().share()
-        }
-        
-        return Observable.create{ observer in
+                return dispose
+            }
+            
             if let id = self.url?.youtubeID {
                 let client = XCDYouTubeClient.default()
                 client.getVideoWithIdentifier(id) { (info, err) -> Void in
                     if let streamUrl =  info?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue]
                         ?? info?.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] {
-                        self.playerItem = CachingPlayerItem(url: streamUrl, customFileExtension: "mp4")
+                        self.cachedPlayerItem = CachingPlayerItem(url: streamUrl, customFileExtension: "mp4")
+                        self.cachedPlayerItem?.delegate = self
+                        observer.onNext(self.cachedPlayerItem)
                     }
                     observer.onCompleted()
                 }
             } else {
                 observer.onCompleted()
             }
-            return Disposables.create()
-        }
+            return dispose
+        }.share()
     }
+}
+
+
+extension RedditPost: CachingPlayerItemDelegate {
+
+    func playerItem(_ playerItem: CachingPlayerItem, didFinishDownloadingData data: Data) {
+        StorageService.shared.cacheVideoData(data: data, id: self.id)
+    }
+    
+    // func playerItem(_ playerItem: CachingPlayerItem, didDownloadBytesSoFar bytesDownloaded: Int, outOf bytesExpected: Int) {
+    //     print("\(bytesDownloaded)/\(bytesExpected)")
+    // }
+    
+    // func playerItemPlaybackStalled(_ playerItem: CachingPlayerItem) {
+    //     print("Not enough data for playback. Probably because of the poor network. Wait a bit and try to play later.")
+    // }
+    
+    // func playerItem(_ playerItem: CachingPlayerItem, downloadingFailedWith error: Error) {
+    //     print(error)
+    // }
+    
 }
 
 extension RedditPost: ListDiffable {

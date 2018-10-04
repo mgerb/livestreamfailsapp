@@ -21,6 +21,10 @@
 		A25285AA21615AC800DCA537 /* CachingPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285A921615AC700DCA537 /* CachingPlayerItem.swift */; };
 		A25285AD2161A0AC00DCA537 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A25285AB2161A09C00DCA537 /* RxSwift.framework */; };
 		A25285AE2161A0AC00DCA537 /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A25285AB2161A09C00DCA537 /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A25285B02165955800DCA537 /* UIScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285AF2165955700DCA537 /* UIScrollView.swift */; };
+		A25285B32165B60000DCA537 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A25285B12165B5F100DCA537 /* Cache.framework */; };
+		A25285B42165B60000DCA537 /* Cache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A25285B12165B5F100DCA537 /* Cache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A25285B62165B7DB00DCA537 /* storage.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285B52165B7DB00DCA537 /* storage.service.swift */; };
 		A2591251211BD28200B09D73 /* reddit.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2591250211BD28200B09D73 /* reddit.service.swift */; };
 		A2591254211BD32900B09D73 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2591252211BD31700B09D73 /* Alamofire.framework */; };
 		A2591255211BD32900B09D73 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2591252211BD31700B09D73 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -28,8 +32,6 @@
 		A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29CD0052119363900A5A6EC /* AppDelegate.swift */; };
 		A29CD00D2119363C00A5A6EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A29CD00C2119363C00A5A6EC /* Assets.xcassets */; };
 		A29CD0102119363C00A5A6EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */; };
-		A29CD02521193DC300A5A6EC /* Player.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29CD02021193DB900A5A6EC /* Player.framework */; };
-		A29CD02621193DC300A5A6EC /* Player.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A29CD02021193DB900A5A6EC /* Player.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A29CD02721193DC300A5A6EC /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29CD02121193DB900A5A6EC /* SnapKit.framework */; };
 		A29CD02821193DC300A5A6EC /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A29CD02121193DB900A5A6EC /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A29CD02921193DC300A5A6EC /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29CD01F21193DB800A5A6EC /* XCDYouTubeKit.framework */; };
@@ -43,13 +45,13 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A29CD02621193DC300A5A6EC /* Player.framework in Embed Frameworks */,
 				A29CD02A21193DC300A5A6EC /* XCDYouTubeKit.framework in Embed Frameworks */,
 				A25285AE2161A0AC00DCA537 /* RxSwift.framework in Embed Frameworks */,
 				A29CD02821193DC300A5A6EC /* SnapKit.framework in Embed Frameworks */,
 				A2591255211BD32900B09D73 /* Alamofire.framework in Embed Frameworks */,
 				A252857B2159F8B900DCA537 /* Kingfisher.framework in Embed Frameworks */,
 				A240BA1E2159AE68004E8419 /* IGListKit.framework in Embed Frameworks */,
+				A25285B42165B60000DCA537 /* Cache.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,6 +70,9 @@
 		A2528583215C6F6B00DCA537 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		A25285A921615AC700DCA537 /* CachingPlayerItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingPlayerItem.swift; sourceTree = "<group>"; };
 		A25285AB2161A09C00DCA537 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = SOURCE_ROOT; };
+		A25285AF2165955700DCA537 /* UIScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollView.swift; sourceTree = "<group>"; };
+		A25285B12165B5F100DCA537 /* Cache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cache.framework; path = Carthage/Build/iOS/Cache.framework; sourceTree = SOURCE_ROOT; };
+		A25285B52165B7DB00DCA537 /* storage.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = storage.service.swift; sourceTree = "<group>"; };
 		A2591250211BD28200B09D73 /* reddit.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reddit.service.swift; sourceTree = "<group>"; };
 		A2591252211BD31700B09D73 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = SOURCE_ROOT; };
 		A288A12B215344D000000733 /* MyPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlayerView.swift; sourceTree = "<group>"; };
@@ -86,13 +91,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A29CD02521193DC300A5A6EC /* Player.framework in Frameworks */,
 				A29CD02921193DC300A5A6EC /* XCDYouTubeKit.framework in Frameworks */,
 				A25285AD2161A0AC00DCA537 /* RxSwift.framework in Frameworks */,
 				A29CD02721193DC300A5A6EC /* SnapKit.framework in Frameworks */,
 				A2591254211BD32900B09D73 /* Alamofire.framework in Frameworks */,
 				A252857A2159F8B900DCA537 /* Kingfisher.framework in Frameworks */,
 				A240BA1D2159AE68004E8419 /* IGListKit.framework in Frameworks */,
+				A25285B32165B60000DCA537 /* Cache.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				A2528583215C6F6B00DCA537 /* String.swift */,
+				A25285AF2165955700DCA537 /* UIScrollView.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -129,6 +135,7 @@
 			children = (
 				A2591250211BD28200B09D73 /* reddit.service.swift */,
 				A25285762159E5BE00DCA537 /* global-player.swift */,
+				A25285B52165B7DB00DCA537 /* storage.service.swift */,
 			);
 			path = services;
 			sourceTree = "<group>";
@@ -169,6 +176,7 @@
 		A29CD01E21193BD800A5A6EC /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A25285B12165B5F100DCA537 /* Cache.framework */,
 				A25285AB2161A09C00DCA537 /* RxSwift.framework */,
 				A25285782159F89900DCA537 /* Kingfisher.framework */,
 				A240BA1B2159AE5C004E8419 /* IGListKit.framework */,
@@ -262,6 +270,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A25285B62165B7DB00DCA537 /* storage.service.swift in Sources */,
 				A2528584215C6F6B00DCA537 /* String.swift in Sources */,
 				A2591251211BD28200B09D73 /* reddit.service.swift in Sources */,
 				A25285732159C9FC00DCA537 /* DisplayViewController.swift in Sources */,
@@ -271,6 +280,7 @@
 				A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */,
 				A25285772159E5BE00DCA537 /* global-player.swift in Sources */,
 				A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */,
+				A25285B02165955800DCA537 /* UIScrollView.swift in Sources */,
 				A25285AA21615AC800DCA537 /* CachingPlayerItem.swift in Sources */,
 				A2528581215C6E9C00DCA537 /* reddit.swift in Sources */,
 			);

@@ -22,12 +22,17 @@ class GlobalPlayer: NSObject {
         return player
     }()
     var playing = false
-    let playerItemSubject = PublishSubject<AVPlayerItem>()
-
-    func replaceItem(_ item: AVPlayerItem) {
+    var activeRedditPost = BehaviorSubject<RedditPost?>(value: nil)
+    
+    func replaceItem(_ item: AVPlayerItem, _ redditPost: RedditPost) {
+        // toggle player if trying to set current active player item
+        if item === self.player.currentItem {
+            self.togglePlaying()
+            return
+        }
         self.pause()
         self.player.replaceCurrentItem(with: item)
-        self.playerItemSubject.onNext(item)
+        self.activeRedditPost.onNext(redditPost)
         self.player.play()
         self.playing = true
     }

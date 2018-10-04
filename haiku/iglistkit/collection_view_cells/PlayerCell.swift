@@ -14,7 +14,14 @@ import RxSwift
 
 class PlayerCell: UICollectionViewCell {
     
-    lazy public var playerView: MyPlayerView = {
+    private var redditPost: RedditPost?
+    private var thumbnail = UIImageView()
+    // used to unsubscribe when component deinits
+    let disposeBag = DisposeBag()
+    // used to unsubscribe when reddit post will change
+    let unsubscribeRedditPost = PublishSubject<Void>()
+
+    lazy private var playerView: MyPlayerView = {
         let view = MyPlayerView()
         self.contentView.addSubview(view)
         view.snp.makeConstraints{make in
@@ -31,9 +38,6 @@ class PlayerCell: UICollectionViewCell {
         return view
     }()
     
-    private var playerItem: AVPlayerItem?
-    var thumbnail = UIImageView()
-
     override func layoutSubviews() {
         super.layoutSubviews()
         self.contentView.addSubview(self.thumbnail)
@@ -42,51 +46,68 @@ class PlayerCell: UICollectionViewCell {
         self.setGlobalPlayerItemSubscription()
     }
     
-    let disposeBag = DisposeBag()
-    func setGlobalPlayerItemSubscription() {
-        GlobalPlayer.shared.playerItemSubject
-            .subscribe(onNext: {item in
-                self.playerItem === item ? self.showPlayerView() : self.showThumbnail()
-            }).disposed(by: self.disposeBag)
-    }
-
-    func setPlayerItem(_ item: AVPlayerItem?) {
-        self.playerItem = item
-        if item != nil && item === GlobalPlayer.shared.player.currentItem {
-            self.playerView.playerLayer.player = GlobalPlayer.shared.player
-            self.showPlayerView()
-        } else {
-            self.playerView.playerLayer.player = nil
+    func setRedditPost(_ post: RedditPost) {
+        self.redditPost = post
+        self.setThumbnail(self.redditPost!.thumbnail)
+        do {
+            let p = try GlobalPlayer.shared.activeRedditPost.value()
+            if self.redditPost?.id == p?.id {
+                self.showPlayerView()
+                self.playerView.player = GlobalPlayer.shared.player
+            } else {
+                self.showThumbnail()
+                self.playerView.player = nil
+            }
+        } catch {
             self.showThumbnail()
+            self.playerView.player = nil
         }
     }
     
-    func setThumbnail(_ view: UIImageView) {
+    private func setThumbnail(_ view: UIImageView) {
         self.thumbnail = view
         self.contentView.addSubview(self.thumbnail)
         self.thumbnail.snp.makeConstraints{make in
             make.edges.equalTo(self)
         }
     }
-    
+
+    func setGlobalPlayerItemSubscription() {
+        GlobalPlayer.shared.activeRedditPost.subscribe(onNext: { post in
+            if self.redditPost?.id == post?.id {
+                self.showPlayerView()
+                self.playerView.playerLayer.player = GlobalPlayer.shared.player
+            } else {
+                self.showThumbnail()
+            }
+        }).disposed(by: self.disposeBag)
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
         if self.contentView.contains(self.thumbnail) {
             self.thumbnail.removeFromSuperview()
-            self.playerItem = nil
+            self.unsubscribeRedditPost.onNext(())
+            self.redditPost = nil
         }
     }
     
     @objc func onTap() {
-        if self.playerItem == nil {
-            return
-        }
-        if self.playerItem !== GlobalPlayer.shared.player.currentItem {
-            GlobalPlayer.shared.replaceItem(self.playerItem!)
-            self.playerView.playerLayer.player = GlobalPlayer.shared.player
-        } else {
-            GlobalPlayer.shared.togglePlaying()
-        }
+        _ = self.redditPost?.playerItemObservable
+            .takeUntil(self.unsubscribeRedditPost)
+            .subscribe(onNext: { item in
+            GlobalPlayer.shared.replaceItem(item!, self.redditPost!)
+        })
+        
+//        self.redditPost?.playVideo().subscribe(onCompleted: {
+//            self.playerView.playerLayer.player = GlobalPlayer.shared.player
+//        })
+
+//        if self.playerItem !== GlobalPlayer.shared.player.currentItem {
+//            GlobalPlayer.shared.replaceItem(self.playerItem!)
+//        } else {
+//            GlobalPlayer.shared.togglePlaying()
+//        }
     }
     
     func showThumbnail() {

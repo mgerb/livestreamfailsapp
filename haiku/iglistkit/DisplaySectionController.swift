@@ -48,13 +48,7 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
             guard let cell = collectionContext?.dequeueReusableCell(of: PlayerCell.self, for: self, at: index) as? PlayerCell else {
                 fatalError()
             }
-            
-            cell.setThumbnail(self.redditPost!.thumbnail)
-            
-            self.redditPost!.getPlayerItem().subscribe(onNext: { item in
-                cell.setPlayerItem(self.redditPost!.playerItem)
-            })
-
+            cell.setRedditPost(self.redditPost!)
             return cell
         }
         

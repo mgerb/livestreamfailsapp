@@ -16,8 +16,9 @@ class RedditService {
             switch response.result {
             case .success(let res):
                 if let data = try? JSONDecoder().decode(RedditData.self, from: res) {
-                    let newData = data.data.children.map{ c in
-                        return c.data
+                    let newData = data.data.children.compactMap { c in
+                        // filter out reddit posts that don't contain youtube link
+                        return c.data.url?.youtubeID == nil ? nil : c.data
                     }
                     closure(newData)
                 }
