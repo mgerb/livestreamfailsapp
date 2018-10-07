@@ -57,6 +57,7 @@ class RedditPost: Codable {
     }
     
     let title: String
+    var expandTitle = false
     let url: String?
     let id: String
     let name: String

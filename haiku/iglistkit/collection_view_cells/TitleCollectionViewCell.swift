@@ -11,23 +11,25 @@ import SnapKit
 
 class TitleCollectionViewCell: UICollectionViewCell {
     
+    var redditPost: RedditPost?
     
     lazy private var label: UILabel = {
         let label = UILabel()
         self.contentView.addSubview(label)
+        label.font = Config.defaultFont
+        label.numberOfLines = 0
         return label
     }()
-    
-    var text: String? {
-        didSet {
-            self.label.text = self.text
-        }
+
+    func setRedditPost(post: RedditPost) {
+        self.label.text = post.title
+        self.label.numberOfLines = post.expandTitle ? 0 : 1
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         label.snp.makeConstraints{(make) -> Void in
-            make.left.equalTo(self).offset(5)
+            make.left.equalTo(self).offset(10)
             make.right.equalTo(self).offset(-5)
             make.centerY.equalTo(self)
         }

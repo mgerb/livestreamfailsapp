@@ -25,6 +25,7 @@
 		A25285B32165B60000DCA537 /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A25285B12165B5F100DCA537 /* Cache.framework */; };
 		A25285B42165B60000DCA537 /* Cache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A25285B12165B5F100DCA537 /* Cache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A25285B62165B7DB00DCA537 /* storage.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285B52165B7DB00DCA537 /* storage.service.swift */; };
+		A25285B8216ACADD00DCA537 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285B7216ACADD00DCA537 /* Config.swift */; };
 		A2591251211BD28200B09D73 /* reddit.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2591250211BD28200B09D73 /* reddit.service.swift */; };
 		A2591254211BD32900B09D73 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2591252211BD31700B09D73 /* Alamofire.framework */; };
 		A2591255211BD32900B09D73 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2591252211BD31700B09D73 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -73,6 +74,7 @@
 		A25285AF2165955700DCA537 /* UIScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollView.swift; sourceTree = "<group>"; };
 		A25285B12165B5F100DCA537 /* Cache.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cache.framework; path = Carthage/Build/iOS/Cache.framework; sourceTree = SOURCE_ROOT; };
 		A25285B52165B7DB00DCA537 /* storage.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = storage.service.swift; sourceTree = "<group>"; };
+		A25285B7216ACADD00DCA537 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		A2591250211BD28200B09D73 /* reddit.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reddit.service.swift; sourceTree = "<group>"; };
 		A2591252211BD31700B09D73 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = SOURCE_ROOT; };
 		A288A12B215344D000000733 /* MyPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlayerView.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				A29CD00C2119363C00A5A6EC /* Assets.xcassets */,
 				A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */,
 				A29CD0112119363C00A5A6EC /* Info.plist */,
+				A25285B7216ACADD00DCA537 /* Config.swift */,
 			);
 			path = haiku;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				A25285B62165B7DB00DCA537 /* storage.service.swift in Sources */,
 				A2528584215C6F6B00DCA537 /* String.swift in Sources */,
 				A2591251211BD28200B09D73 /* reddit.service.swift in Sources */,
+				A25285B8216ACADD00DCA537 /* Config.swift in Sources */,
 				A25285732159C9FC00DCA537 /* DisplayViewController.swift in Sources */,
 				A288A12C215344D000000733 /* MyPlayerView.swift in Sources */,
 				A252857E215C655600DCA537 /* TitleCollectionViewCell.swift in Sources */,

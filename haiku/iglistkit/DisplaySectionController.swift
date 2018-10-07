@@ -14,7 +14,7 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
 
 
     public var redditPost: RedditPost!
-    
+
     override init() {
         super.init()
         displayDelegate = self
@@ -29,7 +29,12 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
     override func sizeForItem(at index: Int) -> CGSize {
         let width = UIScreen.main.bounds.width
         if index == 0 {
-            return CGSize(width: width, height: 30)
+            let cellHorizontalPadding = CGFloat(15)
+            var size = CGSize(width: width, height: "blankstring".heightWithConstrainedWidth(width: width - cellHorizontalPadding, font: Config.defaultFont) + 30)
+            if self.redditPost.expandTitle {
+                size.height = self.redditPost.title.heightWithConstrainedWidth(width: width - cellHorizontalPadding, font: Config.defaultFont) + 30
+            }
+            return size
         } else if index == 1 {
             let height = (width * 9 / 16)
             return CGSize(width: width, height: height)
@@ -39,15 +44,11 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         if index == 0 {
-            guard let cell = collectionContext?.dequeueReusableCell(of: TitleCollectionViewCell.self, for: self, at: index) as? TitleCollectionViewCell else {
-                fatalError()
-            }
-            cell.text = redditPost.title
+            let cell = collectionContext?.dequeueReusableCell(of: TitleCollectionViewCell.self, for: self, at: index) as! TitleCollectionViewCell
+            cell.setRedditPost(post: self.redditPost)
             return cell
         } else if index == 1 {
-            guard let cell = collectionContext?.dequeueReusableCell(of: PlayerCell.self, for: self, at: index) as? PlayerCell else {
-                fatalError()
-            }
+            let cell = collectionContext?.dequeueReusableCell(of: PlayerCell.self, for: self, at: index) as! PlayerCell
             cell.setRedditPost(self.redditPost!)
             return cell
         }
@@ -60,11 +61,18 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
             self.redditPost = post
         }
     }
+    
+    override func didSelectItem(at index: Int) {
+        if index == 0 {
+            self.redditPost.expandTitle = !self.redditPost.expandTitle
+            self.updateCell(index: 0)
+        }
+    }
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {
         if let controller = sectionController as? DisplaySectionController {
             // pre load player item
-            controller.redditPost!.getPlayerItem().subscribe{}
+            controller.redditPost?.getPlayerItem().subscribe()
         }
     }
     
@@ -81,6 +89,13 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
     }
     
     func listAdapter(_ listAdapter: ListAdapter, didEndDisplaying sectionController: ListSectionController, cell: UICollectionViewCell, at index: Int) {
+        
+    }
+    
+    private func updateCell(index: Int) {
+        collectionContext?.performBatch(animated: false, updates: { (batchContext) in
+            batchContext.reload(in: self, at: IndexSet(integer: index))
+        })
     }
 }
 
