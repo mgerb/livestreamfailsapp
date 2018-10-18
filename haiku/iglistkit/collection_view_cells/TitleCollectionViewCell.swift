@@ -17,11 +17,20 @@ class TitleCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         self.contentView.addSubview(label)
         label.font = Config.defaultFont
-        label.numberOfLines = 0
+        label.textColor = Config.colors.primaryFont
         return label
     }()
 
+    lazy private var moreButton: UIButton = {
+        let button = UIButton()
+        self.contentView.addSubview(button)
+        button.addTarget(self, action: #selector(moreButtonAction), for: .touchUpInside)
+        button.setIcon(icon: .fontAwesomeSolid(.ellipsisH), iconSize: 30, color: Config.colors.primaryLight, forState: .normal)
+        return button
+    }()
+
     func setRedditPost(post: RedditPost) {
+        self.redditPost = post
         self.label.text = post.title
         self.label.numberOfLines = post.expandTitle ? 0 : 1
     }
@@ -29,9 +38,17 @@ class TitleCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         label.snp.makeConstraints{(make) -> Void in
-            make.left.equalTo(self).offset(10)
-            make.right.equalTo(self).offset(-5)
+            make.left.equalTo(self).offset(15)
+            make.right.equalTo(self).offset(-(self.moreButton.frame.width + 20))
             make.centerY.equalTo(self)
         }
+        self.moreButton.snp.makeConstraints{ make in
+            make.right.equalTo(self).offset(-15)
+            make.centerY.equalTo(self)
+        }
+    }
+    
+    @objc func moreButtonAction() {
+        Subjects.shared.moreButtonAction.onNext(self.redditPost!)
     }
 }

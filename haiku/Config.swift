@@ -9,6 +9,13 @@
 import Foundation
 import UIKit
 
+class Colors {
+    let primaryFont: UIColor = .darkGray
+    let primaryLight: UIColor = .lightGray
+    let red: UIColor = .red
+}
+
 class Config {
-    static let defaultFont = UIFont(name: "HelveticaNeue-Bold", size: 14)!
+    static let defaultFont = UIFont.systemFont(ofSize: 16)
+    static let colors = Colors()
 }

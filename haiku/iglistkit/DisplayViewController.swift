@@ -1,17 +1,11 @@
-//
-//  DisplayViewController.swift
-//  haiku
-//
-//  Created by Mitchell Gerber on 9/24/18.
-//  Copyright © 2018 Mitchell Gerber. All rights reserved.
-//
-
 import IGListKit
 import UIKit
+import RxSwift
 
 class DisplayViewController: UIViewController, ListAdapterDataSource, UIScrollViewDelegate {
     var data: [ListDiffable] = []
     let refreshControl = UIRefreshControl()
+    private let disposeBag = DisposeBag()
 
     lazy var adapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 10)
@@ -39,6 +33,7 @@ class DisplayViewController: UIViewController, ListAdapterDataSource, UIScrollVi
         }
         self.refreshControl.addTarget(self, action: #selector(fetchInitial(_:)), for: .valueChanged)
         self.fetchInitial()
+        self.setupSubjectSubscriptions()
     }
     
     override func viewDidLayoutSubviews() {
@@ -55,7 +50,6 @@ class DisplayViewController: UIViewController, ListAdapterDataSource, UIScrollVi
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? { return nil }
-    
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.isAtBottom && !self.refreshControl.isRefreshing {
@@ -80,5 +74,28 @@ class DisplayViewController: UIViewController, ListAdapterDataSource, UIScrollVi
                 self.refreshControl.endRefreshing()
             })
         }
+    }
+    
+    func setupSubjectSubscriptions() {
+        Subjects.shared.moreButtonAction.subscribe(onNext: { redditPost in
+            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            let action1 = UIAlertAction(title: "Copy Video URL", style: .default) { (action:UIAlertAction) in
+                UIPasteboard.general.string = redditPost.url
+            }
+
+            let action2 = UIAlertAction(title: "Open in Reddit", style: .default) { (action:UIAlertAction) in
+                guard let url = URL(string: "https://www.reddit.com\(redditPost.permalink)") else { return }
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+            
+            let action3 = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
+            }
+            
+            alertController.addAction(action1)
+            alertController.addAction(action2)
+            alertController.addAction(action3)
+            self.present(alertController, animated: true, completion: nil)
+        }).disposed(by: self.disposeBag)
     }
 }

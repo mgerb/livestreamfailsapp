@@ -54,13 +54,15 @@ class RedditPost: Codable {
         case url
         case id
         case name
+        case permalink
     }
     
     let title: String
-    var expandTitle = false
     let url: String?
     let id: String
     let name: String
+    let permalink: String
+    var expandTitle = false
     lazy var thumbnail: UIImageView = {
         let view = UIImageView()
         if let youtubeID = self.url?.youtubeID {

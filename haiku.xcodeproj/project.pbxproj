@@ -10,6 +10,11 @@
 		A240BA1D2159AE68004E8419 /* IGListKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A240BA1B2159AE5C004E8419 /* IGListKit.framework */; };
 		A240BA1E2159AE68004E8419 /* IGListKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A240BA1B2159AE5C004E8419 /* IGListKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A240BA252159BD74004E8419 /* PlayerCell.swift */; };
+		A24818BE21780E3B005B8819 /* InfoRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24818BD21780E3B005B8819 /* InfoRowCell.swift */; };
+		A24818C0217815C8005B8819 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24818BF217815C8005B8819 /* Util.swift */; };
+		A24818C221781807005B8819 /* subjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24818C121781807005B8819 /* subjects.swift */; };
+		A24818C6217823A1005B8819 /* SwiftIcons.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A24818C421782395005B8819 /* SwiftIcons.framework */; };
+		A24818C7217823A1005B8819 /* SwiftIcons.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A24818C421782395005B8819 /* SwiftIcons.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A25285732159C9FC00DCA537 /* DisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285722159C9FC00DCA537 /* DisplayViewController.swift */; };
 		A25285752159CA2E00DCA537 /* DisplaySectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285742159CA2E00DCA537 /* DisplaySectionController.swift */; };
 		A25285772159E5BE00DCA537 /* global-player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285762159E5BE00DCA537 /* global-player.swift */; };
@@ -47,6 +52,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				A29CD02A21193DC300A5A6EC /* XCDYouTubeKit.framework in Embed Frameworks */,
+				A24818C7217823A1005B8819 /* SwiftIcons.framework in Embed Frameworks */,
 				A25285AE2161A0AC00DCA537 /* RxSwift.framework in Embed Frameworks */,
 				A29CD02821193DC300A5A6EC /* SnapKit.framework in Embed Frameworks */,
 				A2591255211BD32900B09D73 /* Alamofire.framework in Embed Frameworks */,
@@ -62,6 +68,10 @@
 /* Begin PBXFileReference section */
 		A240BA1B2159AE5C004E8419 /* IGListKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IGListKit.framework; path = Carthage/Build/iOS/IGListKit.framework; sourceTree = SOURCE_ROOT; };
 		A240BA252159BD74004E8419 /* PlayerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCell.swift; sourceTree = "<group>"; };
+		A24818BD21780E3B005B8819 /* InfoRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoRowCell.swift; sourceTree = "<group>"; };
+		A24818BF217815C8005B8819 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		A24818C121781807005B8819 /* subjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = subjects.swift; sourceTree = "<group>"; };
+		A24818C421782395005B8819 /* SwiftIcons.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftIcons.framework; path = Carthage/Build/iOS/SwiftIcons.framework; sourceTree = SOURCE_ROOT; };
 		A25285722159C9FC00DCA537 /* DisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayViewController.swift; sourceTree = "<group>"; };
 		A25285742159CA2E00DCA537 /* DisplaySectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySectionController.swift; sourceTree = "<group>"; };
 		A25285762159E5BE00DCA537 /* global-player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "global-player.swift"; sourceTree = "<group>"; };
@@ -84,7 +94,6 @@
 		A29CD00F2119363C00A5A6EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A29CD0112119363C00A5A6EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A29CD01F21193DB800A5A6EC /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/iOS/XCDYouTubeKit.framework; sourceTree = SOURCE_ROOT; };
-		A29CD02021193DB900A5A6EC /* Player.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Player.framework; path = Carthage/Build/iOS/Player.framework; sourceTree = SOURCE_ROOT; };
 		A29CD02121193DB900A5A6EC /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -94,6 +103,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A29CD02921193DC300A5A6EC /* XCDYouTubeKit.framework in Frameworks */,
+				A24818C6217823A1005B8819 /* SwiftIcons.framework in Frameworks */,
 				A25285AD2161A0AC00DCA537 /* RxSwift.framework in Frameworks */,
 				A29CD02721193DC300A5A6EC /* SnapKit.framework in Frameworks */,
 				A2591254211BD32900B09D73 /* Alamofire.framework in Frameworks */,
@@ -106,11 +116,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A24818C321781811005B8819 /* global */ = {
+			isa = PBXGroup;
+			children = (
+				A25285762159E5BE00DCA537 /* global-player.swift */,
+				A24818C121781807005B8819 /* subjects.swift */,
+			);
+			path = global;
+			sourceTree = "<group>";
+		};
 		A252857C215C652E00DCA537 /* collection_view_cells */ = {
 			isa = PBXGroup;
 			children = (
 				A240BA252159BD74004E8419 /* PlayerCell.swift */,
 				A252857D215C655600DCA537 /* TitleCollectionViewCell.swift */,
+				A24818BD21780E3B005B8819 /* InfoRowCell.swift */,
 			);
 			path = collection_view_cells;
 			sourceTree = "<group>";
@@ -136,7 +156,6 @@
 			isa = PBXGroup;
 			children = (
 				A2591250211BD28200B09D73 /* reddit.service.swift */,
-				A25285762159E5BE00DCA537 /* global-player.swift */,
 				A25285B52165B7DB00DCA537 /* storage.service.swift */,
 			);
 			path = services;
@@ -167,11 +186,13 @@
 				A252857F215C6E8C00DCA537 /* model */,
 				A2A186D32159AB2100474ABC /* iglistkit */,
 				A259124F211BD26700B09D73 /* services */,
-				A29CD0052119363900A5A6EC /* AppDelegate.swift */,
+				A24818C321781811005B8819 /* global */,
 				A29CD00C2119363C00A5A6EC /* Assets.xcassets */,
+				A29CD0052119363900A5A6EC /* AppDelegate.swift */,
 				A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */,
 				A29CD0112119363C00A5A6EC /* Info.plist */,
 				A25285B7216ACADD00DCA537 /* Config.swift */,
+				A24818BF217815C8005B8819 /* Util.swift */,
 			);
 			path = haiku;
 			sourceTree = "<group>";
@@ -179,12 +200,12 @@
 		A29CD01E21193BD800A5A6EC /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A24818C421782395005B8819 /* SwiftIcons.framework */,
 				A25285B12165B5F100DCA537 /* Cache.framework */,
 				A25285AB2161A09C00DCA537 /* RxSwift.framework */,
 				A25285782159F89900DCA537 /* Kingfisher.framework */,
 				A240BA1B2159AE5C004E8419 /* IGListKit.framework */,
 				A2591252211BD31700B09D73 /* Alamofire.framework */,
-				A29CD02021193DB900A5A6EC /* Player.framework */,
 				A29CD02121193DB900A5A6EC /* SnapKit.framework */,
 				A29CD01F21193DB800A5A6EC /* XCDYouTubeKit.framework */,
 			);
@@ -235,6 +256,7 @@
 				TargetAttributes = {
 					A29CD0012119363900A5A6EC = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -276,6 +298,7 @@
 				A25285B62165B7DB00DCA537 /* storage.service.swift in Sources */,
 				A2528584215C6F6B00DCA537 /* String.swift in Sources */,
 				A2591251211BD28200B09D73 /* reddit.service.swift in Sources */,
+				A24818C0217815C8005B8819 /* Util.swift in Sources */,
 				A25285B8216ACADD00DCA537 /* Config.swift in Sources */,
 				A25285732159C9FC00DCA537 /* DisplayViewController.swift in Sources */,
 				A288A12C215344D000000733 /* MyPlayerView.swift in Sources */,
@@ -284,7 +307,9 @@
 				A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */,
 				A25285772159E5BE00DCA537 /* global-player.swift in Sources */,
 				A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */,
+				A24818BE21780E3B005B8819 /* InfoRowCell.swift in Sources */,
 				A25285B02165955800DCA537 /* UIScrollView.swift in Sources */,
+				A24818C221781807005B8819 /* subjects.swift in Sources */,
 				A25285AA21615AC800DCA537 /* CachingPlayerItem.swift in Sources */,
 				A2528581215C6E9C00DCA537 /* reddit.swift in Sources */,
 			);
@@ -422,6 +447,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A2MTP4D45D;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -435,6 +461,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mgerb1.DownTube;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -444,6 +471,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = A2MTP4D45D;
 				FRAMEWORK_SEARCH_PATHS = (

@@ -98,16 +98,6 @@ class PlayerCell: UICollectionViewCell {
             .subscribe(onNext: { item in
             GlobalPlayer.shared.replaceItem(item!, self.redditPost!)
         })
-        
-//        self.redditPost?.playVideo().subscribe(onCompleted: {
-//            self.playerView.playerLayer.player = GlobalPlayer.shared.player
-//        })
-
-//        if self.playerItem !== GlobalPlayer.shared.player.currentItem {
-//            GlobalPlayer.shared.replaceItem(self.playerItem!)
-//        } else {
-//            GlobalPlayer.shared.togglePlaying()
-//        }
     }
     
     func showThumbnail() {
