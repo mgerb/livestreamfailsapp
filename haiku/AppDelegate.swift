@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tc.title = "Yaiku"
         let firstViewController = DisplayViewController()
         firstViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
-        let secondViewController = DisplayViewController()
+        let secondViewController = FavoritesViewController()
         secondViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 1)
         
         tc.viewControllers = [firstViewController, secondViewController]

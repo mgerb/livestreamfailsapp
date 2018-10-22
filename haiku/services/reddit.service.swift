@@ -16,10 +16,17 @@ class RedditService {
             switch response.result {
             case .success(let res):
                 if let data = try? JSONDecoder().decode(RedditData.self, from: res) {
-                    let newData = data.data.children.compactMap { c in
+                    let newData = data.data.children.compactMap { val -> RedditPost? in
                         // filter out reddit posts that don't contain youtube link
-                        return c.data.url?.youtubeID == nil ? nil : c.data
+                        if val.data.url?.youtubeID == nil {
+                            return nil
+                        }
+                        if StorageService.shared.redditPostFavoriteExists(id: val.data.id) {
+                            val.data.favorited = true
+                        }
+                        return val.data
                     }
+                    
                     closure(newData)
                 }
             case .failure(_):

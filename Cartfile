@@ -6,4 +6,5 @@ github "onevcat/Kingfisher" ~> 4.0
 github "ReactiveX/RxSwift" ~> 4.0
 github "hyperoslo/Cache"
 github "ranesr/SwiftIcons" ~> 2.2.0
+github "realm/realm-cocoa"
 

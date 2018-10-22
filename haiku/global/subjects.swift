@@ -12,4 +12,5 @@ import RxSwift
 class Subjects {
     static let shared = Subjects()
     let moreButtonAction = PublishSubject<RedditPost>()
+    let favoriteButtonAction = PublishSubject<RedditPost>()
 }

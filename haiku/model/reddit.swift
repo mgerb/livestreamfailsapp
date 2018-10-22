@@ -10,6 +10,8 @@ import IGListKit
 import XCDYouTubeKit
 import RxSwift
 import Cache
+import Realm
+import RealmSwift
 
 struct RedditData: Codable {
     let kind: String
@@ -47,6 +49,32 @@ struct RedditChildren: Codable {
     }
 }
 
+
+class RealmRedditPost: Object {
+    @objc dynamic var title: String = ""
+    @objc dynamic var url: String?
+    @objc dynamic var id: String = ""
+    @objc dynamic var name: String = ""
+    @objc dynamic var permalink: String = ""
+    
+    convenience init(_ redditPost: RedditPost) {
+        self.init()
+        self.title = redditPost.title
+        self.url = redditPost.url
+        self.id = redditPost.id
+        self.name = redditPost.name
+        self.permalink = redditPost.permalink
+    }
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+    
+    func getRedditPost() -> RedditPost {
+        return RedditPost(title: self.title, url: self.url, id: self.id, name: self.name, permalink: self.permalink)
+    }
+}
+
 class RedditPost: Codable {
     
     private enum CodingKeys: String, CodingKey {
@@ -62,6 +90,8 @@ class RedditPost: Codable {
     let id: String
     let name: String
     let permalink: String
+    
+    var favorited = false
     var expandTitle = false
     lazy var thumbnail: UIImageView = {
         let view = UIImageView()
@@ -73,6 +103,14 @@ class RedditPost: Codable {
     }()
     private var cachedPlayerItem: CachingPlayerItem? = nil
     lazy var playerItemObservable: Observable<CachingPlayerItem?> = self.getPlayerItem()
+    
+    init(title: String, url: String?, id: String, name: String, permalink: String) {
+        self.title = title
+        self.url = url
+        self.id = id
+        self.name = name
+        self.permalink = permalink
+    }
 
     func getPlayerItem() -> Observable<CachingPlayerItem?> {
         return Observable.create { observer in
