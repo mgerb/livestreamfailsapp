@@ -5,7 +5,7 @@ import RxSwift
 class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UIScrollViewDelegate {
     var data: [ListDiffable] = []
     let refreshControl = UIRefreshControl()
-    private let disposeBag = DisposeBag()
+    let disposeBag = DisposeBag()
     
     lazy var adapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 10)

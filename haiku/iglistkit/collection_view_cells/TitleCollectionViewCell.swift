@@ -25,7 +25,7 @@ class TitleCollectionViewCell: UICollectionViewCell {
         let button = UIButton()
         self.contentView.addSubview(button)
         button.addTarget(self, action: #selector(moreButtonAction), for: .touchUpInside)
-        button.setIcon(icon: .fontAwesomeSolid(.ellipsisH), iconSize: 30, color: Config.colors.primaryLight, forState: .normal)
+        button.setIcon(icon: .ionicons(.more), iconSize: 20, color: Config.colors.primaryFont, forState: .normal)
         return button
     }()
 

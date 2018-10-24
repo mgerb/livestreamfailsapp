@@ -30,12 +30,7 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
         let width = UIScreen.main.bounds.width
         switch index {
         case 0:
-            let cellHorizontalPadding = CGFloat(15)
-            var size = CGSize(width: width, height: "blankstring".heightWithConstrainedWidth(width: width - cellHorizontalPadding, font: Config.defaultFont) + 20)
-            if self.redditPost.expandTitle {
-                size.height = self.redditPost.title.heightWithConstrainedWidth(width: width - cellHorizontalPadding, font: Config.defaultFont) + 20
-            }
-            return size
+            return CGSize(width: width, height: self.getTitleCellHeight(width))
         case 1:
             let height = (width * 9 / 16)
             return CGSize(width: width, height: height)
@@ -105,6 +100,16 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
         collectionContext?.performBatch(animated: false, updates: { (batchContext) in
             batchContext.reload(in: self, at: IndexSet(integer: index))
         })
+    }
+    
+    private func getTitleCellHeight(_ width: CGFloat) -> CGFloat {
+        // width of everything else except the title
+        let cellOffsetWidth = CGFloat(80)
+        if self.redditPost.expandTitle {
+            return self.redditPost.title.heightWithConstrainedWidth(width: width - cellOffsetWidth, font: Config.defaultFont) + 20
+        } else {
+            return "".heightWithConstrainedWidth(width: width, font: Config.defaultFont) + 20
+        }
     }
 }
 
