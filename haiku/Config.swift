@@ -17,5 +17,6 @@ class Colors {
 
 class Config {
     static let defaultFont = UIFont.systemFont(ofSize: 16)
+    static let smallFont = UIFont.systemFont(ofSize: 12)
     static let colors = Colors()
 }

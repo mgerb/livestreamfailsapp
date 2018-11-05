@@ -11,6 +11,10 @@
 		A216DC9F217BE72900F6F5C2 /* RealmSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A216DC9C217BE71E00F6F5C2 /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A216DCA2217BE7F600F6F5C2 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A216DCA0217BE7ED00F6F5C2 /* Realm.framework */; };
 		A216DCA3217BE7F600F6F5C2 /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A216DCA0217BE7ED00F6F5C2 /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A235062521814ED400552B65 /* FlexLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A235062321814ECB00552B65 /* FlexLayout.framework */; };
+		A235062621814ED400552B65 /* FlexLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A235062321814ECB00552B65 /* FlexLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A23506292181639600552B65 /* PinLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A23506272181638800552B65 /* PinLayout.framework */; };
+		A235062A2181639600552B65 /* PinLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A23506272181638800552B65 /* PinLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A240BA1D2159AE68004E8419 /* IGListKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A240BA1B2159AE5C004E8419 /* IGListKit.framework */; };
 		A240BA1E2159AE68004E8419 /* IGListKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A240BA1B2159AE5C004E8419 /* IGListKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A240BA252159BD74004E8419 /* PlayerCell.swift */; };
@@ -38,6 +42,8 @@
 		A2591251211BD28200B09D73 /* reddit.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2591250211BD28200B09D73 /* reddit.service.swift */; };
 		A2591254211BD32900B09D73 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2591252211BD31700B09D73 /* Alamofire.framework */; };
 		A2591255211BD32900B09D73 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2591252211BD31700B09D73 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A26BD837218FE09100E948A4 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26BD836218FE09100E948A4 /* Int.swift */; };
+		A26BD839218FE53500E948A4 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26BD838218FE53500E948A4 /* SettingsViewController.swift */; };
 		A2889F2C217D6FF0001E7061 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2889F2B217D6FF0001E7061 /* FavoritesViewController.swift */; };
 		A2889F2E217D70CF001E7061 /* YaikuCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */; };
 		A288A12C215344D000000733 /* MyPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A288A12B215344D000000733 /* MyPlayerView.swift */; };
@@ -57,6 +63,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				A235062A2181639600552B65 /* PinLayout.framework in Embed Frameworks */,
 				A29CD02A21193DC300A5A6EC /* XCDYouTubeKit.framework in Embed Frameworks */,
 				A24818C7217823A1005B8819 /* SwiftIcons.framework in Embed Frameworks */,
 				A216DC9F217BE72900F6F5C2 /* RealmSwift.framework in Embed Frameworks */,
@@ -65,6 +72,7 @@
 				A29CD02821193DC300A5A6EC /* SnapKit.framework in Embed Frameworks */,
 				A2591255211BD32900B09D73 /* Alamofire.framework in Embed Frameworks */,
 				A252857B2159F8B900DCA537 /* Kingfisher.framework in Embed Frameworks */,
+				A235062621814ED400552B65 /* FlexLayout.framework in Embed Frameworks */,
 				A240BA1E2159AE68004E8419 /* IGListKit.framework in Embed Frameworks */,
 				A25285B42165B60000DCA537 /* Cache.framework in Embed Frameworks */,
 			);
@@ -76,6 +84,8 @@
 /* Begin PBXFileReference section */
 		A216DC9C217BE71E00F6F5C2 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = SOURCE_ROOT; };
 		A216DCA0217BE7ED00F6F5C2 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = SOURCE_ROOT; };
+		A235062321814ECB00552B65 /* FlexLayout.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FlexLayout.framework; path = Carthage/Build/iOS/FlexLayout.framework; sourceTree = SOURCE_ROOT; };
+		A23506272181638800552B65 /* PinLayout.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PinLayout.framework; path = Carthage/Build/iOS/PinLayout.framework; sourceTree = SOURCE_ROOT; };
 		A240BA1B2159AE5C004E8419 /* IGListKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IGListKit.framework; path = Carthage/Build/iOS/IGListKit.framework; sourceTree = SOURCE_ROOT; };
 		A240BA252159BD74004E8419 /* PlayerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCell.swift; sourceTree = "<group>"; };
 		A24818BD21780E3B005B8819 /* InfoRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoRowCell.swift; sourceTree = "<group>"; };
@@ -97,6 +107,8 @@
 		A25285B7216ACADD00DCA537 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		A2591250211BD28200B09D73 /* reddit.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reddit.service.swift; sourceTree = "<group>"; };
 		A2591252211BD31700B09D73 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = SOURCE_ROOT; };
+		A26BD836218FE09100E948A4 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
+		A26BD838218FE53500E948A4 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		A2889F2B217D6FF0001E7061 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YaikuCollectionViewController.swift; sourceTree = "<group>"; };
 		A288A12B215344D000000733 /* MyPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlayerView.swift; sourceTree = "<group>"; };
@@ -114,6 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A23506292181639600552B65 /* PinLayout.framework in Frameworks */,
 				A29CD02921193DC300A5A6EC /* XCDYouTubeKit.framework in Frameworks */,
 				A24818C6217823A1005B8819 /* SwiftIcons.framework in Frameworks */,
 				A216DC9E217BE72900F6F5C2 /* RealmSwift.framework in Frameworks */,
@@ -122,6 +135,7 @@
 				A29CD02721193DC300A5A6EC /* SnapKit.framework in Frameworks */,
 				A2591254211BD32900B09D73 /* Alamofire.framework in Frameworks */,
 				A252857A2159F8B900DCA537 /* Kingfisher.framework in Frameworks */,
+				A235062521814ED400552B65 /* FlexLayout.framework in Frameworks */,
 				A240BA1D2159AE68004E8419 /* IGListKit.framework in Frameworks */,
 				A25285B32165B60000DCA537 /* Cache.framework in Frameworks */,
 			);
@@ -162,6 +176,7 @@
 			children = (
 				A2528583215C6F6B00DCA537 /* String.swift */,
 				A25285AF2165955700DCA537 /* UIScrollView.swift */,
+				A26BD836218FE09100E948A4 /* Int.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -214,6 +229,8 @@
 		A29CD01E21193BD800A5A6EC /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A23506272181638800552B65 /* PinLayout.framework */,
+				A235062321814ECB00552B65 /* FlexLayout.framework */,
 				A216DCA0217BE7ED00F6F5C2 /* Realm.framework */,
 				A216DC9C217BE71E00F6F5C2 /* RealmSwift.framework */,
 				A24818C421782395005B8819 /* SwiftIcons.framework */,
@@ -237,6 +254,7 @@
 				A25285722159C9FC00DCA537 /* DisplayViewController.swift */,
 				A2889F2B217D6FF0001E7061 /* FavoritesViewController.swift */,
 				A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */,
+				A26BD838218FE53500E948A4 /* SettingsViewController.swift */,
 			);
 			path = iglistkit;
 			sourceTree = "<group>";
@@ -315,11 +333,13 @@
 			files = (
 				A25285B62165B7DB00DCA537 /* storage.service.swift in Sources */,
 				A2528584215C6F6B00DCA537 /* String.swift in Sources */,
+				A26BD839218FE53500E948A4 /* SettingsViewController.swift in Sources */,
 				A2591251211BD28200B09D73 /* reddit.service.swift in Sources */,
 				A24818C0217815C8005B8819 /* Util.swift in Sources */,
 				A25285B8216ACADD00DCA537 /* Config.swift in Sources */,
 				A25285732159C9FC00DCA537 /* DisplayViewController.swift in Sources */,
 				A288A12C215344D000000733 /* MyPlayerView.swift in Sources */,
+				A26BD837218FE09100E948A4 /* Int.swift in Sources */,
 				A252857E215C655600DCA537 /* TitleCollectionViewCell.swift in Sources */,
 				A25285752159CA2E00DCA537 /* DisplaySectionController.swift in Sources */,
 				A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */,
@@ -479,7 +499,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mgerb1.DownTube;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mgerb.yaiku;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -503,7 +523,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mgerb1.DownTube;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mgerb.yaiku;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

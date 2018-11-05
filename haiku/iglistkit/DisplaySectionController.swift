@@ -66,12 +66,7 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
         }
     }
     
-    override func didSelectItem(at index: Int) {
-        if index == 0 {
-            self.redditPost.expandTitle = !self.redditPost.expandTitle
-            self.updateCell(index: 0)
-        }
-    }
+    override func didSelectItem(at index: Int) {}
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {
         if let controller = sectionController as? DisplaySectionController {
@@ -104,12 +99,8 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
     
     private func getTitleCellHeight(_ width: CGFloat) -> CGFloat {
         // width of everything else except the title
-        let cellOffsetWidth = CGFloat(80)
-        if self.redditPost.expandTitle {
-            return self.redditPost.title.heightWithConstrainedWidth(width: width - cellOffsetWidth, font: Config.defaultFont) + 20
-        } else {
-            return "".heightWithConstrainedWidth(width: width, font: Config.defaultFont) + 20
-        }
+        let cellOffsetWidth = TitleCollectionViewCell.padding * 2
+        return self.redditPost.title.heightWithConstrainedWidth(width: width - cellOffsetWidth, font: Config.defaultFont) + 20
     }
 }
 

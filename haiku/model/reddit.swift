@@ -56,6 +56,7 @@ class RealmRedditPost: Object {
     @objc dynamic var id: String = ""
     @objc dynamic var name: String = ""
     @objc dynamic var permalink: String = ""
+    @objc dynamic var score: Int = 0
     
     convenience init(_ redditPost: RedditPost) {
         self.init()
@@ -64,6 +65,7 @@ class RealmRedditPost: Object {
         self.id = redditPost.id
         self.name = redditPost.name
         self.permalink = redditPost.permalink
+        self.score = redditPost.score
     }
     
     override static func primaryKey() -> String? {
@@ -71,7 +73,7 @@ class RealmRedditPost: Object {
     }
     
     func getRedditPost() -> RedditPost {
-        return RedditPost(title: self.title, url: self.url, id: self.id, name: self.name, permalink: self.permalink)
+        return RedditPost(title: self.title, url: self.url, id: self.id, name: self.name, permalink: self.permalink, score: self.score)
     }
 }
 
@@ -83,6 +85,7 @@ class RedditPost: Codable {
         case id
         case name
         case permalink
+        case score
     }
     
     let title: String
@@ -90,6 +93,7 @@ class RedditPost: Codable {
     let id: String
     let name: String
     let permalink: String
+    let score: Int
     
     var favorited = false
     var expandTitle = false
@@ -104,12 +108,13 @@ class RedditPost: Codable {
     private var cachedPlayerItem: CachingPlayerItem? = nil
     lazy var playerItemObservable: Observable<CachingPlayerItem?> = self.getPlayerItem()
     
-    init(title: String, url: String?, id: String, name: String, permalink: String) {
+    init(title: String, url: String?, id: String, name: String, permalink: String, score: Int) {
         self.title = title
         self.url = url
         self.id = id
         self.name = name
         self.permalink = permalink
+        self.score = score
     }
 
     func getPlayerItem() -> Observable<CachingPlayerItem?> {

@@ -3,6 +3,7 @@ import UIKit
 import SnapKit
 import SwiftIcons
 import RxSwift
+import FlexLayout
 
 class InfoRowCell: UICollectionViewCell {
     
@@ -12,22 +13,66 @@ class InfoRowCell: UICollectionViewCell {
 
     lazy private var likeButton: UIButton = {
         let button = UIButton()
-        self.contentView.addSubview(button)
         button.addTarget(self, action: #selector(likeButtonAction), for: .touchUpInside)
         return button
     }()
     
+    lazy private var moreButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(moreButtonAction), for: .touchUpInside)
+        return button
+    }()
+    
+    let scoreLabel: UILabel = {
+        let label = UILabel()
+        label.adjustsFontSizeToFitWidth = false
+        label.font = Config.smallFont
+        label.textColor = Config.colors.primaryFont
+        return label
+    }()
+
+    lazy private var rootViewContainer: UIView = {
+        let view = UIView()
+        view.flex.define{ flex in
+            flex.addItem().justifyContent(.spaceBetween).direction(.row).padding(10).paddingBottom(0).define{ flex in
+                
+                flex.addItem().grow(1).direction(.row).define{ flex in
+                    let l = UILabel()
+                    l.font = Config.smallFont
+                    l.text = "Score: "
+                    l.textColor = Config.colors.primaryFont
+                    flex.addItem(l)
+                    flex.addItem(self.scoreLabel).grow(1)
+                }
+                
+                flex.addItem().direction(.row).define{ flex in
+                    flex.addItem(self.moreButton).marginVertical(-10)
+                    flex.addItem(self.likeButton).marginVertical(-10)
+                }
+            }
+        }
+        return view
+    }()
+    
     func setRedditPost(post: RedditPost) {
         self.redditPost = post
+        self.scoreLabel.text = post.score.commaRepresentation
+        self.setupFlexLayout()
         self.setFavoriteButton()
+        self.moreButton.setIcon(icon: .ionicons(.more), iconSize: 20, color: Config.colors.primaryFont, forState: .normal)
+    }
+    
+    func setupFlexLayout() {
+        self.rootViewContainer.removeFromSuperview()
+        self.contentView.addSubview(self.rootViewContainer)
+        self.rootViewContainer.pin.all()
+        self.rootViewContainer.flex.layout(mode: .adjustHeight)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.likeButton.snp.makeConstraints{ make in
-            make.right.equalTo(self).offset(-15)
-            make.centerY.equalTo(self)
-        }
+        self.setupFlexLayout()
+
         Subjects.shared.favoriteButtonAction.subscribe(onNext: { p in
             if self.redditPost?.id == p.id {
                 self.redditPost?.favorited = p.favorited
@@ -70,6 +115,10 @@ class InfoRowCell: UICollectionViewCell {
             Subjects.shared.favoriteButtonAction.onNext(p)
         }
         Util.hapticFeedbackSuccess()
+    }
+    
+    @objc func moreButtonAction() {
+        Subjects.shared.moreButtonAction.onNext(self.redditPost!)
     }
     
 }

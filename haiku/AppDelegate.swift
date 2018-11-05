@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftIcons
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,12 +21,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let tc = UITabBarController()
         tc.title = "Yaiku"
-        let firstViewController = DisplayViewController()
-        firstViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
-        let secondViewController = FavoritesViewController()
-        secondViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .more, tag: 1)
         
-        tc.viewControllers = [firstViewController, secondViewController]
+        let mainViewController = DisplayViewController()
+        mainViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 0)
+        mainViewController.tabBarItem.setIcon(icon: .ionicons(.home), size: nil, textColor: Config.colors.primaryLight)
+
+        let favoritesViewController = FavoritesViewController()
+        favoritesViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
+        favoritesViewController.tabBarItem.setIcon(icon: .ionicons(.iosHeart), size: nil, textColor: Config.colors.primaryLight)
+        
+        let settingsViewController = SettingsViewController()
+        settingsViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 2)
+        settingsViewController.tabBarItem.setIcon(icon: .ionicons(.settings), size: nil, textColor: Config.colors.primaryLight)
+
+        tc.viewControllers = [mainViewController, favoritesViewController, settingsViewController]
         
         self.window!.rootViewController = UINavigationController(rootViewController: tc)
         self.window?.makeKeyAndVisible()

@@ -8,47 +8,30 @@
 
 import UIKit
 import SnapKit
+import FlexLayout
+import PinLayout
 
 class TitleCollectionViewCell: UICollectionViewCell {
     
+    static let padding = CGFloat(10)
     var redditPost: RedditPost?
     
     lazy private var label: UILabel = {
         let label = UILabel()
-        self.contentView.addSubview(label)
         label.font = Config.defaultFont
         label.textColor = Config.colors.primaryFont
         return label
     }()
 
-    lazy private var moreButton: UIButton = {
-        let button = UIButton()
-        self.contentView.addSubview(button)
-        button.addTarget(self, action: #selector(moreButtonAction), for: .touchUpInside)
-        button.setIcon(icon: .ionicons(.more), iconSize: 20, color: Config.colors.primaryFont, forState: .normal)
-        return button
-    }()
-
     func setRedditPost(post: RedditPost) {
         self.redditPost = post
         self.label.text = post.title
-        self.label.numberOfLines = post.expandTitle ? 0 : 1
+        self.label.numberOfLines = 0
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        label.snp.makeConstraints{(make) -> Void in
-            make.left.equalTo(self).offset(15)
-            make.right.equalTo(self).offset(-(self.moreButton.frame.width + 20))
-            make.centerY.equalTo(self)
-        }
-        self.moreButton.snp.makeConstraints{ make in
-            make.right.equalTo(self).offset(-15)
-            make.centerY.equalTo(self)
-        }
-    }
-    
-    @objc func moreButtonAction() {
-        Subjects.shared.moreButtonAction.onNext(self.redditPost!)
+        self.contentView.addSubview(self.label)
+        self.label.pin.all(TitleCollectionViewCell.padding)
     }
 }
