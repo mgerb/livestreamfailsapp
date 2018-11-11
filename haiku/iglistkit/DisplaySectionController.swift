@@ -13,7 +13,7 @@ import AVKit
 final class DisplaySectionController: ListSectionController, ListDisplayDelegate, ListWorkingRangeDelegate {
 
 
-    public var redditPost: RedditPost!
+    public var redditViewItem: RedditViewItem!
 
     override init() {
         super.init()
@@ -45,15 +45,15 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
         switch index {
         case 0:
             let cell = collectionContext?.dequeueReusableCell(of: TitleCollectionViewCell.self, for: self, at: index) as! TitleCollectionViewCell
-            cell.setRedditPost(post: self.redditPost)
+            cell.setRedditViewItem(item: self.redditViewItem)
             return cell
         case 1:
             let cell = collectionContext?.dequeueReusableCell(of: PlayerCell.self, for: self, at: index) as! PlayerCell
-            cell.setRedditPost(self.redditPost!)
+            cell.setRedditViewItem(item: self.redditViewItem)
             return cell
         case 2:
             let cell = collectionContext?.dequeueReusableCell(of: InfoRowCell.self, for: self, at: index) as! InfoRowCell
-            cell.setRedditPost(post: self.redditPost)
+            cell.setRedditViewItem(item: self.redditViewItem)
             return cell
         default:
             return collectionContext?.dequeueReusableCell(of: UICollectionViewCell.self, for: self, at: index) as! UICollectionViewCell
@@ -61,8 +61,8 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
     }
     
     override func didUpdate(to object: Any) {
-        if let post = object as? RedditPost {
-            self.redditPost = post
+        if let item = object as? RedditViewItem {
+            self.redditViewItem = item
         }
     }
     
@@ -71,7 +71,7 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {
         if let controller = sectionController as? DisplaySectionController {
             // pre load player item
-            controller.redditPost?.getPlayerItem().subscribe()
+            controller.redditViewItem?.getPlayerItem().subscribe()
         }
     }
     
@@ -100,7 +100,7 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
     private func getTitleCellHeight(_ width: CGFloat) -> CGFloat {
         // width of everything else except the title
         let cellOffsetWidth = TitleCollectionViewCell.padding * 2
-        return self.redditPost.title.heightWithConstrainedWidth(width: width - cellOffsetWidth, font: Config.defaultFont) + 20
+        return self.redditViewItem.redditPost.title.heightWithConstrainedWidth(width: width - cellOffsetWidth, font: Config.defaultFont) + 20
     }
 }
 

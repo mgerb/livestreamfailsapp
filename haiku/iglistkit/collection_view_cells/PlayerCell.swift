@@ -14,7 +14,7 @@ import RxSwift
 
 class PlayerCell: UICollectionViewCell {
     
-    private var redditPost: RedditPost?
+    private var redditViewItem: RedditViewItem?
     private var thumbnail = UIImageView()
     // used to unsubscribe when component deinits
     let disposeBag = DisposeBag()
@@ -46,12 +46,11 @@ class PlayerCell: UICollectionViewCell {
         self.setGlobalPlayerItemSubscription()
     }
     
-    func setRedditPost(_ post: RedditPost) {
-        self.redditPost = post
-        self.setThumbnail(self.redditPost!.thumbnail)
+    func setRedditViewItem(item: RedditViewItem) {
+        self.redditViewItem = item
+        self.setThumbnail(self.redditViewItem!.thumbnail)
         do {
-            let p = try GlobalPlayer.shared.activeRedditPost.value()
-            if self.redditPost?.id == p?.id {
+            if GlobalPlayer.shared.isItemPlaying(item: self.redditViewItem!) {
                 self.showPlayerView()
                 self.playerView.player = GlobalPlayer.shared.player
             } else {
@@ -73,8 +72,8 @@ class PlayerCell: UICollectionViewCell {
     }
 
     func setGlobalPlayerItemSubscription() {
-        GlobalPlayer.shared.activeRedditPost.subscribe(onNext: { post in
-            if self.redditPost?.id == post?.id {
+        GlobalPlayer.shared.activeRedditViewItem.subscribe(onNext: { item in
+            if self.redditViewItem! === item {
                 self.showPlayerView()
                 self.playerView.playerLayer.player = GlobalPlayer.shared.player
             } else {
@@ -88,15 +87,15 @@ class PlayerCell: UICollectionViewCell {
         if self.contentView.contains(self.thumbnail) {
             self.thumbnail.removeFromSuperview()
             self.unsubscribeRedditPost.onNext(())
-            self.redditPost = nil
+            self.redditViewItem = nil
         }
     }
     
     @objc func onTap() {
-        _ = self.redditPost?.playerItemObservable
+        _ = self.redditViewItem?.playerItemObservable
             .takeUntil(self.unsubscribeRedditPost)
             .subscribe(onNext: { item in
-            GlobalPlayer.shared.replaceItem(item!, self.redditPost!)
+            GlobalPlayer.shared.replaceItem(item!, self.redditViewItem!)
         })
     }
     

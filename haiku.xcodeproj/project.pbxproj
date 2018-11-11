@@ -23,7 +23,7 @@
 		A24818C221781807005B8819 /* subjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24818C121781807005B8819 /* subjects.swift */; };
 		A24818C6217823A1005B8819 /* SwiftIcons.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A24818C421782395005B8819 /* SwiftIcons.framework */; };
 		A24818C7217823A1005B8819 /* SwiftIcons.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A24818C421782395005B8819 /* SwiftIcons.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A25285732159C9FC00DCA537 /* DisplayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285722159C9FC00DCA537 /* DisplayViewController.swift */; };
+		A25285732159C9FC00DCA537 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285722159C9FC00DCA537 /* HomeViewController.swift */; };
 		A25285752159CA2E00DCA537 /* DisplaySectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285742159CA2E00DCA537 /* DisplaySectionController.swift */; };
 		A25285772159E5BE00DCA537 /* global-player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285762159E5BE00DCA537 /* global-player.swift */; };
 		A252857A2159F8B900DCA537 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A25285782159F89900DCA537 /* Kingfisher.framework */; };
@@ -54,6 +54,8 @@
 		A29CD02821193DC300A5A6EC /* SnapKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A29CD02121193DB900A5A6EC /* SnapKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A29CD02921193DC300A5A6EC /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A29CD01F21193DB800A5A6EC /* XCDYouTubeKit.framework */; };
 		A29CD02A21193DC300A5A6EC /* XCDYouTubeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A29CD01F21193DB800A5A6EC /* XCDYouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */; };
+		A2B7C2442198C211008DB7E6 /* RedditViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -92,7 +94,7 @@
 		A24818BF217815C8005B8819 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		A24818C121781807005B8819 /* subjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = subjects.swift; sourceTree = "<group>"; };
 		A24818C421782395005B8819 /* SwiftIcons.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftIcons.framework; path = Carthage/Build/iOS/SwiftIcons.framework; sourceTree = SOURCE_ROOT; };
-		A25285722159C9FC00DCA537 /* DisplayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayViewController.swift; sourceTree = "<group>"; };
+		A25285722159C9FC00DCA537 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		A25285742159CA2E00DCA537 /* DisplaySectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySectionController.swift; sourceTree = "<group>"; };
 		A25285762159E5BE00DCA537 /* global-player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "global-player.swift"; sourceTree = "<group>"; };
 		A25285782159F89900DCA537 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = SOURCE_ROOT; };
@@ -119,6 +121,8 @@
 		A29CD0112119363C00A5A6EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A29CD01F21193DB800A5A6EC /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/iOS/XCDYouTubeKit.framework; sourceTree = SOURCE_ROOT; };
 		A29CD02121193DB900A5A6EC /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = SOURCE_ROOT; };
+		A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
+		A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditViewItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -251,10 +255,12 @@
 				A252857C215C652E00DCA537 /* collection_view_cells */,
 				A288A12B215344D000000733 /* MyPlayerView.swift */,
 				A25285742159CA2E00DCA537 /* DisplaySectionController.swift */,
-				A25285722159C9FC00DCA537 /* DisplayViewController.swift */,
+				A25285722159C9FC00DCA537 /* HomeViewController.swift */,
 				A2889F2B217D6FF0001E7061 /* FavoritesViewController.swift */,
 				A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */,
 				A26BD838218FE53500E948A4 /* SettingsViewController.swift */,
+				A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */,
+				A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */,
 			);
 			path = iglistkit;
 			sourceTree = "<group>";
@@ -331,19 +337,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2B7C2442198C211008DB7E6 /* RedditViewItem.swift in Sources */,
 				A25285B62165B7DB00DCA537 /* storage.service.swift in Sources */,
 				A2528584215C6F6B00DCA537 /* String.swift in Sources */,
 				A26BD839218FE53500E948A4 /* SettingsViewController.swift in Sources */,
 				A2591251211BD28200B09D73 /* reddit.service.swift in Sources */,
 				A24818C0217815C8005B8819 /* Util.swift in Sources */,
 				A25285B8216ACADD00DCA537 /* Config.swift in Sources */,
-				A25285732159C9FC00DCA537 /* DisplayViewController.swift in Sources */,
+				A25285732159C9FC00DCA537 /* HomeViewController.swift in Sources */,
 				A288A12C215344D000000733 /* MyPlayerView.swift in Sources */,
 				A26BD837218FE09100E948A4 /* Int.swift in Sources */,
 				A252857E215C655600DCA537 /* TitleCollectionViewCell.swift in Sources */,
 				A25285752159CA2E00DCA537 /* DisplaySectionController.swift in Sources */,
 				A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */,
 				A2889F2C217D6FF0001E7061 /* FavoritesViewController.swift in Sources */,
+				A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */,
 				A25285772159E5BE00DCA537 /* global-player.swift in Sources */,
 				A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */,
 				A24818BE21780E3B005B8819 /* InfoRowCell.swift in Sources */,

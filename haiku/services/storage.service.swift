@@ -51,13 +51,14 @@ extension StorageService {
         }
     }
     
+    // get reddit post favorites from storage - order by date added
     func getRedditPostFavorites() -> [RedditPost] {
         if let posts = self.realm?.objects(RealmRedditPost.self) {
             return posts.map {
                 let p = $0.getRedditPost()
                 p.favorited = true
                 return p
-            }
+            }.sorted(by: {$0.dateAdded!.compare($1.dateAdded!) == .orderedDescending})
         }
         return []
     }

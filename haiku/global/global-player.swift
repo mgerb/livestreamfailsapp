@@ -22,9 +22,9 @@ class GlobalPlayer: NSObject {
         return player
     }()
     var playing = false
-    var activeRedditPost = BehaviorSubject<RedditPost?>(value: nil)
+    var activeRedditViewItem = BehaviorSubject<RedditViewItem?>(value: nil)
     
-    func replaceItem(_ item: AVPlayerItem, _ redditPost: RedditPost) {
+    func replaceItem(_ item: AVPlayerItem, _ redditViewItem: RedditViewItem) {
         // toggle player if trying to set current active player item
         if item === self.player.currentItem {
             self.togglePlaying()
@@ -32,7 +32,7 @@ class GlobalPlayer: NSObject {
         }
         self.pause()
         self.player.replaceCurrentItem(with: item)
-        self.activeRedditPost.onNext(redditPost)
+        self.activeRedditViewItem.onNext(redditViewItem)
         self.player.play()
         self.playing = true
     }
@@ -60,5 +60,12 @@ class GlobalPlayer: NSObject {
             self.play()
             self.playing = true
         }
+    }
+    
+    /// check if item is currently playing
+    /// compares object reference to current active item
+    func isItemPlaying(item: RedditViewItem) -> Bool {
+        let i = try? self.activeRedditViewItem.value()
+        return i != nil && i! === item
     }
 }

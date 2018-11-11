@@ -19,12 +19,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
-        let tc = UITabBarController()
+        let tc = MyTabBarController()
         tc.title = "Yaiku"
         
-        let mainViewController = DisplayViewController()
-        mainViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 0)
-        mainViewController.tabBarItem.setIcon(icon: .ionicons(.home), size: nil, textColor: Config.colors.primaryLight)
+        let homeViewController = HomeViewController()
+        homeViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 0)
+        homeViewController.tabBarItem.setIcon(icon: .ionicons(.home), size: nil, textColor: Config.colors.primaryLight)
 
         let favoritesViewController = FavoritesViewController()
         favoritesViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         settingsViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 2)
         settingsViewController.tabBarItem.setIcon(icon: .ionicons(.settings), size: nil, textColor: Config.colors.primaryLight)
 
-        tc.viewControllers = [mainViewController, favoritesViewController, settingsViewController]
+        tc.viewControllers = [homeViewController, favoritesViewController, settingsViewController]
         
         self.window!.rootViewController = UINavigationController(rootViewController: tc)
         self.window?.makeKeyAndVisible()
@@ -45,6 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+        GlobalPlayer.shared.pause()
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {

@@ -49,7 +49,6 @@ struct RedditChildren: Codable {
     }
 }
 
-
 class RealmRedditPost: Object {
     @objc dynamic var title: String = ""
     @objc dynamic var url: String?
@@ -57,23 +56,48 @@ class RealmRedditPost: Object {
     @objc dynamic var name: String = ""
     @objc dynamic var permalink: String = ""
     @objc dynamic var score: Int = 0
+    @objc dynamic var dateAdded: Date = Date()
+    @objc dynamic var over_18: Bool = false
+    @objc dynamic var author: String = ""
+    @objc dynamic var ups: Int = 0
+    @objc dynamic var is_self: Bool = false
+    @objc dynamic var created: Float = 0.0
+    @objc dynamic var created_utc: Float = 0.0
+    @objc dynamic var archived: Bool = false
+    @objc dynamic var pinned: Bool = false
+    @objc dynamic var locked: Bool = false
+    @objc dynamic var visited: Bool = false
+    @objc dynamic var num_comments: Int = 0
+    @objc dynamic var stickied: Bool = false
     
-    convenience init(_ redditPost: RedditPost) {
+    convenience init(_ rp: RedditPost) {
         self.init()
-        self.title = redditPost.title
-        self.url = redditPost.url
-        self.id = redditPost.id
-        self.name = redditPost.name
-        self.permalink = redditPost.permalink
-        self.score = redditPost.score
+        self.title = rp.title
+        self.url = rp.url
+        self.id = rp.id
+        self.name = rp.name
+        self.permalink = rp.permalink
+        self.score = rp.score
+        self.over_18 = rp.over_18
+        self.author = rp.author
+        self.ups = rp.ups
+        self.is_self = rp.is_self
+        self.created = rp.created
+        self.created_utc = rp.created_utc
+        self.archived = rp.archived
+        self.pinned = rp.pinned
+        self.locked = rp.locked
+        self.visited = rp.visited
+        self.num_comments = rp.num_comments
+        self.stickied = rp.stickied
     }
-    
+
     override static func primaryKey() -> String? {
         return "id"
     }
     
     func getRedditPost() -> RedditPost {
-        return RedditPost(title: self.title, url: self.url, id: self.id, name: self.name, permalink: self.permalink, score: self.score)
+        return RedditPost(rrp: self)
     }
 }
 
@@ -86,6 +110,18 @@ class RedditPost: Codable {
         case name
         case permalink
         case score
+        case over_18
+        case author
+        case ups
+        case is_self
+        case created
+        case created_utc
+        case archived
+        case pinned
+        case locked
+        case visited
+        case num_comments
+        case stickied
     }
     
     let title: String
@@ -94,94 +130,40 @@ class RedditPost: Codable {
     let name: String
     let permalink: String
     let score: Int
-    
+    let over_18: Bool
+    let author: String
+    let ups: Int
+    let is_self: Bool
+    let created: Float // created at timestamp
+    let created_utc: Float
+    let archived: Bool
+    let pinned: Bool
+    let locked: Bool
+    let visited: Bool
+    let num_comments: Int
+    let stickied: Bool
     var favorited = false
-    var expandTitle = false
-    lazy var thumbnail: UIImageView = {
-        let view = UIImageView()
-        if let youtubeID = self.url?.youtubeID {
-            // cache thumbnail with KF
-            view.kf.setImage(with: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")!)
-        }
-        return view
-    }()
-    private var cachedPlayerItem: CachingPlayerItem? = nil
-    lazy var playerItemObservable: Observable<CachingPlayerItem?> = self.getPlayerItem()
-    
-    init(title: String, url: String?, id: String, name: String, permalink: String, score: Int) {
-        self.title = title
-        self.url = url
-        self.id = id
-        self.name = name
-        self.permalink = permalink
-        self.score = score
-    }
+    var dateAdded: Date?
 
-    func getPlayerItem() -> Observable<CachingPlayerItem?> {
-        return Observable.create { observer in
-            let dispose = Disposables.create()
-
-            if self.cachedPlayerItem == nil {
-                if let storedItemData = StorageService.shared.getCachedVideo(id: self.id) {
-                    self.cachedPlayerItem = CachingPlayerItem(data: storedItemData, mimeType: "video/mp4", fileExtension: "mp4")
-                }
-            }
-
-            if self.cachedPlayerItem != nil {
-                observer.onNext(self.cachedPlayerItem)
-                observer.onCompleted()
-                return dispose
-            }
-            
-            if let id = self.url?.youtubeID {
-                let client = XCDYouTubeClient.default()
-                client.getVideoWithIdentifier(id) { (info, err) -> Void in
-                    if let streamUrl =  info?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue]
-                        ?? info?.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] {
-                        self.cachedPlayerItem = CachingPlayerItem(url: streamUrl, customFileExtension: "mp4")
-                        self.cachedPlayerItem?.delegate = self
-                        observer.onNext(self.cachedPlayerItem)
-                    }
-                    observer.onCompleted()
-                }
-            } else {
-                observer.onCompleted()
-            }
-            return dispose
-        }.share()
-    }
-}
-
-
-extension RedditPost: CachingPlayerItemDelegate {
-
-    func playerItem(_ playerItem: CachingPlayerItem, didFinishDownloadingData data: Data) {
-        StorageService.shared.cacheVideoData(data: data, id: self.id)
-    }
-    
-    // func playerItem(_ playerItem: CachingPlayerItem, didDownloadBytesSoFar bytesDownloaded: Int, outOf bytesExpected: Int) {
-    //     print("\(bytesDownloaded)/\(bytesExpected)")
-    // }
-    
-    // func playerItemPlaybackStalled(_ playerItem: CachingPlayerItem) {
-    //     print("Not enough data for playback. Probably because of the poor network. Wait a bit and try to play later.")
-    // }
-    
-    // func playerItem(_ playerItem: CachingPlayerItem, downloadingFailedWith error: Error) {
-    //     print(error)
-    // }
-    
-}
-
-extension RedditPost: ListDiffable {
-    func diffIdentifier() -> NSObjectProtocol {
-        return self.id as NSString
-    }
-    
-    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        if let object = object as? RedditPost {
-            return self.id == object.id
-        }
-        return false
+    init(rrp: RealmRedditPost) {
+        self.title = rrp.title
+        self.url = rrp.url
+        self.id = rrp.id
+        self.name = rrp.name
+        self.permalink = rrp.permalink
+        self.score = rrp.score
+        self.dateAdded = rrp.dateAdded
+        self.over_18 = rrp.over_18
+        self.author = rrp.author
+        self.ups = rrp.ups
+        self.is_self = rrp.is_self
+        self.created = rrp.created
+        self.created_utc = rrp.created_utc
+        self.archived = rrp.archived
+        self.pinned = rrp.pinned
+        self.locked = rrp.locked
+        self.visited = rrp.visited
+        self.num_comments = rrp.num_comments
+        self.stickied = rrp.stickied
     }
 }

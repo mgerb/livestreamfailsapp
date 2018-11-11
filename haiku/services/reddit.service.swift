@@ -12,7 +12,13 @@ class RedditService {
             url = url + ("&after=" + after!)
         }
         
-        Alamofire.request(url).responseData{ response in
+        // use custom headers to allow NSFW content
+        // it seems reddit blocks default iOS headers
+        let headers = [
+            "User-Agent": "Youtube Haiku App :)"
+        ]
+        
+        Alamofire.request(url, headers: headers).responseData{ response in
             switch response.result {
             case .success(let res):
                 if let data = try? JSONDecoder().decode(RedditData.self, from: res) {
@@ -21,9 +27,8 @@ class RedditService {
                         if val.data.url?.youtubeID == nil {
                             return nil
                         }
-                        if StorageService.shared.redditPostFavoriteExists(id: val.data.id) {
-                            val.data.favorited = true
-                        }
+                        // check if in storage - update favorited
+                        val.data.favorited = StorageService.shared.redditPostFavoriteExists(id: val.data.id)
                         return val.data
                     }
                     

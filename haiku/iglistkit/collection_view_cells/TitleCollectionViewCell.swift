@@ -14,7 +14,7 @@ import PinLayout
 class TitleCollectionViewCell: UICollectionViewCell {
     
     static let padding = CGFloat(10)
-    var redditPost: RedditPost?
+    var redditViewItem: RedditViewItem?
     
     lazy private var label: UILabel = {
         let label = UILabel()
@@ -23,9 +23,9 @@ class TitleCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
-    func setRedditPost(post: RedditPost) {
-        self.redditPost = post
-        self.label.text = post.title
+    func setRedditViewItem(item: RedditViewItem) {
+        self.redditViewItem = item
+        self.label.text = item.redditPost.title
         self.label.numberOfLines = 0
     }
 

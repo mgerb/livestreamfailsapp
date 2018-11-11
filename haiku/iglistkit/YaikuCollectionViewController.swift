@@ -3,7 +3,7 @@ import UIKit
 import RxSwift
 
 class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UIScrollViewDelegate {
-    var data: [ListDiffable] = []
+    var data: [RedditViewItem] = []
     let refreshControl = UIRefreshControl()
     let disposeBag = DisposeBag()
     
@@ -61,15 +61,15 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
     func fetchHaikus(_ after: String? = nil) {}
     
     func setupSubjectSubscriptions() {
-        Subjects.shared.moreButtonAction.subscribe(onNext: { redditPost in
+        Subjects.shared.moreButtonAction.subscribe(onNext: { redditViewItem in
             let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             
             let action1 = UIAlertAction(title: "Copy Video URL", style: .default) { (action:UIAlertAction) in
-                UIPasteboard.general.string = redditPost.url
+                UIPasteboard.general.string = redditViewItem.redditPost.url
             }
             
             let action2 = UIAlertAction(title: "Open in Reddit", style: .default) { (action:UIAlertAction) in
-                guard let url = URL(string: "https://www.reddit.com\(redditPost.permalink)") else { return }
+                guard let url = URL(string: "https://www.reddit.com\(redditViewItem.redditPost.permalink)") else { return }
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
             
@@ -80,6 +80,16 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
             alertController.addAction(action2)
             alertController.addAction(action3)
             self.present(alertController, animated: true, completion: nil)
+        }).disposed(by: self.disposeBag)
+        
+        // update post in list if favorited chages
+        // this is needed if user unfavorites post in favorites - need to update in main list view
+        Subjects.shared.favoriteButtonAction.subscribe(onNext: { redditViewItem in
+            self.data.forEach{ p in
+                if p.redditPost.id == redditViewItem.redditPost.id {
+                    p.redditPost.favorited = redditViewItem.redditPost.favorited
+                }
+            }
         }).disposed(by: self.disposeBag)
     }
 }
