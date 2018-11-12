@@ -33,6 +33,19 @@ class StorageService {
     }
 }
 
+// UserDefaults stuff
+extension StorageService {
+    /// store reddit post ID if user has watched it
+    func storeWatchedRedditPost(redditPost: RedditPost) {
+        UserDefaults.standard.set(true, forKey: "wrp:\(redditPost.id)")
+    }
+    
+    /// check if user has watched reddit post by ID
+    func getWatchedRedditPost(redditPost: RedditPost) -> Bool {
+        return UserDefaults.standard.bool(forKey: "wrp:\(redditPost.id)")
+    }
+}
+
 // realm reddit storage
 extension StorageService {
     
@@ -54,11 +67,9 @@ extension StorageService {
     // get reddit post favorites from storage - order by date added
     func getRedditPostFavorites() -> [RedditPost] {
         if let posts = self.realm?.objects(RealmRedditPost.self) {
-            return posts.map {
-                let p = $0.getRedditPost()
-                p.favorited = true
-                return p
-            }.sorted(by: {$0.dateAdded!.compare($1.dateAdded!) == .orderedDescending})
+            return posts
+                .map { $0.getRedditPost() }
+                .sorted(by: {$0.dateAdded!.compare($1.dateAdded!) == .orderedDescending})
         }
         return []
     }

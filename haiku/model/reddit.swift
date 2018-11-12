@@ -142,7 +142,6 @@ class RedditPost: Codable {
     let visited: Bool
     let num_comments: Int
     let stickied: Bool
-    var favorited = false
     var dateAdded: Date?
 
     init(rrp: RealmRedditPost) {

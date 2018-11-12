@@ -16,9 +16,21 @@ enum RedditViewItemContext {
     case favorites
 }
 
+enum RedditViewItemPlayerState {
+    case idle
+    case loading
+    case error
+}
+
 class RedditViewItem {
     let redditPost: RedditPost
+    let disposeBag = DisposeBag()
+    /// context of where item is being used
     var context: RedditViewItemContext
+    lazy var favorited = BehaviorSubject<Bool>(value: StorageService.shared.redditPostFavoriteExists(id: self.redditPost.id))
+    lazy var markedAsWatched = BehaviorSubject<Bool>(value: StorageService.shared.getWatchedRedditPost(redditPost: self.redditPost))
+    /// what state the player is in
+    lazy var playerState = BehaviorSubject<RedditViewItemPlayerState>(value: .idle)
 
     lazy var thumbnail: UIImageView = {
         let view = UIImageView()
@@ -34,6 +46,7 @@ class RedditViewItem {
     init(_ redditPost: RedditPost, context: RedditViewItemContext) {
         self.redditPost = redditPost
         self.context = context
+        self.setupSubscriptions()
     }
     
     func getPlayerItem() -> Observable<CachingPlayerItem?> {
@@ -68,6 +81,38 @@ class RedditViewItem {
             }
             return dispose
             }.share()
+    }
+    
+    func updateGlobalPlayer() {
+        self.playerItemObservable.subscribe(onNext: { item in
+            StorageService.shared.storeWatchedRedditPost(redditPost: self.redditPost)
+            self.markedAsWatched.onNext(true)
+            GlobalPlayer.shared.replaceItem(item!, self)
+        }).dispose()
+    }
+    
+    func toggleFavorite() {
+        if try! self.favorited.value() {
+            self.favorited.onNext(false)
+            StorageService.shared.deleteRedditPostFavorite(id: self.redditPost.id)
+            // pause player if removing playing video from favorites
+            if GlobalPlayer.shared.isItemPlaying(item: self) && self.context == .favorites {
+                GlobalPlayer.shared.pause()
+            }
+        } else {
+            self.favorited.onNext(true)
+            StorageService.shared.storeRedditPostFavorite(redditPost: self.redditPost)
+        }
+        Subjects.shared.favoriteButtonAction.onNext(self)
+        Util.hapticFeedbackSuccess()
+    }
+    
+    func setupSubscriptions() {
+        Subjects.shared.favoriteButtonAction.subscribe(onNext: { item in
+            if item !== self && item.redditPost.id == self.redditPost.id {
+                try? self.favorited.onNext(item.favorited.value())
+            }
+        }).disposed(by: self.disposeBag)
     }
 }
 

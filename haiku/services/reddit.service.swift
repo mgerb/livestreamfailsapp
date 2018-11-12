@@ -27,8 +27,6 @@ class RedditService {
                         if val.data.url?.youtubeID == nil {
                             return nil
                         }
-                        // check if in storage - update favorited
-                        val.data.favorited = StorageService.shared.redditPostFavoriteExists(id: val.data.id)
                         return val.data
                     }
                     

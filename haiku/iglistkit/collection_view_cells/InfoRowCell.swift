@@ -10,6 +10,7 @@ class InfoRowCell: UICollectionViewCell {
     public static let height = CGFloat(50)
     var redditViewItem: RedditViewItem?
     let disposeBag = DisposeBag()
+    let rxUnsubscribe = PublishSubject<Void>()
 
     lazy private var likeButton: UIButton = {
         let button = UIButton()
@@ -54,12 +55,24 @@ class InfoRowCell: UICollectionViewCell {
         return view
     }()
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.setupFlexLayout()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.rxUnsubscribe.onNext(())
+    }
+    
     func setRedditViewItem(item: RedditViewItem) {
         self.redditViewItem = item
         self.scoreLabel.text = item.redditPost.score.commaRepresentation
         self.setupFlexLayout()
-        self.setFavoriteButton()
         self.moreButton.setIcon(icon: .ionicons(.more), iconSize: 20, color: Config.colors.primaryFont, forState: .normal)
+        _ = self.redditViewItem?.favorited.takeUntil(self.rxUnsubscribe).subscribe(onNext: { favorited in
+            self.setFavoriteButton(favorited)
+        })
     }
     
     func setupFlexLayout() {
@@ -69,21 +82,10 @@ class InfoRowCell: UICollectionViewCell {
         self.rootViewContainer.flex.layout(mode: .adjustHeight)
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.setupFlexLayout()
 
-        Subjects.shared.favoriteButtonAction.subscribe(onNext: { item in
-            if self.redditViewItem?.redditPost.id == item.redditPost.id {
-                self.redditViewItem!.redditPost.favorited = item.redditPost.favorited
-                self.setFavoriteButton()
-            }
-        }).disposed(by: self.disposeBag)
-    }
-    
-    private func setFavoriteButton() {
-        let color = self.redditViewItem?.redditPost.favorited == true ? Config.colors.red : Config.colors.primaryFont
-        let icon = self.redditViewItem?.redditPost.favorited == true ? FontType.ionicons(.iosHeart) : FontType.ionicons(.iosHeartOutline)
+    private func setFavoriteButton(_ favorited: Bool) {
+        let color = favorited == true ? Config.colors.red : Config.colors.primaryFont
+        let icon = favorited == true ? FontType.ionicons(.iosHeart) : FontType.ionicons(.iosHeartOutline)
         self.likeButton.setIcon(icon: icon, iconSize: 30, color: color, forState: .normal)
     }
     
@@ -103,22 +105,7 @@ class InfoRowCell: UICollectionViewCell {
     }
     
     @objc func likeButtonAction() {
-        if let item = self.redditViewItem {
-            if item.redditPost.favorited {
-                item.redditPost.favorited = false
-                StorageService.shared.deleteRedditPostFavorite(id: item.redditPost.id)
-                // pause player if removing playing video from favorites
-                if GlobalPlayer.shared.isItemPlaying(item: item) && item.context == .favorites {
-                    GlobalPlayer.shared.pause()
-                }
-            } else {
-                item.redditPost.favorited = true
-                StorageService.shared.storeRedditPostFavorite(redditPost: item.redditPost)
-            }
-            self.animateFavoriteButton()
-            Subjects.shared.favoriteButtonAction.onNext(item)
-        }
-        Util.hapticFeedbackSuccess()
+        self.redditViewItem?.toggleFavorite()
     }
     
     @objc func moreButtonAction() {

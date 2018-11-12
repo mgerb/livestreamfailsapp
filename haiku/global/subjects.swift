@@ -9,6 +9,7 @@
 import Foundation
 import RxSwift
 
+/// store global events here
 class Subjects {
     static let shared = Subjects()
     let moreButtonAction = PublishSubject<RedditViewItem>()

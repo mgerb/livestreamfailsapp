@@ -49,15 +49,10 @@ class PlayerCell: UICollectionViewCell {
     func setRedditViewItem(item: RedditViewItem) {
         self.redditViewItem = item
         self.setThumbnail(self.redditViewItem!.thumbnail)
-        do {
-            if GlobalPlayer.shared.isItemPlaying(item: self.redditViewItem!) {
-                self.showPlayerView()
-                self.playerView.player = GlobalPlayer.shared.player
-            } else {
-                self.showThumbnail()
-                self.playerView.player = nil
-            }
-        } catch {
+        if GlobalPlayer.shared.isItemPlaying(item: self.redditViewItem!) {
+            self.showPlayerView()
+            self.playerView.player = GlobalPlayer.shared.player
+        } else {
             self.showThumbnail()
             self.playerView.player = nil
         }
@@ -92,11 +87,7 @@ class PlayerCell: UICollectionViewCell {
     }
     
     @objc func onTap() {
-        _ = self.redditViewItem?.playerItemObservable
-            .takeUntil(self.unsubscribeRedditPost)
-            .subscribe(onNext: { item in
-            GlobalPlayer.shared.replaceItem(item!, self.redditViewItem!)
-        })
+        self.redditViewItem?.updateGlobalPlayer()
     }
     
     func showThumbnail() {

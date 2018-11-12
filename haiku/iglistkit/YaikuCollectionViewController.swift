@@ -81,15 +81,5 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
             alertController.addAction(action3)
             self.present(alertController, animated: true, completion: nil)
         }).disposed(by: self.disposeBag)
-        
-        // update post in list if favorited chages
-        // this is needed if user unfavorites post in favorites - need to update in main list view
-        Subjects.shared.favoriteButtonAction.subscribe(onNext: { redditViewItem in
-            self.data.forEach{ p in
-                if p.redditPost.id == redditViewItem.redditPost.id {
-                    p.redditPost.favorited = redditViewItem.redditPost.favorited
-                }
-            }
-        }).disposed(by: self.disposeBag)
     }
 }
