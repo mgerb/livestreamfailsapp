@@ -13,31 +13,15 @@ import SwiftIcons
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    private var backgroundTimestamp = Date()
+    /// time interval to refresh the app views - 15 minutes
+    private let refreshTime = Double(15 * 60)
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
-        let tc = MyTabBarController()
-        tc.title = "Yaiku"
-        
-        let homeViewController = HomeViewController()
-        homeViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 0)
-        homeViewController.tabBarItem.setIcon(icon: .ionicons(.home), size: nil, textColor: Config.colors.primaryLight)
-
-        let favoritesViewController = FavoritesViewController()
-        favoritesViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
-        favoritesViewController.tabBarItem.setIcon(icon: .ionicons(.iosHeart), size: nil, textColor: Config.colors.primaryLight)
-        
-        let settingsViewController = SettingsViewController()
-        settingsViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 2)
-        settingsViewController.tabBarItem.setIcon(icon: .ionicons(.settings), size: nil, textColor: Config.colors.primaryLight)
-
-        tc.viewControllers = [homeViewController, favoritesViewController, settingsViewController]
-        
-        self.window!.rootViewController = UINavigationController(rootViewController: tc)
-        self.window?.makeKeyAndVisible()
+        self.setupTabBarController()
         
         return true
     }
@@ -51,10 +35,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        self.backgroundTimestamp = Date()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        // reload the tab view controller if in background for certain period of time
+        let time = Date().timeIntervalSince(self.backgroundTimestamp)
+        if time > self.refreshTime {
+            self.setupTabBarController()
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -65,6 +55,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    func setupTabBarController() {
+        let tc = MyTabBarController()
+        tc.title = "Yaiku"
+        
+        let homeViewController = HomeViewController()
+        homeViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 0)
+        homeViewController.tabBarItem.setIcon(icon: .ionicons(.home), size: nil, textColor: Config.colors.primaryLight)
+        
+        let favoritesViewController = FavoritesViewController()
+        favoritesViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
+        favoritesViewController.tabBarItem.setIcon(icon: .ionicons(.iosHeart), size: nil, textColor: Config.colors.primaryLight)
+        
+        let settingsViewController = SettingsViewController()
+        settingsViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 2)
+        settingsViewController.tabBarItem.setIcon(icon: .ionicons(.settings), size: nil, textColor: Config.colors.primaryLight)
+        
+        tc.viewControllers = [homeViewController, favoritesViewController, settingsViewController]
+        
+        self.window!.rootViewController = UINavigationController(rootViewController: tc)
+        self.window?.makeKeyAndVisible()
+    }
 }
-

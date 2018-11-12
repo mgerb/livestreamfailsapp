@@ -19,6 +19,12 @@ class GlobalPlayer: NSObject {
         let player = AVPlayer()
         player.automaticallyWaitsToMinimizeStalling = false
         NotificationCenter.default.addObserver(self, selector:#selector(playerDidFinishPlaying(note:)),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player.currentItem)
+        // let timeScale = CMTimeScale(NSEC_PER_SEC)
+        // let time = CMTime(seconds: 0.5, preferredTimescale: timeScale)
+        
+        // let timeObserverToken = player.addPeriodicTimeObserver(forInterval: time, queue: .main) { [weak self] time in
+        //     self?.intervalTick()
+        // }
         return player
     }()
     var playing = false
@@ -33,8 +39,7 @@ class GlobalPlayer: NSObject {
         self.pause()
         self.player.replaceCurrentItem(with: item)
         self.activeRedditViewItem.onNext(redditViewItem)
-        self.player.play()
-        self.playing = true
+        self.play()
     }
     
     @objc func playerDidFinishPlaying(note: NSNotification){
@@ -52,19 +57,21 @@ class GlobalPlayer: NSObject {
         self.playing = true
     }
     
-    func togglePlaying() {
-        if self.playing {
-            self.pause()
-            self.playing = false
-        } else {
-            self.play()
-            self.playing = true
+    private func togglePlaying() {
+        self.playing ? self.pause() : self.play()
+    }
+    
+    private func intervalTick() {
+        if let duration = self.player.currentItem?.asset.duration.seconds {
+            let percent = (self.player.currentTime().seconds / duration)
+            print(percent)
+//            try? self.activeRedditViewItem.value()?.playerProgress.onNext(percent)
         }
     }
     
-    /// check if item is currently playing
+    /// check if item is active in the player
     /// compares object reference to current active item
-    func isItemPlaying(item: RedditViewItem) -> Bool {
+    func isActivePlayerItem(item: RedditViewItem) -> Bool {
         let i = try? self.activeRedditViewItem.value()
         return i != nil && i! === item
     }

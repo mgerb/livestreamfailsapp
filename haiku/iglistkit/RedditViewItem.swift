@@ -31,6 +31,7 @@ class RedditViewItem {
     lazy var markedAsWatched = BehaviorSubject<Bool>(value: StorageService.shared.getWatchedRedditPost(redditPost: self.redditPost))
     /// what state the player is in
     lazy var playerState = BehaviorSubject<RedditViewItemPlayerState>(value: .idle)
+    lazy var playerProgress = BehaviorSubject<Double>(value: 0.0)
 
     lazy var thumbnail: UIImageView = {
         let view = UIImageView()
@@ -65,22 +66,22 @@ class RedditViewItem {
                 return dispose
             }
             
-            if let id = self.redditPost.url?.youtubeID {
-                let client = XCDYouTubeClient.default()
-                client.getVideoWithIdentifier(id) { (info, err) -> Void in
-                    if let streamUrl =  info?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue]
-                        ?? info?.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] {
-                        self.cachedPlayerItem = CachingPlayerItem(url: streamUrl, customFileExtension: "mp4")
-                        self.cachedPlayerItem?.delegate = self
-                        observer.onNext(self.cachedPlayerItem)
+                if let id = self.redditPost.url?.youtubeID {
+                    let client = XCDYouTubeClient.default()
+                    client.getVideoWithIdentifier(id) { (info, err) -> Void in
+                        if let streamUrl =  info?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue]
+                            ?? info?.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] {
+                            self.cachedPlayerItem = CachingPlayerItem(url: streamUrl, customFileExtension: "mp4")
+                            self.cachedPlayerItem?.delegate = self
+                            observer.onNext(self.cachedPlayerItem)
+                        }
+                        observer.onCompleted()
                     }
+                } else {
                     observer.onCompleted()
                 }
-            } else {
-                observer.onCompleted()
-            }
             return dispose
-            }.share()
+        }.share()
     }
     
     func updateGlobalPlayer() {
@@ -96,7 +97,7 @@ class RedditViewItem {
             self.favorited.onNext(false)
             StorageService.shared.deleteRedditPostFavorite(id: self.redditPost.id)
             // pause player if removing playing video from favorites
-            if GlobalPlayer.shared.isItemPlaying(item: self) && self.context == .favorites {
+            if GlobalPlayer.shared.isActivePlayerItem(item: self) && self.context == .favorites {
                 GlobalPlayer.shared.pause()
             }
         } else {

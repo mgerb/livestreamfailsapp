@@ -19,13 +19,19 @@ class PlayerCell: UICollectionViewCell {
     // used to unsubscribe when component deinits
     let disposeBag = DisposeBag()
     // used to unsubscribe when reddit post will change
-    let unsubscribeRedditPost = PublishSubject<Void>()
+    let rxUnsubscribe = PublishSubject<Void>()
 
+    lazy private var progressBar: UIView = {
+        let view = UIView()
+        view.backgroundColor = .red
+        return view
+    }()
+    
     lazy private var playerView: MyPlayerView = {
         let view = MyPlayerView()
         self.contentView.addSubview(view)
         view.snp.makeConstraints{make in
-            make.edges.equalTo(self)
+            make.edges.equalTo(self.contentView)
         }
         view.alpha = 0
         let bgView = UIView()
@@ -33,14 +39,20 @@ class PlayerCell: UICollectionViewCell {
         view.addSubview(bgView)
         view.sendSubview(toBack: bgView)
         bgView.snp.makeConstraints{make in
-            make.edges.equalTo(self)
+            make.edges.equalTo(self.contentView)
         }
         return view
     }()
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.contentView.addSubview(self.thumbnail)
+        self.contentView.addSubview(self.progressBar)
+        self.progressBar.snp.makeConstraints{ make in
+            make.bottom.equalTo(self.contentView).offset(2)
+            make.left.equalTo(self.contentView)
+            make.height.equalTo(2)
+            make.width.equalTo(0)
+        }
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTap))
         self.contentView.addGestureRecognizer(tap)
         self.setGlobalPlayerItemSubscription()
@@ -49,7 +61,8 @@ class PlayerCell: UICollectionViewCell {
     func setRedditViewItem(item: RedditViewItem) {
         self.redditViewItem = item
         self.setThumbnail(self.redditViewItem!.thumbnail)
-        if GlobalPlayer.shared.isItemPlaying(item: self.redditViewItem!) {
+        self.setRedditViewItemSubscriptions()
+        if GlobalPlayer.shared.isActivePlayerItem(item: self.redditViewItem!) {
             self.showPlayerView()
             self.playerView.player = GlobalPlayer.shared.player
         } else {
@@ -62,10 +75,20 @@ class PlayerCell: UICollectionViewCell {
         self.thumbnail = view
         self.contentView.addSubview(self.thumbnail)
         self.thumbnail.snp.makeConstraints{make in
-            make.edges.equalTo(self)
+            make.edges.equalTo(self.contentView)
         }
     }
 
+     func setRedditViewItemSubscriptions() {
+         _ = self.redditViewItem!.playerProgress.takeUntil(self.rxUnsubscribe).subscribe(onNext: { p in
+            if p > 0 {
+               self.progressBar.snp.makeConstraints{ make in
+                   make.width.equalTo(self.contentView).multipliedBy(p)
+               }
+            }
+         })
+     }
+    
     func setGlobalPlayerItemSubscription() {
         GlobalPlayer.shared.activeRedditViewItem.subscribe(onNext: { item in
             if self.redditViewItem! === item {
@@ -81,7 +104,7 @@ class PlayerCell: UICollectionViewCell {
         super.prepareForReuse()
         if self.contentView.contains(self.thumbnail) {
             self.thumbnail.removeFromSuperview()
-            self.unsubscribeRedditPost.onNext(())
+            self.rxUnsubscribe.onNext(())
             self.redditViewItem = nil
         }
     }
