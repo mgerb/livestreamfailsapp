@@ -19,12 +19,12 @@ class GlobalPlayer: NSObject {
         let player = AVPlayer()
         player.automaticallyWaitsToMinimizeStalling = false
         NotificationCenter.default.addObserver(self, selector:#selector(playerDidFinishPlaying(note:)),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player.currentItem)
-        // let timeScale = CMTimeScale(NSEC_PER_SEC)
-        // let time = CMTime(seconds: 0.5, preferredTimescale: timeScale)
+         let timeScale = CMTimeScale(NSEC_PER_SEC)
+         let time = CMTime(seconds: 0.01, preferredTimescale: timeScale)
         
-        // let timeObserverToken = player.addPeriodicTimeObserver(forInterval: time, queue: .main) { [weak self] time in
-        //     self?.intervalTick()
-        // }
+         let timeObserverToken = player.addPeriodicTimeObserver(forInterval: time, queue: .main) { [weak self] time in
+             self?.intervalTick()
+         }
         return player
     }()
     var playing = false
@@ -62,10 +62,15 @@ class GlobalPlayer: NSObject {
     }
     
     private func intervalTick() {
-        if let duration = self.player.currentItem?.asset.duration.seconds {
-            let percent = (self.player.currentTime().seconds / duration)
-            print(percent)
-//            try? self.activeRedditViewItem.value()?.playerProgress.onNext(percent)
+        // need to access these on the global queue because app was freezing
+        DispatchQueue.global().async {
+            if let duration = self.player.currentItem?.asset.duration.seconds {
+                let percent = (self.player.currentTime().seconds / duration)
+                // continue to use main queue after we have the values we need
+                DispatchQueue.main.async {
+                    try? self.activeRedditViewItem.value()?.playerProgress.onNext(percent)
+                }
+            }
         }
     }
     

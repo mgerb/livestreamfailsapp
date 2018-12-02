@@ -19,10 +19,11 @@ class PlayerCell: UICollectionViewCell {
     // used to unsubscribe when component deinits
     let disposeBag = DisposeBag()
     // used to unsubscribe when reddit post will change
-    let rxUnsubscribe = PublishSubject<Void>()
+    var progressSubscription: Disposable?
 
     lazy private var progressBar: UIView = {
         let view = UIView()
+        self.contentView.addSubview(view)
         view.backgroundColor = .red
         return view
     }()
@@ -46,13 +47,6 @@ class PlayerCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.contentView.addSubview(self.progressBar)
-        self.progressBar.snp.makeConstraints{ make in
-            make.bottom.equalTo(self.contentView).offset(2)
-            make.left.equalTo(self.contentView)
-            make.height.equalTo(2)
-            make.width.equalTo(0)
-        }
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTap))
         self.contentView.addGestureRecognizer(tap)
         self.setGlobalPlayerItemSubscription()
@@ -80,12 +74,8 @@ class PlayerCell: UICollectionViewCell {
     }
 
      func setRedditViewItemSubscriptions() {
-         _ = self.redditViewItem!.playerProgress.takeUntil(self.rxUnsubscribe).subscribe(onNext: { p in
-            if p > 0 {
-               self.progressBar.snp.makeConstraints{ make in
-                   make.width.equalTo(self.contentView).multipliedBy(p)
-               }
-            }
+         self.progressSubscription = self.redditViewItem!.playerProgress.subscribe(onNext: { p in
+            self.updateProgressBarConstraints(p)
          })
      }
     
@@ -99,12 +89,21 @@ class PlayerCell: UICollectionViewCell {
             }
         }).disposed(by: self.disposeBag)
     }
+    
+    func updateProgressBarConstraints(_ progress: Double) {
+        self.progressBar.snp.remakeConstraints{ make in
+            make.bottom.equalTo(self.contentView).offset(2)
+            make.left.equalTo(self.contentView)
+            make.height.equalTo(2)
+            make.width.equalTo(self.contentView).multipliedBy(progress)
+        }
+    }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         if self.contentView.contains(self.thumbnail) {
             self.thumbnail.removeFromSuperview()
-            self.rxUnsubscribe.onNext(())
+            self.progressSubscription?.dispose()
             self.redditViewItem = nil
         }
     }

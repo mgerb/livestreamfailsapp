@@ -105,6 +105,7 @@ class InfoRowCell: UICollectionViewCell {
     }
     
     @objc func likeButtonAction() {
+        self.animateFavoriteButton()
         self.redditViewItem?.toggleFavorite()
     }
     
