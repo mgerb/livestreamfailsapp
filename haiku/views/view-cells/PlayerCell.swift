@@ -90,12 +90,13 @@ class PlayerCell: UICollectionViewCell {
         }).disposed(by: self.disposeBag)
     }
     
-    func updateProgressBarConstraints(_ progress: Double) {
+    func updateProgressBarConstraints(_ progress: Double?) {
         self.progressBar.snp.remakeConstraints{ make in
             make.bottom.equalTo(self.contentView).offset(2)
             make.left.equalTo(self.contentView)
             make.height.equalTo(2)
-            make.width.equalTo(self.contentView).multipliedBy(progress)
+            // was crashing if progress isn't set - default to 0
+            make.width.equalTo(self.contentView).multipliedBy(progress ?? 0)
         }
     }
 

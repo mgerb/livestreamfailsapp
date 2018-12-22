@@ -25,13 +25,21 @@ enum RedditViewItemPlayerState {
 class RedditViewItem {
     let redditPost: RedditPost
     let disposeBag = DisposeBag()
-    /// context of where item is being used
+    
+    /// context of where item is being used - either home or favorites page
     var context: RedditViewItemContext
+    
     lazy var favorited = BehaviorSubject<Bool>(value: StorageService.shared.redditPostFavoriteExists(id: self.redditPost.id))
     lazy var markedAsWatched = BehaviorSubject<Bool>(value: StorageService.shared.getWatchedRedditPost(redditPost: self.redditPost))
-    /// what state the player is in
+    /// TODO: what state the player is in
     lazy var playerState = BehaviorSubject<RedditViewItemPlayerState>(value: .idle)
     lazy var playerProgress = BehaviorSubject<Double>(value: 0.0)
+    
+    /// if XCDYouTubeKit fails to load the video
+    var unavailable = false
+
+    lazy var videoStartTime: Int = self.redditPost.url?.youtubeStartTime ?? 0
+    lazy var videoEndTime: Int? = self.redditPost.url?.youtubeEndTime
 
     lazy var thumbnail: UIImageView = {
         let view = UIImageView()
@@ -69,7 +77,12 @@ class RedditViewItem {
                 if let id = self.redditPost.url?.youtubeID {
                     let client = XCDYouTubeClient.default()
                     client.getVideoWithIdentifier(id) { (info, err) -> Void in
-                        if let streamUrl =  info?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue]
+                        // if video is unavailable in country set this flag
+                        if let e = (err as NSError?) {
+                            if e.domain == XCDYouTubeVideoErrorDomain {
+                                self.unavailable = true
+                            }
+                        } else if let streamUrl =  info?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue]
                             ?? info?.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] {
                             self.cachedPlayerItem = CachingPlayerItem(url: streamUrl, customFileExtension: "mp4")
                             self.cachedPlayerItem?.delegate = self

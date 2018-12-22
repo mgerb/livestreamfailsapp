@@ -39,12 +39,20 @@ class GlobalPlayer: NSObject {
         self.pause()
         self.player.replaceCurrentItem(with: item)
         self.activeRedditViewItem.onNext(redditViewItem)
+        
+        // if player time is set to 0 - check if we need to seek to start time from youtube URL
+        if item.currentTime().value == 0 {
+            self.player.seek(to: CMTime(seconds: Double(redditViewItem.videoStartTime), preferredTimescale: 1))
+        }
+
         self.play()
     }
     
+    /// seek to either 0 or time specified in youtube URL
     @objc func playerDidFinishPlaying(note: NSNotification){
         self.pause()
-        self.player.seek(to: CMTime(seconds: Double(0), preferredTimescale: 1))
+        let time = (try? self.activeRedditViewItem.value()?.videoStartTime)! ?? 0
+        self.player.seek(to: CMTime(seconds: Double(time), preferredTimescale: 1))
     }
 
     func pause() {

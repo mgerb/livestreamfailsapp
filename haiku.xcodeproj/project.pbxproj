@@ -157,20 +157,21 @@
 			path = global;
 			sourceTree = "<group>";
 		};
-		A252857C215C652E00DCA537 /* collection_view_cells */ = {
+		A252857C215C652E00DCA537 /* view-cells */ = {
 			isa = PBXGroup;
 			children = (
 				A240BA252159BD74004E8419 /* PlayerCell.swift */,
 				A252857D215C655600DCA537 /* TitleCollectionViewCell.swift */,
 				A24818BD21780E3B005B8819 /* InfoRowCell.swift */,
 			);
-			path = collection_view_cells;
+			path = "view-cells";
 			sourceTree = "<group>";
 		};
 		A252857F215C6E8C00DCA537 /* model */ = {
 			isa = PBXGroup;
 			children = (
 				A2528580215C6E9C00DCA537 /* reddit.swift */,
+				A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -214,18 +215,19 @@
 		A29CD0042119363900A5A6EC /* haiku */ = {
 			isa = PBXGroup;
 			children = (
-				A25285A921615AC700DCA537 /* CachingPlayerItem.swift */,
-				A2528582215C6F5B00DCA537 /* extensions */,
-				A252857F215C6E8C00DCA537 /* model */,
-				A2A186D32159AB2100474ABC /* iglistkit */,
-				A259124F211BD26700B09D73 /* services */,
-				A24818C321781811005B8819 /* global */,
-				A29CD00C2119363C00A5A6EC /* Assets.xcassets */,
 				A29CD0052119363900A5A6EC /* AppDelegate.swift */,
-				A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */,
-				A29CD0112119363C00A5A6EC /* Info.plist */,
+				A29CD00C2119363C00A5A6EC /* Assets.xcassets */,
 				A25285B7216ACADD00DCA537 /* Config.swift */,
+				A2528582215C6F5B00DCA537 /* extensions */,
+				A24818C321781811005B8819 /* global */,
+				A29CD0112119363C00A5A6EC /* Info.plist */,
+				A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */,
+				A2D0EF6E21CEB225002F1134 /* libs */,
+				A252857F215C6E8C00DCA537 /* model */,
+				A259124F211BD26700B09D73 /* services */,
 				A24818BF217815C8005B8819 /* Util.swift */,
+				A2D0EF6C21CEB1F4002F1134 /* view-controllers */,
+				A2D0EF6D21CEB203002F1134 /* views */,
 			);
 			path = haiku;
 			sourceTree = "<group>";
@@ -249,20 +251,34 @@
 			path = frameworks;
 			sourceTree = "<group>";
 		};
-		A2A186D32159AB2100474ABC /* iglistkit */ = {
+		A2D0EF6C21CEB1F4002F1134 /* view-controllers */ = {
 			isa = PBXGroup;
 			children = (
-				A252857C215C652E00DCA537 /* collection_view_cells */,
-				A288A12B215344D000000733 /* MyPlayerView.swift */,
 				A25285742159CA2E00DCA537 /* DisplaySectionController.swift */,
 				A25285722159C9FC00DCA537 /* HomeViewController.swift */,
 				A2889F2B217D6FF0001E7061 /* FavoritesViewController.swift */,
 				A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */,
 				A26BD838218FE53500E948A4 /* SettingsViewController.swift */,
 				A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */,
-				A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */,
 			);
-			path = iglistkit;
+			path = "view-controllers";
+			sourceTree = "<group>";
+		};
+		A2D0EF6D21CEB203002F1134 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				A252857C215C652E00DCA537 /* view-cells */,
+				A288A12B215344D000000733 /* MyPlayerView.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		A2D0EF6E21CEB225002F1134 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				A25285A921615AC700DCA537 /* CachingPlayerItem.swift */,
+			);
+			path = libs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
