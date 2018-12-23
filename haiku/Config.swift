@@ -13,6 +13,7 @@ class Colors {
     let primaryFont: UIColor = .darkGray
     let primaryLight: UIColor = .lightGray
     let red: UIColor = .red
+    let white: UIColor = .white
 }
 
 class Config {

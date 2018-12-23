@@ -42,6 +42,7 @@
 		A2591251211BD28200B09D73 /* reddit.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2591250211BD28200B09D73 /* reddit.service.swift */; };
 		A2591254211BD32900B09D73 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2591252211BD31700B09D73 /* Alamofire.framework */; };
 		A2591255211BD32900B09D73 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2591252211BD31700B09D73 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A269478421CEF93000A07F69 /* RedditAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A269478321CEF93000A07F69 /* RedditAlertController.swift */; };
 		A26BD837218FE09100E948A4 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26BD836218FE09100E948A4 /* Int.swift */; };
 		A26BD839218FE53500E948A4 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26BD838218FE53500E948A4 /* SettingsViewController.swift */; };
 		A2889F2C217D6FF0001E7061 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2889F2B217D6FF0001E7061 /* FavoritesViewController.swift */; };
@@ -109,6 +110,7 @@
 		A25285B7216ACADD00DCA537 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		A2591250211BD28200B09D73 /* reddit.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reddit.service.swift; sourceTree = "<group>"; };
 		A2591252211BD31700B09D73 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = SOURCE_ROOT; };
+		A269478321CEF93000A07F69 /* RedditAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditAlertController.swift; sourceTree = "<group>"; };
 		A26BD836218FE09100E948A4 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		A26BD838218FE53500E948A4 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		A2889F2B217D6FF0001E7061 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 				A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */,
 				A26BD838218FE53500E948A4 /* SettingsViewController.swift */,
 				A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */,
+				A269478321CEF93000A07F69 /* RedditAlertController.swift */,
 			);
 			path = "view-controllers";
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 				A26BD839218FE53500E948A4 /* SettingsViewController.swift in Sources */,
 				A2591251211BD28200B09D73 /* reddit.service.swift in Sources */,
 				A24818C0217815C8005B8819 /* Util.swift in Sources */,
+				A269478421CEF93000A07F69 /* RedditAlertController.swift in Sources */,
 				A25285B8216ACADD00DCA537 /* Config.swift in Sources */,
 				A25285732159C9FC00DCA537 /* HomeViewController.swift in Sources */,
 				A288A12C215344D000000733 /* MyPlayerView.swift in Sources */,
@@ -519,6 +523,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = haiku/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -543,6 +548,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = haiku/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

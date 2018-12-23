@@ -14,4 +14,5 @@ class Subjects {
     static let shared = Subjects()
     let moreButtonAction = PublishSubject<RedditViewItem>()
     let favoriteButtonAction = PublishSubject<RedditViewItem>()
+    let fullScreenPlayerAction = PublishSubject<RedditViewItem>()
 }

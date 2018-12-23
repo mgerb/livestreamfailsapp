@@ -33,7 +33,6 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
         }
         self.refreshControl.addTarget(self, action: #selector(fetchInitial(_:)), for: .valueChanged)
         self.fetchInitial()
-        self.setupSubjectSubscriptions()
     }
     
     override func viewDidLayoutSubviews() {
@@ -59,27 +58,4 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
     }
     
     func fetchHaikus(_ after: String? = nil) {}
-    
-    func setupSubjectSubscriptions() {
-        Subjects.shared.moreButtonAction.subscribe(onNext: { redditViewItem in
-            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-            
-            let action1 = UIAlertAction(title: "Copy Video URL", style: .default) { (action:UIAlertAction) in
-                UIPasteboard.general.string = redditViewItem.redditPost.url
-            }
-            
-            let action2 = UIAlertAction(title: "Open in Reddit", style: .default) { (action:UIAlertAction) in
-                guard let url = URL(string: "https://www.reddit.com\(redditViewItem.redditPost.permalink)") else { return }
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }
-            
-            let action3 = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
-            }
-            
-            alertController.addAction(action1)
-            alertController.addAction(action2)
-            alertController.addAction(action3)
-            self.present(alertController, animated: true, completion: nil)
-        }).disposed(by: self.disposeBag)
-    }
 }

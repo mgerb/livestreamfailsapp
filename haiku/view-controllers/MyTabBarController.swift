@@ -7,13 +7,18 @@
 //
 
 import UIKit
+import RxSwift
+import AVKit
 
 class MyTabBarController: UITabBarController {
 
+    private let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.setupSubjectSubscriptions()
     }
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
@@ -21,6 +26,26 @@ class MyTabBarController: UITabBarController {
         GlobalPlayer.shared.pause()
     }
 
+    func setupSubjectSubscriptions() {
+        Subjects.shared.moreButtonAction.subscribe(onNext: { redditViewItem in
+            let alertController = RedditAlertController(redditViewItem: redditViewItem)
+            self.present(alertController, animated: true, completion: nil)
+        }).disposed(by: self.disposeBag)
+        
+        // open default video player controller
+        Subjects.shared.fullScreenPlayerAction.subscribe(onNext: { redditViewItem in
+            redditViewItem.getPlayerItem().subscribe(onNext: { item in
+                let itemCopy: AVPlayerItem = item!.copy() as! AVPlayerItem
+                let player = AVPlayer(playerItem: itemCopy)
+                let playerViewController = AVPlayerViewController()
+                playerViewController.player = player
+                self.present(playerViewController, animated: true) {
+                    playerViewController.player!.play()
+                }
+            }).dispose()
+        }).disposed(by: self.disposeBag)
+    }
+    
     /*
     // MARK: - Navigation
 

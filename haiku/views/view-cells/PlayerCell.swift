@@ -11,6 +11,7 @@ import AVKit;
 import AVFoundation;
 import Kingfisher
 import RxSwift
+import SwiftIcons
 
 class PlayerCell: UICollectionViewCell {
     
@@ -21,6 +22,29 @@ class PlayerCell: UICollectionViewCell {
     // used to unsubscribe when reddit post will change
     var progressSubscription: Disposable?
 
+    lazy private var fullScreenButtonContainer: UIView = {
+        let view = UIView()
+        self.contentView.addSubview(view)
+        view.snp.makeConstraints { make in
+            make.right.equalTo(self.contentView).inset(5)
+            make.bottom.equalTo(self.contentView).inset(5)
+            make.height.equalTo(25)
+        }
+        view.backgroundColor = .black
+        view.layer.cornerRadius = 4
+        view.alpha = 0
+
+        // button
+        let button = UIButton()
+        view.addSubview(button)
+        button.addTarget(self, action: #selector(fullScreenButtonAction), for: .touchUpInside)
+        button.snp.makeConstraints { make in
+            make.edges.equalTo(view)
+        }
+        button.setIcon(icon: .googleMaterialDesign(.fullscreen), iconSize: 25, color: Config.colors.white, forState: .normal)
+        return view
+    }()
+    
     lazy private var progressBar: UIView = {
         let view = UIView()
         self.contentView.addSubview(view)
@@ -95,8 +119,9 @@ class PlayerCell: UICollectionViewCell {
             make.bottom.equalTo(self.contentView).offset(2)
             make.left.equalTo(self.contentView)
             make.height.equalTo(2)
-            // was crashing if progress isn't set - default to 0
-            make.width.equalTo(self.contentView).multipliedBy(progress ?? 0)
+            if progress != nil && progress! > 0 {
+                make.width.equalTo(self.contentView).multipliedBy(progress!)
+            }
         }
     }
 
@@ -109,13 +134,32 @@ class PlayerCell: UICollectionViewCell {
         }
     }
     
+    @objc func fullScreenButtonAction() {
+        GlobalPlayer.shared.pause()
+        Subjects.shared.fullScreenPlayerAction.onNext(self.redditViewItem!)
+    }
+    
     @objc func onTap() {
         self.redditViewItem?.updateGlobalPlayer()
+        self.toggleFullScreenButton()
+    }
+    
+    var fullScreenTimeoutTask: DispatchWorkItem?
+    
+    /// hide the full screen button after 3 seconds
+    func toggleFullScreenButton() {
+        self.fullScreenTimeoutTask?.cancel()
+        self.fullScreenTimeoutTask = DispatchWorkItem {
+            self.animateView(view: self.fullScreenButtonContainer, alpha: 0)
+        }
+        self.animateView(view: self.fullScreenButtonContainer, alpha: 0.5)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: self.fullScreenTimeoutTask!)
     }
     
     func showThumbnail() {
         self.animateView(view: self.thumbnail, alpha: 1)
         self.animateView(view: self.playerView, alpha: 0)
+        self.animateView(view: self.fullScreenButtonContainer, alpha: 0)
     }
     
     func showPlayerView() {

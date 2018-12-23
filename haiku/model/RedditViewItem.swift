@@ -50,8 +50,7 @@ class RedditViewItem {
         return view
     }()
     private var cachedPlayerItem: CachingPlayerItem? = nil
-    lazy var playerItemObservable: Observable<CachingPlayerItem?> = self.getPlayerItem()
-    
+
     init(_ redditPost: RedditPost, context: RedditViewItemContext) {
         self.redditPost = redditPost
         self.context = context
@@ -98,7 +97,7 @@ class RedditViewItem {
     }
     
     func updateGlobalPlayer() {
-        self.playerItemObservable.subscribe(onNext: { item in
+        self.getPlayerItem().subscribe(onNext: { item in
             StorageService.shared.storeWatchedRedditPost(redditPost: self.redditPost)
             self.markedAsWatched.onNext(true)
             GlobalPlayer.shared.replaceItem(item!, self)
