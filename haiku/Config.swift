@@ -14,6 +14,7 @@ class Colors {
     let primaryLight: UIColor = .lightGray
     let red: UIColor = .red
     let white: UIColor = .white
+    let blueLink = UIColor(red: 0.204, green: 0.459, blue: 1.000, alpha: 1.0)
 }
 
 class Config {
