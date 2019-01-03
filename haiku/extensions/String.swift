@@ -78,4 +78,8 @@ extension String {
         let boundingBox = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedStringKey.font: font], context: nil)
         return boundingBox.height
     }
+    
+    func replaceEncoding() -> String {
+        return self.replacingOccurrences(of: "&amp;", with: "&")
+    }
 }

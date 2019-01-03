@@ -26,7 +26,7 @@ class TitleCollectionViewCell: UICollectionViewCell {
 
     func setRedditViewItem(item: RedditViewItem) {
         self.redditViewItem = item
-        self.label.text = item.redditPost.title
+        self.label.text = item.redditPost.title.replaceEncoding()
         self.label.numberOfLines = 0
         _ = self.redditViewItem?.markedAsWatched.takeUntil(self.rxUnsubscribe).subscribe(onNext: { watched in
             self.label.textColor = watched && self.redditViewItem?.context == .home ? Config.colors.primaryLight : Config.colors.primaryFont
