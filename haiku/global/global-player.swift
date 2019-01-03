@@ -15,16 +15,12 @@ import RxSwift
  */
 class GlobalPlayer: NSObject {
     static let shared = GlobalPlayer()
+    var timeObserverToken: Any?
+    
     lazy var player: AVPlayer = {
         let player = AVPlayer()
         player.automaticallyWaitsToMinimizeStalling = false
         NotificationCenter.default.addObserver(self, selector:#selector(playerDidFinishPlaying(note:)),name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player.currentItem)
-         let timeScale = CMTimeScale(NSEC_PER_SEC)
-         let time = CMTime(seconds: 0.01, preferredTimescale: timeScale)
-        
-         let timeObserverToken = player.addPeriodicTimeObserver(forInterval: time, queue: .main) { [weak self] time in
-             self?.intervalTick()
-         }
         return player
     }()
     var playing = false
@@ -37,9 +33,9 @@ class GlobalPlayer: NSObject {
             return
         }
         self.pause()
-        self.player.replaceCurrentItem(with: item)
         self.activeRedditViewItem.onNext(redditViewItem)
-        
+        self.player.replaceCurrentItem(with: item)
+
         // if player time is set to 0 - check if we need to seek to start time from youtube URL
         if item.currentTime().value == 0 {
             self.player.seek(to: CMTime(seconds: Double(redditViewItem.videoStartTime), preferredTimescale: 1))
@@ -56,6 +52,7 @@ class GlobalPlayer: NSObject {
     }
 
     func pause() {
+        self.stopTimeObserver()
         self.player.pause()
         self.playing = false
     }
@@ -63,6 +60,7 @@ class GlobalPlayer: NSObject {
     func play() {
         self.player.play()
         self.playing = true
+        self.startTimeObserver()
     }
     
     private func togglePlaying() {
@@ -71,14 +69,24 @@ class GlobalPlayer: NSObject {
     
     private func intervalTick() {
         // need to access these on the global queue because app was freezing
-        DispatchQueue.global().async {
-            if let duration = self.player.currentItem?.asset.duration.seconds {
-                let percent = (self.player.currentTime().seconds / duration)
-                // continue to use main queue after we have the values we need
-                DispatchQueue.main.async {
-                    try? self.activeRedditViewItem.value()?.playerProgress.onNext(percent)
-                }
-            }
+        if let duration = self.player.currentItem?.asset.duration.seconds {
+            let percent = (self.player.currentTime().seconds / duration)
+            try? self.activeRedditViewItem.value()?.playerProgress.onNext(percent)
+        }
+    }
+    
+    func startTimeObserver() {
+        let timeScale = CMTimeScale(NSEC_PER_SEC)
+        let time = CMTime(seconds: 0.01, preferredTimescale: timeScale)
+        self.timeObserverToken = player.addPeriodicTimeObserver(forInterval: time, queue: .main) { [weak self] time in
+            self?.intervalTick()
+        }
+    }
+    
+    func stopTimeObserver() {
+        if let observer = self.timeObserverToken {
+            player.removeTimeObserver(observer)
+            self.timeObserverToken = nil
         }
     }
     

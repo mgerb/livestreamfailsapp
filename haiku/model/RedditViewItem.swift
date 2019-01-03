@@ -135,6 +135,10 @@ extension RedditViewItem: CachingPlayerItemDelegate {
         StorageService.shared.cacheVideoData(data: data, id: self.redditPost.id)
     }
     
+    // func playerItemReadyToPlay(_ playerItem: CachingPlayerItem) {
+
+    // }
+    
     // func playerItem(_ playerItem: CachingPlayerItem, didDownloadBytesSoFar bytesDownloaded: Int, outOf bytesExpected: Int) {
     //     print("\(bytesDownloaded)/\(bytesExpected)")
     // }
