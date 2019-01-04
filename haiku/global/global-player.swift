@@ -68,7 +68,6 @@ class GlobalPlayer: NSObject {
     }
     
     private func intervalTick() {
-        // need to access these on the global queue because app was freezing
         if let duration = self.player.currentItem?.asset.duration.seconds {
             let percent = (self.player.currentTime().seconds / duration)
             try? self.activeRedditViewItem.value()?.playerProgress.onNext(percent)

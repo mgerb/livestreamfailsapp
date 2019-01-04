@@ -7,7 +7,7 @@ import FlexLayout
 
 class InfoRowCell: UICollectionViewCell {
     
-    public static let height = CGFloat(50)
+    public static let height = CGFloat(40)
     var redditViewItem: RedditViewItem?
     let disposeBag = DisposeBag()
     let rxUnsubscribe = PublishSubject<Void>()
@@ -21,6 +21,7 @@ class InfoRowCell: UICollectionViewCell {
     lazy private var moreButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(moreButtonAction), for: .touchUpInside)
+        button.setIcon(icon: .ionicons(.more), iconSize: 20, color: Config.colors.primaryFont, forState: .normal)
         return button
     }()
     
@@ -31,19 +32,37 @@ class InfoRowCell: UICollectionViewCell {
         label.textColor = Config.colors.primaryFont
         return label
     }()
+    
+    lazy private var commentsButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("", for: .normal)
+        button.setTitleColor(Config.colors.primaryFont, for: .normal)
+        button.titleLabel?.font = Config.smallFont
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
+    
+    lazy private var commentBubble: UIButton = {
+        let button = UIButton()
+        button.setIcon(icon: .fontAwesomeRegular(.comment), iconSize: 20, color: Config.colors.primaryFont, backgroundColor: UIColor.black.withAlphaComponent(0), forState: .normal)
+        return button
+    }()
 
     lazy private var rootViewContainer: UIView = {
         let view = UIView()
         view.flex.define{ flex in
-            flex.addItem().justifyContent(.spaceBetween).direction(.row).padding(10).paddingBottom(0).define{ flex in
+            flex.addItem().justifyContent(.spaceBetween).direction(.row).padding(10).paddingBottom(0).paddingTop(5).define{ flex in
                 
-                flex.addItem().grow(1).direction(.row).define{ flex in
+                flex.addItem().direction(.row).define{ flex in
                     let l = UILabel()
                     l.font = Config.smallFont
-                    l.text = "Score: "
+                    l.setIcon(icon: .googleMaterialDesign(.arrowUpward), iconSize: 20)
                     l.textColor = Config.colors.primaryFont
+                    
                     flex.addItem(l)
-                    flex.addItem(self.scoreLabel).grow(1)
+                    flex.addItem(self.scoreLabel)
+                    flex.addItem(self.commentBubble).marginLeft(10)
+                    flex.addItem(self.commentsButton)
                 }
                 
                 flex.addItem().direction(.row).define{ flex in
@@ -57,7 +76,9 @@ class InfoRowCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.setupFlexLayout()
+        self.contentView.addSubview(self.rootViewContainer)
+        self.rootViewContainer.pin.all()
+        self.rootViewContainer.flex.layout(mode: .adjustHeight)
     }
     
     override func prepareForReuse() {
@@ -68,20 +89,15 @@ class InfoRowCell: UICollectionViewCell {
     func setRedditViewItem(item: RedditViewItem) {
         self.redditViewItem = item
         self.scoreLabel.text = item.redditPost.score.commaRepresentation
-        self.setupFlexLayout()
-        self.moreButton.setIcon(icon: .ionicons(.more), iconSize: 20, color: Config.colors.primaryFont, forState: .normal)
+        self.scoreLabel.flex.markDirty()
+        self.commentsButton.setTitle(String(item.redditPost.num_comments), for: .normal)
+        self.commentsButton.flex.markDirty()
+        self.commentBubble.flex.markDirty()
+        self.rootViewContainer.flex.layout(mode: .adjustHeight)
         _ = self.redditViewItem?.favorited.takeUntil(self.rxUnsubscribe).subscribe(onNext: { favorited in
             self.setFavoriteButton(favorited)
         })
     }
-    
-    func setupFlexLayout() {
-        self.rootViewContainer.removeFromSuperview()
-        self.contentView.addSubview(self.rootViewContainer)
-        self.rootViewContainer.pin.all()
-        self.rootViewContainer.flex.layout(mode: .adjustHeight)
-    }
-    
 
     private func setFavoriteButton(_ favorited: Bool) {
         let color = favorited == true ? Config.colors.red : Config.colors.primaryFont
