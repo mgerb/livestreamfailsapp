@@ -1,16 +1,8 @@
-//
-//  DisplaySectionController.swift
-//  haiku
-//
-//  Created by Mitchell Gerber on 9/24/18.
-//  Copyright © 2018 Mitchell Gerber. All rights reserved.
-//
-
 import IGListKit
 import UIKit
 import AVKit
 
-final class DisplaySectionController: ListSectionController, ListDisplayDelegate, ListWorkingRangeDelegate {
+final class RedditViewItemSectionController: ListSectionController, ListDisplayDelegate, ListWorkingRangeDelegate {
 
 
     public var redditViewItem: RedditViewItem!
@@ -19,7 +11,7 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
         super.init()
         displayDelegate = self
         workingRangeDelegate = self
-        inset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
+        self.inset = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
     }
     
     override func numberOfItems() -> Int {
@@ -44,19 +36,19 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         switch index {
         case 0:
-            let cell = collectionContext?.dequeueReusableCell(of: TitleCollectionViewCell.self, for: self, at: index) as! TitleCollectionViewCell
+            let cell = collectionContext!.dequeueReusableCell(of: TitleCollectionViewCell.self, for: self, at: index) as! TitleCollectionViewCell
             cell.setRedditViewItem(item: self.redditViewItem)
             return cell
         case 1:
-            let cell = collectionContext?.dequeueReusableCell(of: PlayerCell.self, for: self, at: index) as! PlayerCell
+            let cell = collectionContext!.dequeueReusableCell(of: PlayerCell.self, for: self, at: index) as! PlayerCell
             cell.setRedditViewItem(item: self.redditViewItem)
             return cell
         case 2:
-            let cell = collectionContext?.dequeueReusableCell(of: InfoRowCell.self, for: self, at: index) as! InfoRowCell
+            let cell = collectionContext!.dequeueReusableCell(of: InfoRowCell.self, for: self, at: index) as! InfoRowCell
             cell.setRedditViewItem(item: self.redditViewItem)
             return cell
         default:
-            return collectionContext?.dequeueReusableCell(of: UICollectionViewCell.self, for: self, at: index) as! UICollectionViewCell
+            return collectionContext!.dequeueReusableCell(of: UICollectionViewCell.self, for: self, at: index)
         }
     }
     
@@ -69,7 +61,7 @@ final class DisplaySectionController: ListSectionController, ListDisplayDelegate
     override func didSelectItem(at index: Int) {}
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {
-        if let controller = sectionController as? DisplaySectionController {
+        if let controller = sectionController as? RedditViewItemSectionController {
             // pre load player item
             controller.redditViewItem?.getPlayerItem().subscribe()
         }

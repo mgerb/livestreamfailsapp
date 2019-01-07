@@ -2,7 +2,7 @@ import IGListKit
 import UIKit
 import RxSwift
 
-class HomeViewController: YaikuCollectionViewController {
+class MainCollectionViewController: YaikuCollectionViewController {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.isAtBottom && !self.refreshControl.isRefreshing {

@@ -6,6 +6,7 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
     var data: [RedditViewItem] = []
     let refreshControl = UIRefreshControl()
     let disposeBag = DisposeBag()
+    var commentsCollectionView: CommentsCollectionView?
     
     lazy var adapter: ListAdapter = {
         return ListAdapter(updater: ListAdapterUpdater(), viewController: self, workingRangeSize: 10)
@@ -33,19 +34,20 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
         }
         self.refreshControl.addTarget(self, action: #selector(fetchInitial(_:)), for: .valueChanged)
         self.fetchInitial()
+        self.setupSubjectSubscriptions()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.collectionView.frame = self.view.bounds
     }
-    
+
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         return self.data
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        return DisplaySectionController()
+        return RedditViewItemSectionController()
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? { return nil }
@@ -58,4 +60,16 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
     }
     
     func fetchHaikus(_ after: String? = nil) {}
+
+    func setupSubjectSubscriptions() {
+        // show comments list
+        Subjects.shared.showCommentsAction.subscribe(onNext: { redditViewItem in
+            if self.isViewLoaded && self.view?.window != nil {
+                self.commentsCollectionView?.dismiss()
+                self.commentsCollectionView = CommentsCollectionView.getInstance(self, redditViewItem)
+                self.view.addSubview(self.commentsCollectionView!)
+                self.commentsCollectionView!.frame = self.view.frame
+            }
+        }).disposed(by: self.disposeBag)
+    }
 }

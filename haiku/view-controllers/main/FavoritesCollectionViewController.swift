@@ -8,7 +8,7 @@
 
 import Foundation
 
-class FavoritesViewController: YaikuCollectionViewController {
+class FavoritesCollectionViewController: YaikuCollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()

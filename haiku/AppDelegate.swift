@@ -59,19 +59,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tc = MyTabBarController()
         tc.title = "Yaiku"
         
-        let homeViewController = HomeViewController()
-        homeViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 0)
-        homeViewController.tabBarItem.setIcon(icon: .ionicons(.home), size: nil, textColor: Config.colors.primaryLight)
+        let mainCollectionViewController = MainCollectionViewController()
+        mainCollectionViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 0)
+        mainCollectionViewController.tabBarItem.setIcon(icon: .ionicons(.home), size: nil, textColor: Config.colors.primaryLight)
         
-        let favoritesViewController = FavoritesViewController()
-        favoritesViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
-        favoritesViewController.tabBarItem.setIcon(icon: .ionicons(.iosHeart), size: nil, textColor: Config.colors.primaryLight)
+        let favoritesCollectionViewController = FavoritesCollectionViewController()
+        favoritesCollectionViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
+        favoritesCollectionViewController.tabBarItem.setIcon(icon: .ionicons(.iosHeart), size: nil, textColor: Config.colors.primaryLight)
         
         let settingsViewController = SettingsViewController()
         settingsViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 2)
         settingsViewController.tabBarItem.setIcon(icon: .ionicons(.settings), size: nil, textColor: Config.colors.primaryLight)
         
-        tc.viewControllers = [homeViewController, favoritesViewController, settingsViewController]
+        tc.viewControllers = [mainCollectionViewController, favoritesCollectionViewController, settingsViewController]
         
         self.window!.rootViewController = UINavigationController(rootViewController: tc)
         self.window?.makeKeyAndVisible()

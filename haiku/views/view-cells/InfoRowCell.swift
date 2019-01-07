@@ -39,12 +39,14 @@ class InfoRowCell: UICollectionViewCell {
         button.setTitleColor(Config.colors.primaryFont, for: .normal)
         button.titleLabel?.font = Config.smallFont
         button.contentHorizontalAlignment = .left
+        button.addTarget(self, action: #selector(commentsButtonAction), for: .touchUpInside)
         return button
     }()
     
     lazy private var commentBubble: UIButton = {
         let button = UIButton()
         button.setIcon(icon: .fontAwesomeRegular(.comment), iconSize: 20, color: Config.colors.primaryFont, backgroundColor: UIColor.black.withAlphaComponent(0), forState: .normal)
+        button.addTarget(self, action: #selector(commentsButtonAction), for: .touchUpInside)
         return button
     }()
 
@@ -94,7 +96,7 @@ class InfoRowCell: UICollectionViewCell {
         self.commentsButton.flex.markDirty()
         self.commentBubble.flex.markDirty()
         self.rootViewContainer.flex.layout(mode: .adjustHeight)
-        _ = self.redditViewItem?.favorited.takeUntil(self.rxUnsubscribe).subscribe(onNext: { favorited in
+        _ = self.redditViewItem?.favorited.takeUntil(self.rxUnsubscribe.asObservable()).subscribe(onNext: { favorited in
             self.setFavoriteButton(favorited)
         })
     }
@@ -127,6 +129,10 @@ class InfoRowCell: UICollectionViewCell {
     
     @objc func moreButtonAction() {
         Subjects.shared.moreButtonAction.onNext(self.redditViewItem!)
+    }
+    
+    @objc func commentsButtonAction() {
+        Subjects.shared.showCommentsAction.onNext(self.redditViewItem!)
     }
     
 }
