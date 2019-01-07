@@ -13,9 +13,9 @@ import Cache
 import Realm
 import RealmSwift
 
-struct RedditData: Codable {
+class RedditPostListing: Codable {
     let kind: String
-    let data: RedditDataInfo
+    let data: RedditPostListingData
     
     private enum CodingKeys: String, CodingKey {
         case kind
@@ -23,10 +23,10 @@ struct RedditData: Codable {
     }
 }
 
-struct RedditDataInfo: Codable {
+class RedditPostListingData: Codable {
     let dist: Int
     let modhash: String
-    let children: [RedditChildren]
+    let children: [RedditPostChildren]
     let after: String?
     let before: String?
     
@@ -39,7 +39,7 @@ struct RedditDataInfo: Codable {
     }
 }
 
-struct RedditChildren: Codable {
+class RedditPostChildren: Codable {
     let kind: String
     let data: RedditPost
     

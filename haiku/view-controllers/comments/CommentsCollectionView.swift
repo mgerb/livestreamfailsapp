@@ -28,8 +28,14 @@ class CommentsCollectionView: TapThroughCollectionView, ListAdapterDataSource, U
         self.adapter?.collectionView = self
         self.adapter?.dataSource = self
         self.adapter?.scrollViewDelegate = self
+        
+        // TODO:
+        RedditService.shared.getComments(permalink: redditViewItem.redditPost.permalink) {comments in
+            print(comments?.data.children)
+        }
     }
 
+    // when controller add this as subview
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         DispatchQueue.main.async {

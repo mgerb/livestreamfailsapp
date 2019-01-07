@@ -9,4 +9,5 @@ github "ranesr/SwiftIcons" ~> 2.3.2
 github "realm/realm-cocoa"
 github "layoutBox/FlexLayout"
 github "layoutBox/PinLayout"
+github "SwiftyJSON/SwiftyJSON" ~> 4.0
 
