@@ -30,8 +30,8 @@ class CommentsCollectionView: TapThroughCollectionView, ListAdapterDataSource, U
         self.adapter?.scrollViewDelegate = self
         
         // TODO:
-        RedditService.shared.getComments(permalink: redditViewItem.redditPost.permalink) {comments in
-            print(comments?.data.children)
+        RedditService.shared.getFlattenedComments(permalink: redditViewItem.redditPost.permalink) {comments in
+            print(comments)
         }
     }
 

@@ -12,6 +12,8 @@ import IGListKit
 
 class CommentsSectionController: ListSectionController, ListDisplayDelegate, ListWorkingRangeDelegate {
 
+    public var redditComment: RedditComment?
+    
     override init() {
         super.init()
         displayDelegate = self

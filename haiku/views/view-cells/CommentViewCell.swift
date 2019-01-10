@@ -12,9 +12,11 @@ import PinLayout
 
 class CommentViewCell: UICollectionViewCell {
     
+    public var redditComment: RedditComment?
+    
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.contentView.backgroundColor = .red
+        self.contentView.backgroundColor = .white
         let label = UILabel()
         label.text = "test123"
         

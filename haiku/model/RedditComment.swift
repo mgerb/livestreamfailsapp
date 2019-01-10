@@ -19,14 +19,12 @@ class RedditCommentListing: Decodable {
 }
 
 class RedditCommentListingData: Decodable {
-    let dist: Int?
     let modhash: String
-    let children: [RedditCommentChildren]
+    let children: [RedditCommentListingOrString]
     let after: String?
     let before: String?
     
     private enum CodingKeys: String, CodingKey {
-        case dist
         case modhash
         case children
         case after
@@ -47,9 +45,14 @@ class RedditCommentChildren: Decodable {
 // combined value to handle string/redditcommentlist because reddit api is shit
 // and return a reply as a string and not a null - wtf?
 enum RedditCommentListingOrString: Decodable {
-    case redditCommentListing(RedditCommentListing), string(String)
+    case redditCommentChildren(RedditCommentChildren), redditCommentListing(RedditCommentListing), string(String)
 
     init(from decoder: Decoder) throws {
+        if let redditCommentChildren = try? decoder.singleValueContainer().decode(RedditCommentChildren.self) {
+            self = .redditCommentChildren(redditCommentChildren)
+            return
+        }
+        
         if let redditCommentListing = try? decoder.singleValueContainer().decode(RedditCommentListing.self) {
             self = .redditCommentListing(redditCommentListing)
             return
@@ -60,6 +63,7 @@ enum RedditCommentListingOrString: Decodable {
             return
         }
 
+        print(decoder)
         throw QuantumError.missingValue
     }
 
@@ -69,8 +73,8 @@ enum RedditCommentListingOrString: Decodable {
 }
 
 class RedditComment: Decodable {
-    let body: String
-    let replies: RedditCommentListingOrString
+    let body: String?
+    let replies: RedditCommentListingOrString?
     
     private enum CodingKeys: String, CodingKey {
         case body

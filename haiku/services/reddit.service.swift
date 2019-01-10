@@ -53,4 +53,40 @@ class RedditService {
             }
         }
     }
+    
+    func getFlattenedComments(permalink: String, closure: @escaping ((_ data: [RedditComment]) -> Void)) {
+        self.getComments(permalink: permalink) {
+            if let comments = $0 {
+                closure(self.flattenComments(comments: RedditCommentListingOrString.redditCommentListing(comments)))
+            } else {
+                closure([])
+            }
+        }
+    }
+
+    func flattenComments(comments: RedditCommentListingOrString?) -> [RedditComment] {
+
+        if let com = comments {
+            switch com {
+            case .redditCommentListing(let c):
+                let d: [[RedditComment]] = c.data.children.compactMap {
+                    switch $0 {
+                    case .redditCommentChildren(let child):
+                        let a = [child.data]
+                        let b = self.flattenComments(comments: child.data.replies)
+                        print(b)
+                        return a + b
+                    default:
+                        return []
+                    }
+                }
+                print(d)
+                return d.reduce([], +)
+            default:
+                return []
+            }
+        }
+
+        return []
+    }
 }
