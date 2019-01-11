@@ -1,6 +1,6 @@
 
 import Alamofire
-import SwiftyJSON
+import DynamicJSON
 
 class RedditService {
     
@@ -38,15 +38,12 @@ class RedditService {
         }
     }
     
-    func getComments(permalink: String, closure: @escaping ((_ data: RedditCommentListing?) -> Void)) {
+    private func getComments(permalink: String, closure: @escaping ((_ data: Data?) -> Void)) {
         let url = "https://www.reddit.com\(permalink).json"
         Alamofire.request(url, headers: RedditService.headers).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
-                if let json = try? JSON(value)[1].rawData() {
-                    let c: RedditCommentListing? = try? JSONDecoder().decode(RedditCommentListing.self, from: json)
-                    closure(c)
-                }
+                closure(JSON(value)[1].data())
             case .failure(let error):
                 print(error)
                 closure(nil)
@@ -57,36 +54,22 @@ class RedditService {
     func getFlattenedComments(permalink: String, closure: @escaping ((_ data: [RedditComment]) -> Void)) {
         self.getComments(permalink: permalink) {
             if let comments = $0 {
-                closure(self.flattenComments(comments: RedditCommentListingOrString.redditCommentListing(comments)))
+                let output = self.flattenComments(data: JSON(comments)).compactMap {
+                    RedditComment(json: $0)
+                }
+                closure(output)
             } else {
                 closure([])
             }
         }
     }
 
-    func flattenComments(comments: RedditCommentListingOrString?) -> [RedditComment] {
-
-        if let com = comments {
-            switch com {
-            case .redditCommentListing(let c):
-                let d: [[RedditComment]] = c.data.children.compactMap {
-                    switch $0 {
-                    case .redditCommentChildren(let child):
-                        let a = [child.data]
-                        let b = self.flattenComments(comments: child.data.replies)
-                        print(b)
-                        return a + b
-                    default:
-                        return []
-                    }
-                }
-                print(d)
-                return d.reduce([], +)
-            default:
-                return []
-            }
-        }
-
-        return []
+    private func flattenComments(data: JSON) -> [JSON] {
+        let list: [[JSON]] = data["data"]["children"].array?.compactMap { val in
+            let data = val["data"]
+            return [data] + self.flattenComments(data: data["replies"])
+        } ?? []
+        
+        return list.reduce([], +)
     }
 }

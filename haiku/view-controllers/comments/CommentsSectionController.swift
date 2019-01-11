@@ -21,7 +21,7 @@ class CommentsSectionController: ListSectionController, ListDisplayDelegate, Lis
     }
     
     override func numberOfItems() -> Int {
-        return 10
+        return 1
     }
     
     override func sizeForItem(at index: Int) -> CGSize {
@@ -30,10 +30,16 @@ class CommentsSectionController: ListSectionController, ListDisplayDelegate, Lis
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
         let cell = collectionContext!.dequeueReusableCell(of: CommentViewCell.self, for: self, at: index) as! CommentViewCell
+        cell.setRedditComment(c: self.redditComment!)
         return cell
     }
     
     override func didUpdate(to object: Any) {
+        if let redditComment = object as? RedditComment {
+            self.redditComment = redditComment
+        } else {
+            self.redditComment = nil
+        }
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {

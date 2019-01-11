@@ -14,14 +14,20 @@ class CommentViewCell: UICollectionViewCell {
     
     public var redditComment: RedditComment?
     
+    let label: UILabel = {
+        let label = UILabel()
+        return label
+    }()
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         self.contentView.backgroundColor = .white
-        let label = UILabel()
-        label.text = "test123"
-        
-        self.addSubview(label)
-
-        label.pin.all()
+        self.addSubview(self.label)
+        self.label.pin.all()
+    }
+    
+    func setRedditComment(c: RedditComment) {
+        self.redditComment = c
+        self.label.text = c.author
     }
 }

@@ -9,10 +9,12 @@
 import Foundation
 import UIKit
 import IGListKit
+import DynamicJSON
 
 class CommentsCollectionView: TapThroughCollectionView, ListAdapterDataSource, UIScrollViewDelegate {
     
     var adapter: ListAdapter?
+    var data: [ListDiffable] = [RedditComment(json: JSON(["id":"test"]))]
 
     static func getInstance(_ controller: UIViewController, _ redditViewItem: RedditViewItem) -> CommentsCollectionView {
         let view = CommentsCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -31,18 +33,20 @@ class CommentsCollectionView: TapThroughCollectionView, ListAdapterDataSource, U
         
         // TODO:
         RedditService.shared.getFlattenedComments(permalink: redditViewItem.redditPost.permalink) {comments in
-            print(comments)
+            self.data = comments
+            self.adapter?.performUpdates(animated: true, completion: { _ in
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
+                        self.contentOffset = CGPoint(x: 0, y: -(UIScreen.main.bounds.height / 2))
+                    }, completion: nil)
+                }
+            })
         }
     }
 
     // when controller add this as subview
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
-        DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
-                self.contentOffset = CGPoint(x: 0, y: -(UIScreen.main.bounds.height / 2))
-            }, completion: nil)
-        }
     }
     
     func dismiss() {
@@ -55,10 +59,9 @@ class CommentsCollectionView: TapThroughCollectionView, ListAdapterDataSource, U
         }
     }
     
-    // TODO:
     func objects(for listAdapter: ListAdapter) -> [ListDiffable] {
         // this can be anything!
-        return [ "Foo", "Bar", 42, "Biz" ] as! [ListDiffable]
+        return self.data
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {

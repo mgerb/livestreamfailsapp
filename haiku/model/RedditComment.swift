@@ -1,4 +1,3 @@
-//
 //  RedditComment.swift
 //  haiku
 //
@@ -7,78 +6,38 @@
 //
 
 import Foundation
+import DynamicJSON
+import IGListKit
 
-class RedditCommentListing: Decodable {
-    let kind: String
-    let data: RedditCommentListingData
-    
-    private enum CodingKeys: String, CodingKey {
-        case kind
-        case data
-    }
-}
-
-class RedditCommentListingData: Decodable {
-    let modhash: String
-    let children: [RedditCommentListingOrString]
-    let after: String?
-    let before: String?
-    
-    private enum CodingKeys: String, CodingKey {
-        case modhash
-        case children
-        case after
-        case before
-    }
-}
-
-class RedditCommentChildren: Decodable {
-    let kind: String
-    let data: RedditComment
-    
-    private enum CodingKeys: String, CodingKey {
-        case kind
-        case data
-    }
-}
-
-// combined value to handle string/redditcommentlist because reddit api is shit
-// and return a reply as a string and not a null - wtf?
-enum RedditCommentListingOrString: Decodable {
-    case redditCommentChildren(RedditCommentChildren), redditCommentListing(RedditCommentListing), string(String)
-
-    init(from decoder: Decoder) throws {
-        if let redditCommentChildren = try? decoder.singleValueContainer().decode(RedditCommentChildren.self) {
-            self = .redditCommentChildren(redditCommentChildren)
-            return
-        }
-        
-        if let redditCommentListing = try? decoder.singleValueContainer().decode(RedditCommentListing.self) {
-            self = .redditCommentListing(redditCommentListing)
-            return
-        }
-
-        if let string = try? decoder.singleValueContainer().decode(String.self) {
-            self = .string(string)
-            return
-        }
-
-        print(decoder)
-        throw QuantumError.missingValue
-    }
-
-    enum QuantumError:Error {
-        case missingValue
-    }
-}
-
-class RedditComment: Decodable {
+class RedditComment {
+    let id: String?
+    let author: String?
     let body: String?
-    let replies: RedditCommentListingOrString?
-    
-    private enum CodingKeys: String, CodingKey {
-        case body
-        case replies
+    let depth: Int?
+    let ups: Int?
+    let score: Int?
+    let created: Int?
+
+    init(json: JSON) {
+        self.id = json.id.string
+        self.body = json.body.string
+        self.depth = json.depth.int
+        self.ups = json.ups.int
+        self.score = json.score.int
+        self.author = json.author.string
+        self.created = json.created.int
     }
 }
 
+extension RedditComment: ListDiffable {
+    func diffIdentifier() -> NSObjectProtocol {
+        return (self.id ?? "") as NSString
+    }
+    
+    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
+        if let object = object as? RedditComment {
+            return self.id == object.id
+        }
+        return false
+    }
+}
