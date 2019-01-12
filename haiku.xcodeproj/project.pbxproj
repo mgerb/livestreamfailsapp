@@ -36,10 +36,10 @@
 		A20A70D021E817B800BD3D0C /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709A21E8176C00BD3D0C /* Alamofire.framework */; };
 		A20A70D121E817B800BD3D0C /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709A21E8176C00BD3D0C /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A240BA252159BD74004E8419 /* PlayerCell.swift */; };
-		A242E87821E28544004A8026 /* CommentsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A242E87721E28544004A8026 /* CommentsCollectionView.swift */; };
-		A242E87A21E28585004A8026 /* CommentsSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A242E87921E28585004A8026 /* CommentsSectionController.swift */; };
 		A242E87C21E2867D004A8026 /* CommentViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A242E87B21E2867D004A8026 /* CommentViewCell.swift */; };
 		A242E87E21E294CB004A8026 /* TapThroughCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A242E87D21E294CB004A8026 /* TapThroughCollectionView.swift */; };
+		A247504221EA6F1A00C0F712 /* CommentsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A247504121EA6F1A00C0F712 /* CommentsTableView.swift */; };
+		A247504421EA726D00C0F712 /* TapThroughTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A247504321EA726D00C0F712 /* TapThroughTableView.swift */; };
 		A24818BE21780E3B005B8819 /* InfoRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24818BD21780E3B005B8819 /* InfoRowCell.swift */; };
 		A24818C0217815C8005B8819 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24818BF217815C8005B8819 /* Util.swift */; };
 		A24818C221781807005B8819 /* subjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24818C121781807005B8819 /* subjects.swift */; };
@@ -111,10 +111,10 @@
 		A20A70B221E817A900BD3D0C /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		A20A70B421E817AC00BD3D0C /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/iOS/XCDYouTubeKit.framework; sourceTree = "<group>"; };
 		A240BA252159BD74004E8419 /* PlayerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCell.swift; sourceTree = "<group>"; };
-		A242E87721E28544004A8026 /* CommentsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionView.swift; sourceTree = "<group>"; };
-		A242E87921E28585004A8026 /* CommentsSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsSectionController.swift; sourceTree = "<group>"; };
 		A242E87B21E2867D004A8026 /* CommentViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewCell.swift; sourceTree = "<group>"; };
 		A242E87D21E294CB004A8026 /* TapThroughCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapThroughCollectionView.swift; sourceTree = "<group>"; };
+		A247504121EA6F1A00C0F712 /* CommentsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsTableView.swift; sourceTree = "<group>"; };
+		A247504321EA726D00C0F712 /* TapThroughTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapThroughTableView.swift; sourceTree = "<group>"; };
 		A24818BD21780E3B005B8819 /* InfoRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoRowCell.swift; sourceTree = "<group>"; };
 		A24818BF217815C8005B8819 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		A24818C121781807005B8819 /* subjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = subjects.swift; sourceTree = "<group>"; };
@@ -206,7 +206,6 @@
 				A24818BD21780E3B005B8819 /* InfoRowCell.swift */,
 				A240BA252159BD74004E8419 /* PlayerCell.swift */,
 				A252857D215C655600DCA537 /* TitleCollectionViewCell.swift */,
-				A242E87B21E2867D004A8026 /* CommentViewCell.swift */,
 			);
 			path = "view-cells";
 			sourceTree = "<group>";
@@ -243,8 +242,8 @@
 		A27E877921E10375002501F1 /* comments */ = {
 			isa = PBXGroup;
 			children = (
-				A242E87721E28544004A8026 /* CommentsCollectionView.swift */,
-				A242E87921E28585004A8026 /* CommentsSectionController.swift */,
+				A247504121EA6F1A00C0F712 /* CommentsTableView.swift */,
+				A242E87B21E2867D004A8026 /* CommentViewCell.swift */,
 			);
 			path = comments;
 			sourceTree = "<group>";
@@ -316,7 +315,6 @@
 		A2D0EF6C21CEB1F4002F1134 /* view-controllers */ = {
 			isa = PBXGroup;
 			children = (
-				A27E877921E10375002501F1 /* comments */,
 				A27E877A21E10394002501F1 /* main */,
 				A27E877C21E10482002501F1 /* misc */,
 				A27E877B21E10474002501F1 /* settings */,
@@ -328,9 +326,11 @@
 		A2D0EF6D21CEB203002F1134 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				A27E877921E10375002501F1 /* comments */,
 				A252857C215C652E00DCA537 /* view-cells */,
 				A288A12B215344D000000733 /* MyPlayerView.swift */,
 				A242E87D21E294CB004A8026 /* TapThroughCollectionView.swift */,
+				A247504321EA726D00C0F712 /* TapThroughTableView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -415,18 +415,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A242E87821E28544004A8026 /* CommentsCollectionView.swift in Sources */,
 				A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */,
 				A25285AA21615AC800DCA537 /* CachingPlayerItem.swift in Sources */,
 				A25285B8216ACADD00DCA537 /* Config.swift in Sources */,
 				A2889F2C217D6FF0001E7061 /* FavoritesCollectionViewController.swift in Sources */,
+				A247504421EA726D00C0F712 /* TapThroughTableView.swift in Sources */,
 				A25285772159E5BE00DCA537 /* global-player.swift in Sources */,
 				A24818BE21780E3B005B8819 /* InfoRowCell.swift in Sources */,
 				A26BD837218FE09100E948A4 /* Int.swift in Sources */,
 				A25285732159C9FC00DCA537 /* MainCollectionViewController.swift in Sources */,
 				A288A12C215344D000000733 /* MyPlayerView.swift in Sources */,
 				A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */,
-				A242E87A21E28585004A8026 /* CommentsSectionController.swift in Sources */,
 				A242E87E21E294CB004A8026 /* TapThroughCollectionView.swift in Sources */,
 				A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */,
 				A2591251211BD28200B09D73 /* reddit.service.swift in Sources */,
@@ -438,6 +437,7 @@
 				A25285B62165B7DB00DCA537 /* storage.service.swift in Sources */,
 				A2528584215C6F6B00DCA537 /* String.swift in Sources */,
 				A24818C221781807005B8819 /* subjects.swift in Sources */,
+				A247504221EA6F1A00C0F712 /* CommentsTableView.swift in Sources */,
 				A283B61A21E2E9CC00AE47C6 /* RedditComment.swift in Sources */,
 				A252857E215C655600DCA537 /* TitleCollectionViewCell.swift in Sources */,
 				A25285B02165955800DCA537 /* UIScrollView.swift in Sources */,

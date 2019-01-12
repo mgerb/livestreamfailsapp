@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import PinLayout
 
-class CommentViewCell: UICollectionViewCell {
+class CommentViewCell: UITableViewCell {
     
     public var redditComment: RedditComment?
     
