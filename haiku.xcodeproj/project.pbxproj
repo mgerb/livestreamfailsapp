@@ -68,6 +68,7 @@
 		A29CD0102119363C00A5A6EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */; };
 		A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */; };
 		A2B7C2442198C211008DB7E6 /* RedditViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */; };
+		A2DCC61321EBB20500E08453 /* MoreCommentsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61221EBB20500E08453 /* MoreCommentsViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -147,6 +148,7 @@
 		A29CD0112119363C00A5A6EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditViewItem.swift; sourceTree = "<group>"; };
+		A2DCC61221EBB20500E08453 /* MoreCommentsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreCommentsViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,6 +252,7 @@
 				A247504121EA6F1A00C0F712 /* CommentsTableView.swift */,
 				A242E87B21E2867D004A8026 /* CommentsViewCell.swift */,
 				A247504521EACBE600C0F712 /* CommentsHeaderCell.swift */,
+				A2DCC61221EBB20500E08453 /* MoreCommentsViewCell.swift */,
 			);
 			path = comments;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 				A25285772159E5BE00DCA537 /* global-player.swift in Sources */,
 				A24818BE21780E3B005B8819 /* InfoRowCell.swift in Sources */,
 				A26BD837218FE09100E948A4 /* Int.swift in Sources */,
+				A2DCC61321EBB20500E08453 /* MoreCommentsViewCell.swift in Sources */,
 				A25285732159C9FC00DCA537 /* MainCollectionViewController.swift in Sources */,
 				A288A12C215344D000000733 /* MyPlayerView.swift in Sources */,
 				A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */,

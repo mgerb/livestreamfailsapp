@@ -13,8 +13,22 @@ import FlexLayout
 
 class CommentsViewCell: UITableViewCell {
     
-    public var redditComment: RedditComment?
+    /// Get the total height of this cell
+    /// Heights
+    /// - 5 top margin
+    /// - 5 bottom margin
+    /// - 15 header height
+    /// - ? body height
+    /// - 5 body top margin
+    /// - 5 body bottom margin
+    /// - 30 body horizontal margin
+    public static func getHeight(redditComment: RedditComment) -> CGFloat {
+        let width = UIScreen.main.bounds.width - (CommentsViewCell.calculateLeftMargin(depth: redditComment.depth) - 30)
+        return 35 + (redditComment.body?.heightWithConstrainedWidth(width: width, font: Config.smallFont) ?? 0)
+    }
     
+    public var redditComment: RedditComment?
+
     var leftBorders: [UIView] = []
 
     lazy var bgView: UIView = {
@@ -39,7 +53,7 @@ class CommentsViewCell: UITableViewCell {
     
     lazy var header: UIView = {
         let view = UIView()
-        view.flex.height(20).paddingLeft(10).paddingRight(10).justifyContent(.spaceBetween).direction(.row).define { flex in
+        view.flex.paddingLeft(10).paddingRight(10).justifyContent(.spaceBetween).direction(.row).define { flex in
             flex.addItem(self.authorLabel)
             flex.addItem(self.scoreLabel)
         }
@@ -53,6 +67,9 @@ class CommentsViewCell: UITableViewCell {
         self.bgView.addSubview(view)
         view.isScrollEnabled = false
         view.isEditable = false
+        view.textContainerInset = .zero
+        view.textContainer.lineFragmentPadding = 0
+        view.font = Config.smallFont
         return view
     }()
 
@@ -69,16 +86,16 @@ class CommentsViewCell: UITableViewCell {
         
         // calculate margin based on depth level of comment
         let marginLeft = CGFloat((self.redditComment?.depth ?? 0) * 10)
-        self.bgView.pin.all().marginLeft(marginLeft)
+        self.bgView.pin.all().marginLeft(marginLeft).marginTop(5).marginBottom(5)
         
-        self.header.pin.top().left().right()
+        self.header.pin.top().left().right().height(15)
         self.header.flex.layout()
         
-        self.body.pin.all().margin(15, 10, 10)
+        self.body.pin.below(of: self.header).left().right().bottom().margin(5, 15)
 
         for (index, border) in self.leftBorders.enumerated() {
             self.addSubview(border)
-            let marginLeft = CGFloat((index + 1) * 10) + 5
+            let marginLeft = self.calculateBorderLeftMargin(depth: index)
             border.pin.top().bottom().left().width(1).marginLeft(marginLeft)
         }
     }
@@ -94,8 +111,7 @@ class CommentsViewCell: UITableViewCell {
         self.redditComment = c
         self.isHidden = c.collapsed
 
-        self.body.attributedText = c.htmlBody
-        self.body.font = Config.smallFont
+        self.body.text = c.body
 
         self.authorLabel.text = c.author
         self.authorLabel.flex.markDirty()
@@ -117,4 +133,12 @@ class CommentsViewCell: UITableViewCell {
         self.layoutSubviews()
     }
     
+    static func calculateLeftMargin(depth: Int) -> CGFloat {
+        return CGFloat((depth + 1) * 10)
+    }
+    
+    func calculateBorderLeftMargin(depth: Int) -> CGFloat {
+        return CommentsViewCell.calculateLeftMargin(depth: depth) + 5
+    }
+
 }

@@ -30,6 +30,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
 
         self.register(CommentsViewCell.self, forCellReuseIdentifier: "CommentsViewCell")
         self.register(UITableViewCell.self, forCellReuseIdentifier: "LoadingCell")
+        self.register(MoreCommentsViewCell.self, forCellReuseIdentifier: "MoreCommentsViewCell")
         self.register(CommentsHeaderCell.self, forHeaderFooterViewReuseIdentifier: "HeaderCell")
     }
     
@@ -91,6 +92,8 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         case let comment as RedditComment:
             if comment.collapsed == true {
                 return 0
+            } else {
+                return CommentsViewCell.getHeight(redditComment: comment)
             }
         default:
             return 50

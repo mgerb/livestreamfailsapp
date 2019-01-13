@@ -13,23 +13,25 @@ class RedditComment {
     let id: String?
     let author: String?
     let body: String?
-    let htmlBody: NSAttributedString?
+//    let htmlBody: NSAttributedString?
     let depth: Int
     let ups: Int?
     let score: Int?
     let created: Int?
     var collapsed: Bool
+    let children: [String]?
 
     init(json: JSON) {
         self.id = json.id.string
         self.body = json.body.string
-        self.htmlBody = json.body.string?.htmlToAttributedString
+//        self.htmlBody = json.body.string?.htmlToAttributedString
         self.depth = json.depth.int ?? 0
         self.ups = json.ups.int
         self.score = json.score.int
         self.author = json.author.string
         self.created = json.created.int
         self.collapsed = json.collapsed.bool ?? false
+        self.children = json.children.array?.compactMap { $0.string }
     }
 }
 
