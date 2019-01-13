@@ -20,6 +20,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         self.redditViewItem = redditViewItem
         super.init(frame: frame, style: .grouped)
 
+        self.separatorStyle = .none
         self.backgroundColor = .clear
         self.showsVerticalScrollIndicator = false
         self.dataSource = self
@@ -27,8 +28,9 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         
         self.contentInset.top = self.frame.height
 
-        self.register(CommentViewCell.self, forCellReuseIdentifier: "CommentViewCell")
+        self.register(CommentsViewCell.self, forCellReuseIdentifier: "CommentsViewCell")
         self.register(UITableViewCell.self, forCellReuseIdentifier: "LoadingCell")
+        self.register(CommentsHeaderCell.self, forHeaderFooterViewReuseIdentifier: "HeaderCell")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -79,16 +81,27 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         return 1
     }
 
+    // height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if self.data[indexPath.row] as? String == "loading" {
-            return 300
+        switch self.data[indexPath.row] {
+        case let s as String:
+            if s == "loading" {
+                return 300
+            }
+        case let comment as RedditComment:
+            if comment.collapsed == true {
+                return 0
+            }
+        default:
+            return 50
         }
+        
         return 50
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let comment = self.data[indexPath.row] as? RedditComment {
-            let cell = self.dequeueReusableCell(withIdentifier: "CommentViewCell", for: indexPath) as! CommentViewCell
+            let cell = self.dequeueReusableCell(withIdentifier: "CommentsViewCell", for: indexPath) as! CommentsViewCell
             cell.setRedditComment(c: comment)
             return cell
         } else {
@@ -100,11 +113,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UITableViewCell()
-        view.backgroundColor = .white
-        view.textLabel?.text = "Comments"
-        view.textLabel?.textAlignment = .center
-        return view
+        return self.dequeueReusableHeaderFooterView(withIdentifier: "HeaderCell")
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -124,6 +133,33 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if self.didLoad && self.contentOffset.y < -(self.frame.height) {
             self.removeFromSuperview()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let comment = self.data[indexPath.row] as? RedditComment {
+            comment.collapsed = true
+            
+            var indexPaths = [indexPath]
+            
+            for i in indexPath.row...(self.data.count - 1) {
+                if i == indexPath.row {
+                    continue
+                }
+                
+                if let c = self.data[i] as? RedditComment {
+                    if c.depth > comment.depth {
+                        c.collapsed = true
+                        indexPaths.append(IndexPath(item: i, section: 0))
+                    } else {
+                        break
+                    }
+                } else {
+                    break
+                }
+            }
+
+            self.reloadRows(at: indexPaths, with: .middle)
         }
     }
 }

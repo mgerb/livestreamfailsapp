@@ -13,19 +13,23 @@ class RedditComment {
     let id: String?
     let author: String?
     let body: String?
-    let depth: Int?
+    let htmlBody: NSAttributedString?
+    let depth: Int
     let ups: Int?
     let score: Int?
     let created: Int?
+    var collapsed: Bool
 
     init(json: JSON) {
         self.id = json.id.string
         self.body = json.body.string
-        self.depth = json.depth.int
+        self.htmlBody = json.body.string?.htmlToAttributedString
+        self.depth = json.depth.int ?? 0
         self.ups = json.ups.int
         self.score = json.score.int
         self.author = json.author.string
         self.created = json.created.int
+        self.collapsed = json.collapsed.bool ?? false
     }
 }
 
