@@ -28,9 +28,9 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         
         self.contentInset.top = self.frame.height
 
-        self.register(CommentsViewCell.self, forCellReuseIdentifier: "CommentsViewCell")
+        self.register(CommentsViewCellContent.self, forCellReuseIdentifier: "CommentsViewCellContent")
         self.register(UITableViewCell.self, forCellReuseIdentifier: "LoadingCell")
-        self.register(MoreCommentsViewCell.self, forCellReuseIdentifier: "MoreCommentsViewCell")
+        self.register(CommentsViewCellMore.self, forCellReuseIdentifier: "CommentsViewCellMore")
         self.register(CommentsHeaderCell.self, forHeaderFooterViewReuseIdentifier: "HeaderCell")
     }
     
@@ -92,6 +92,8 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         case let comment as RedditComment:
             if comment.collapsed == true {
                 return 0
+            } else if comment.isMoreComment {
+                return 20
             } else {
                 return CommentsViewCell.getHeight(redditComment: comment)
             }
@@ -104,9 +106,16 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let comment = self.data[indexPath.row] as? RedditComment {
-            let cell = self.dequeueReusableCell(withIdentifier: "CommentsViewCell", for: indexPath) as! CommentsViewCell
-            cell.setRedditComment(c: comment)
-            return cell
+            if comment.isMoreComment {
+                let cell = self.dequeueReusableCell(withIdentifier: "CommentsViewCellMore", for: indexPath) as! CommentsViewCellMore
+                cell.setRedditComment(c: comment)
+                return cell
+            } else {
+                let cell = self.dequeueReusableCell(withIdentifier: "CommentsViewCellContent", for: indexPath) as! CommentsViewCellContent
+                cell.setRedditComment(c: comment)
+                return cell
+            }
+            
         } else {
             let cell = self.dequeueReusableCell(withIdentifier: "LoadingCell", for: indexPath)
             cell.textLabel?.text = "Loading..."
@@ -141,28 +150,41 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let comment = self.data[indexPath.row] as? RedditComment {
-            comment.collapsed = true
+            if comment.isMoreComment {
+                self.redditCommentMorePressed(comment: comment, indexPath: indexPath)
+            } else {
+                self.redditCommentContentPressed(comment: comment, indexPath: indexPath)
+            }
+        }
+    }
+    
+    /// when user taps load more comments button
+    func redditCommentMorePressed(comment: RedditComment, indexPath: IndexPath) {
+    }
+    
+    /// when user taps on normal content comment
+    func redditCommentContentPressed(comment: RedditComment, indexPath: IndexPath) {
+        comment.collapsed = true
+        
+        var indexPaths = [indexPath]
+        
+        for i in indexPath.row...(self.data.count - 1) {
+            if i == indexPath.row {
+                continue
+            }
             
-            var indexPaths = [indexPath]
-            
-            for i in indexPath.row...(self.data.count - 1) {
-                if i == indexPath.row {
-                    continue
-                }
-                
-                if let c = self.data[i] as? RedditComment {
-                    if c.depth > comment.depth {
-                        c.collapsed = true
-                        indexPaths.append(IndexPath(item: i, section: 0))
-                    } else {
-                        break
-                    }
+            if let c = self.data[i] as? RedditComment {
+                if c.depth > comment.depth {
+                    c.collapsed = true
+                    indexPaths.append(IndexPath(item: i, section: 0))
                 } else {
                     break
                 }
+            } else {
+                break
             }
-
-            self.reloadRows(at: indexPaths, with: .middle)
         }
+        
+        self.reloadRows(at: indexPaths, with: .middle)
     }
 }

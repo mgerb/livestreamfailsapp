@@ -9,17 +9,16 @@
 import Foundation
 import UIKit
 
-class MoreCommentsViewCell: UITableViewCell {
+class CommentsViewCellMore: CommentsViewCell {
     
-    public var redditComment: RedditComment?
-
-    lazy var bgView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        self.addSubview(view)
-        return view
+    lazy var label: UILabel = {
+        let l = UILabel()
+        l.font = Config.smallerFont
+        l.textColor = Config.colors.blueLink
+        self.bgView.addSubview(l)
+        return l
     }()
-    
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
@@ -30,17 +29,16 @@ class MoreCommentsViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        self.label.pin.all().marginLeft(15)
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
     }
     
-    func setRedditComment(c: RedditComment) {
-        self.redditComment = c
-    }
-    
-    func calculateLeftMargin(depth: Int) -> CGFloat {
-        return CGFloat((depth + 1) * 10)
+    override func setRedditComment(c: RedditComment) {
+        super.setRedditComment(c: c)
+        self.label.text = "Load More (\(c.children?.count ?? 0))"
+        self.layoutSubviews()
     }
 }

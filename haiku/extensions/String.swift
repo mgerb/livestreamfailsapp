@@ -91,7 +91,4 @@ extension String {
             return NSAttributedString()
         }
     }
-    var htmlToString: String {
-        return self.htmlToAttributedString?.string ?? ""
-    }
 }

@@ -11,4 +11,6 @@ github "layoutBox/FlexLayout"
 github "layoutBox/PinLayout"
 github "SwiftyJSON/SwiftyJSON" ~> 4.0
 github "saoudrizwan/DynamicJSON"
+github "SimonFairbairn/SwiftyMarkdown"
+
 
