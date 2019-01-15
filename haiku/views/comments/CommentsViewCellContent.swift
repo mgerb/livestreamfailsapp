@@ -67,9 +67,8 @@ class CommentsViewCellContent: CommentsViewCell {
     
     override func setRedditComment(c: RedditComment) {
         super.setRedditComment(c: c)
-        
-        self.isHidden = c.collapsed
-        
+
+        self.body.isHidden = c.isHidden || c.collapsed
         self.body.attributedText = c.htmlBody
 
         self.authorLabel.text = c.author

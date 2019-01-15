@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
 
@@ -15,6 +16,20 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     var data: [Any] = ["loading"]
     private let footerHeight: CGFloat = 400
     let redditViewItem: RedditViewItem
+    
+    lazy var bgView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.isUserInteractionEnabled = false
+        view.addSubview(self.whiteBackgroundLayer)
+        return view
+    }()
+    
+    lazy var whiteBackgroundLayer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
     
     init(frame: CGRect, redditViewItem: RedditViewItem) {
         self.redditViewItem = redditViewItem
@@ -25,11 +40,17 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         self.showsVerticalScrollIndicator = false
         self.dataSource = self
         self.delegate = self
+        self.estimatedRowHeight = 0
+        self.estimatedSectionFooterHeight = 0
+        self.estimatedSectionFooterHeight = 0
         
+        self.backgroundView = self.bgView
+
         self.contentInset.top = self.frame.height
 
         self.register(CommentsViewCellContent.self, forCellReuseIdentifier: "CommentsViewCellContent")
         self.register(UITableViewCell.self, forCellReuseIdentifier: "LoadingCell")
+        self.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "FooterCell")
         self.register(CommentsViewCellMore.self, forCellReuseIdentifier: "CommentsViewCellMore")
         self.register(CommentsHeaderCell.self, forHeaderFooterViewReuseIdentifier: "HeaderCell")
     }
@@ -37,7 +58,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func willMove(toSuperview newSuperview: UIView?) {
         if newSuperview != nil {
             DispatchQueue.main.async {
@@ -59,6 +80,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
                 DispatchQueue.main.async {
                     self.contentOffset.y = -(self.frame.height / 2)
                     self.didLoad = true
+                    self.setWhiteBackgroundLayout()
                 }
             }
         }
@@ -90,9 +112,9 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
                 return 300
             }
         case let comment as RedditComment:
-            if comment.collapsed == true {
+            if comment.isHidden {
                 return 0
-            } else if comment.isMoreComment {
+            } else if comment.isMoreComment || comment.isDeleted || comment.collapsed {
                 return 20
             } else {
                 return CommentsViewCell.getHeight(redditComment: comment)
@@ -123,7 +145,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
             return cell
         }
     }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return self.dequeueReusableHeaderFooterView(withIdentifier: "HeaderCell")
     }
@@ -133,9 +155,9 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .white
-        return view
+        let cell = self.dequeueReusableHeaderFooterView(withIdentifier: "FooterCell")
+        cell?.backgroundColor = .white
+        return cell
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -143,17 +165,30 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if self.didLoad && self.contentOffset.y < -(self.frame.height) {
-            self.removeFromSuperview()
+        if self.didLoad {
+            self.setWhiteBackgroundLayout()
+            if self.contentOffset.y < -(self.frame.height) {
+                self.removeFromSuperview()
+            }
+        }
+    }
+    
+    func setWhiteBackgroundLayout() {
+        DispatchQueue.main.async {
+            if self.contentOffset.y < 0 {
+                self.whiteBackgroundLayer.pinFrame.all().marginTop(abs(self.contentOffset.y))
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let comment = self.data[indexPath.row] as? RedditComment {
-            if comment.isMoreComment {
-                self.redditCommentMorePressed(comment: comment, indexPath: indexPath)
-            } else {
-                self.redditCommentContentPressed(comment: comment, indexPath: indexPath)
+            DispatchQueue.main.async {
+                if comment.isMoreComment {
+                    self.redditCommentMorePressed(comment: comment, indexPath: indexPath)
+                } else {
+                    self.redditCommentContentPressed(comment: comment, indexPath: indexPath)
+                }
             }
         }
     }
@@ -164,10 +199,10 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     
     /// when user taps on normal content comment
     func redditCommentContentPressed(comment: RedditComment, indexPath: IndexPath) {
-        comment.collapsed = true
+        comment.collapsed = !comment.collapsed
         
         var indexPaths = [indexPath]
-        
+
         for i in indexPath.row...(self.data.count - 1) {
             if i == indexPath.row {
                 continue
@@ -175,7 +210,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
             
             if let c = self.data[i] as? RedditComment {
                 if c.depth > comment.depth {
-                    c.collapsed = true
+                    c.isHidden = comment.collapsed
                     indexPaths.append(IndexPath(item: i, section: 0))
                 } else {
                     break
@@ -185,6 +220,6 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
             }
         }
         
-        self.reloadRows(at: indexPaths, with: .middle)
+        self.reloadRows(at: indexPaths, with: .fade)
     }
 }

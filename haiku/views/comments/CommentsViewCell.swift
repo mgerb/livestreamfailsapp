@@ -69,6 +69,7 @@ class CommentsViewCell: UITableViewCell {
     
     func setRedditComment(c: RedditComment) {
         self.redditComment = c
+        self.isHidden = c.isHidden
 
         if c.depth > 0 {
             for i in 0...c.depth {

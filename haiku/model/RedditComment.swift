@@ -8,7 +8,6 @@
 import Foundation
 import DynamicJSON
 import IGListKit
-import Down
 import SwiftyMarkdown
 
 class RedditComment {
@@ -20,13 +19,20 @@ class RedditComment {
     let ups: Int?
     let score: Int?
     let created: Int?
-    var collapsed: Bool
     let children: [String]?
     
+    var collapsed: Bool
+    var isHidden: Bool
+
     /// more comments will contain a list of children ID's
-    lazy var isMoreComment: Bool = {
+    var isMoreComment: Bool {
         return (self.children?.count ?? 0) > 0
-    }()
+    }
+    
+    /// check if author is "[deleted]"
+    var isDeleted: Bool {
+        return self.author == "[deleted]"
+    }
 
     init(json: JSON) {
         self.id = json.id.string
@@ -36,8 +42,10 @@ class RedditComment {
         self.score = json.score.int
         self.author = json.author.string
         self.created = json.created.int
-        self.collapsed = json.collapsed.bool ?? false
         self.children = json.children.array?.compactMap { $0.string }
+        
+        self.collapsed = false
+        self.isHidden = false
 
         // TODO: refine this - make normal links clickable
         let text = self.body ?? ""

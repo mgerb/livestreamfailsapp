@@ -38,12 +38,12 @@ class RedditService {
         }
     }
     
-    private func getComments(permalink: String, closure: @escaping ((_ data: Data?) -> Void)) {
+    private func getComments(permalink: String, closure: @escaping ((_ data: JSON?) -> Void)) {
         let url = "https://www.reddit.com\(permalink).json"
         Alamofire.request(url, headers: RedditService.headers).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
-                closure(JSON(value)[1].data())
+                closure(JSON(value)[1])
             case .failure(let error):
                 print(error)
                 closure(nil)
@@ -54,7 +54,7 @@ class RedditService {
     func getFlattenedComments(permalink: String, closure: @escaping ((_ data: [RedditComment]) -> Void)) {
         self.getComments(permalink: permalink) {
             if let comments = $0 {
-                let output = self.flattenComments(data: JSON(comments)).compactMap {
+                let output = self.flattenComments(data: comments).compactMap {
                     RedditComment(json: $0)
                 }
                 closure(output)
