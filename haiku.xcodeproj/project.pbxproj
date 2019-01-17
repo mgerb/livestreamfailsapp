@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A20A709D21E8176F00BD3D0C /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709C21E8176F00BD3D0C /* Cache.framework */; };
-		A20A709F21E8177500BD3D0C /* DynamicJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709E21E8177500BD3D0C /* DynamicJSON.framework */; };
-		A20A70A121E8177800BD3D0C /* FlexLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A021E8177800BD3D0C /* FlexLayout.framework */; };
 		A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A221E8178000BD3D0C /* IGListKit.framework */; };
 		A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A421E8178300BD3D0C /* Kingfisher.framework */; };
 		A20A70A721E8178800BD3D0C /* PinLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A621E8178800BD3D0C /* PinLayout.framework */; };
@@ -66,8 +64,10 @@
 		A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29CD0052119363900A5A6EC /* AppDelegate.swift */; };
 		A29CD00D2119363C00A5A6EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A29CD00C2119363C00A5A6EC /* Assets.xcassets */; };
 		A29CD0102119363C00A5A6EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */; };
+		A2B0098221F01E9200888476 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */; };
 		A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */; };
 		A2B7C2442198C211008DB7E6 /* RedditViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */; };
+		A2D70E8C21EED67C00F69F0C /* TapThroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */; };
 		A2DCC61321EBB20500E08453 /* CommentsViewCellMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61221EBB20500E08453 /* CommentsViewCellMore.swift */; };
 		A2DCC61521EC175700E08453 /* CommentsViewCellContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61421EC175700E08453 /* CommentsViewCellContent.swift */; };
 		A2DCC61D21EC242E00E08453 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61C21EC242E00E08453 /* WebViewController.swift */; };
@@ -153,8 +153,10 @@
 		A29CD00C2119363C00A5A6EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A29CD00F2119363C00A5A6EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A29CD0112119363C00A5A6EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
 		A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditViewItem.swift; sourceTree = "<group>"; };
+		A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapThroughTextView.swift; sourceTree = "<group>"; };
 		A2DCC61221EBB20500E08453 /* CommentsViewCellMore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewCellMore.swift; sourceTree = "<group>"; };
 		A2DCC61421EC175700E08453 /* CommentsViewCellContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewCellContent.swift; sourceTree = "<group>"; };
 		A2DCC61C21EC242E00E08453 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
@@ -170,8 +172,6 @@
 			files = (
 				A20A70D021E817B800BD3D0C /* Alamofire.framework in Frameworks */,
 				A20A709D21E8176F00BD3D0C /* Cache.framework in Frameworks */,
-				A20A709F21E8177500BD3D0C /* DynamicJSON.framework in Frameworks */,
-				A20A70A121E8177800BD3D0C /* FlexLayout.framework in Frameworks */,
 				A20A70C421E817B800BD3D0C /* PinLayout.framework in Frameworks */,
 				A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */,
 				A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */,
@@ -249,6 +249,7 @@
 				A25285AF2165955700DCA537 /* UIScrollView.swift */,
 				A247504721EAF0EE00C0F712 /* UIColor.swift */,
 				A2DCC62021EC2CAA00E08453 /* NSAttributedString.swift */,
+				A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -350,6 +351,7 @@
 				A288A12B215344D000000733 /* MyPlayerView.swift */,
 				A242E87D21E294CB004A8026 /* TapThroughCollectionView.swift */,
 				A247504321EA726D00C0F712 /* TapThroughTableView.swift */,
+				A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -448,6 +450,7 @@
 				A25285732159C9FC00DCA537 /* MainCollectionViewController.swift in Sources */,
 				A288A12C215344D000000733 /* MyPlayerView.swift in Sources */,
 				A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */,
+				A2B0098221F01E9200888476 /* NSMutableAttributedString.swift in Sources */,
 				A242E87E21E294CB004A8026 /* TapThroughCollectionView.swift in Sources */,
 				A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */,
 				A2591251211BD28200B09D73 /* reddit.service.swift in Sources */,
@@ -455,6 +458,7 @@
 				A269478421CEF93000A07F69 /* RedditAlertController.swift in Sources */,
 				A2B7C2442198C211008DB7E6 /* RedditViewItem.swift in Sources */,
 				A25285752159CA2E00DCA537 /* RedditViewItemSectionController.swift in Sources */,
+				A2D70E8C21EED67C00F69F0C /* TapThroughTextView.swift in Sources */,
 				A26BD839218FE53500E948A4 /* SettingsViewController.swift in Sources */,
 				A25285B62165B7DB00DCA537 /* storage.service.swift in Sources */,
 				A247504821EAF0EE00C0F712 /* UIColor.swift in Sources */,

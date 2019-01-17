@@ -8,13 +8,28 @@
 
 import Foundation
 import UIKit
+import AVKit
 
 class MyNavigation {
-    let shared = MyNavigation()
+    public static let shared = MyNavigation()
     private let rootViewController = UIApplication.shared.keyWindow!.rootViewController
     
-    func presentWebView() {
-        let navController = UINavigationController(rootViewController: WebViewController())
+    func presentWebView(url: URL) {
+        let webview = WebViewController()
+        webview.url = url
+        let navController = UINavigationController(rootViewController: webview)
         self.rootViewController?.present(navController, animated: true)
+    }
+
+    func presentVideoPlayer(redditViewItem: RedditViewItem) {
+        redditViewItem.getPlayerItem().subscribe(onNext: { item in
+            let itemCopy: AVPlayerItem = item!.copy() as! AVPlayerItem
+            let player = AVPlayer(playerItem: itemCopy)
+            let playerViewController = AVPlayerViewController()
+            playerViewController.player = player
+            self.rootViewController?.present(playerViewController, animated: true) {
+                playerViewController.player!.play()
+            }
+        }).dispose()
     }
 }

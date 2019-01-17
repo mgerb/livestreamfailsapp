@@ -1,6 +1,6 @@
 
 import Alamofire
-import DynamicJSON
+import SwiftyJSON
 
 class RedditService {
     

@@ -114,8 +114,8 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         case let comment as RedditComment:
             if comment.isHidden {
                 return 0
-            } else if comment.isMoreComment || comment.isDeleted || comment.collapsed {
-                return 20
+            } else if comment.isMoreComment || comment.isDeleted || comment.isCollapsed {
+                return 30
             } else {
                 return CommentsViewCell.getHeight(redditComment: comment)
             }
@@ -199,8 +199,10 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     
     /// when user taps on normal content comment
     func redditCommentContentPressed(comment: RedditComment, indexPath: IndexPath) {
-        comment.collapsed = !comment.collapsed
+        comment.isCollapsed = !comment.isCollapsed
         
+        print(comment.body_html)
+        print(comment.htmlBody)
         var indexPaths = [indexPath]
 
         for i in indexPath.row...(self.data.count - 1) {
@@ -210,7 +212,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
             
             if let c = self.data[i] as? RedditComment {
                 if c.depth > comment.depth {
-                    c.isHidden = comment.collapsed
+                    c.isHidden = comment.isCollapsed
                     indexPaths.append(IndexPath(item: i, section: 0))
                 } else {
                     break

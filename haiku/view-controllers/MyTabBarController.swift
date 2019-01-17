@@ -31,29 +31,5 @@ class MyTabBarController: UITabBarController {
             let alertController = RedditAlertController(redditViewItem: redditViewItem)
             self.present(alertController, animated: true, completion: nil)
         }).disposed(by: self.disposeBag)
-        
-        // open default video player controller
-        Subjects.shared.fullScreenPlayerAction.subscribe(onNext: { redditViewItem in
-            redditViewItem.getPlayerItem().subscribe(onNext: { item in
-                let itemCopy: AVPlayerItem = item!.copy() as! AVPlayerItem
-                let player = AVPlayer(playerItem: itemCopy)
-                let playerViewController = AVPlayerViewController()
-                playerViewController.player = player
-                self.present(playerViewController, animated: true) {
-                    playerViewController.player!.play()
-                }
-            }).dispose()
-        }).disposed(by: self.disposeBag)
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

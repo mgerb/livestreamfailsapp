@@ -83,12 +83,28 @@ extension String {
         return self.replacingOccurrences(of: "&amp;", with: "&")
     }
     
-    var htmlToAttributedString: NSAttributedString? {
-        guard let data = data(using: .utf8) else { return NSAttributedString() }
+    var htmlToAttributedString: NSMutableAttributedString? {
+        guard let data = data(using: .utf8) else { return NSMutableAttributedString() }
         do {
-            return try NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding:String.Encoding.utf8.rawValue], documentAttributes: nil)
+            return try NSMutableAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding:String.Encoding.utf8.rawValue], documentAttributes: nil)
         } catch {
-            return NSAttributedString()
+            return NSMutableAttributedString()
         }
+    }
+    
+    /// replaces normal links with markdown formatted links
+    func replaceLinksWithMarkdown() -> String {
+        let regex = try! NSRegularExpression(pattern: "(^|[\\n\\r\\s]+)(https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*))")
+        let range = NSMakeRange(0, self.count)
+        return regex.stringByReplacingMatches(in: self, options: [], range:range , withTemplate: "$1[$2]($2)")
+    }
+    
+    var isValidUrl: Bool {
+        // create NSURL instance
+        if let url = URL(string: self) {
+            // check if your application can open the NSURL instance
+            return UIApplication.shared.canOpenURL(url)
+        }
+        return false
     }
 }

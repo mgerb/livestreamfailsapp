@@ -40,6 +40,11 @@ class CommentsViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        // set light gray highlight color
+        self.selectionStyle = .gray
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = Config.colors.primaryLight2
+        self.selectedBackgroundView = bgColorView
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -35,8 +35,8 @@ class CommentsViewCellContent: CommentsViewCell {
         return view
     }()
     
-    lazy var body: UITextView = {
-        let view = UITextView()
+    lazy var body: TapThroughTextView = {
+        let view = TapThroughTextView()
         self.bgView.addSubview(view)
         view.isScrollEnabled = false
         view.isEditable = false
@@ -68,7 +68,8 @@ class CommentsViewCellContent: CommentsViewCell {
     override func setRedditComment(c: RedditComment) {
         super.setRedditComment(c: c)
 
-        self.body.isHidden = c.isHidden || c.collapsed
+        self.bgView.alpha = c.isCollapsed ? 0.3 : 1
+        self.body.isHidden = c.isHidden || c.isCollapsed || c.isDeleted
         self.body.attributedText = c.htmlBody
 
         self.authorLabel.text = c.author
