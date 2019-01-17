@@ -54,7 +54,7 @@ class RedditService {
     func getFlattenedComments(permalink: String, closure: @escaping ((_ data: [RedditComment]) -> Void)) {
         self.getComments(permalink: permalink) {
             if let comments = $0 {
-                let output = self.flattenComments(data: comments).compactMap {
+                let output = RedditComment.flattenReplies(replies: comments).compactMap {
                     RedditComment(json: $0)
                 }
                 closure(output)
@@ -62,14 +62,5 @@ class RedditService {
                 closure([])
             }
         }
-    }
-
-    private func flattenComments(data: JSON) -> [JSON] {
-        let list: [[JSON]] = data["data"]["children"].array?.compactMap { val in
-            let data = val["data"]
-            return [data] + self.flattenComments(data: data["replies"])
-        } ?? []
-        
-        return list.reduce([], +)
     }
 }

@@ -195,14 +195,47 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     
     /// when user taps load more comments button
     func redditCommentMorePressed(comment: RedditComment, indexPath: IndexPath) {
+        let parentID = comment.parent_id?.split(separator: "_")[1] ?? ""
+        let permalink = self.redditViewItem.redditPost.permalink + String.init(parentID)
+        RedditService.shared.getFlattenedComments(permalink: permalink) { comments in
+            
+            let parentIndex = self.data.firstIndex {
+                return ($0 as? RedditComment)?.id ?? "" == parentID
+            }
+            
+            // TODO: this doesn't work!
+            // what I need to do:
+            
+//            - filter out new loaded comments that are not in the children id list
+//            - replace the more cell with the first comment
+//            - insert the rest after that
+            
+            if let parentIndex = parentIndex {
+                if let parent = self.data[parentIndex] as? RedditComment {
+                    // remove current comments
+                    for i in parentIndex...parent.getFlattenedReplies().count + (parentIndex - 1) {
+                        self.data.remove(at: i)
+                    }
+                    
+                    // insert new comments at parent index
+                    self.data.insert(contentsOf: comments, at: parentIndex)
+                    
+                    let indexPaths = (0...comments.count - 1).map { index in
+                        return IndexPath(row: parentIndex + index, section: 0)
+                    }
+                    self.beginUpdates()
+                    self.reloadData()
+                    self.reloadRows(at: indexPaths, with: .automatic)
+                    self.endUpdates()
+                }
+            }
+        }
     }
     
     /// when user taps on normal content comment
     func redditCommentContentPressed(comment: RedditComment, indexPath: IndexPath) {
         comment.isCollapsed = !comment.isCollapsed
         
-        print(comment.body_html)
-        print(comment.htmlBody)
         var indexPaths = [indexPath]
 
         for i in indexPath.row...(self.data.count - 1) {

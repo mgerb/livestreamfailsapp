@@ -12,6 +12,7 @@ import SwiftyJSON
 
 class RedditComment {
     let id: String?
+    let parent_id: String?
     let author: String?
     let body: String?
     let body_html: String?
@@ -21,7 +22,9 @@ class RedditComment {
     let score: Int?
     let created: Int?
     let children: [String]?
-    
+    let permalink: String?
+    let replies: JSON
+
     // self defined values not on reddit json
     var isCollapsed: Bool
     var isHidden: Bool
@@ -38,6 +41,7 @@ class RedditComment {
     
     init(json: JSON) {
         self.id = json["id"].string
+        self.parent_id = json["parent_id"].string
         self.body = json["body"].string
         self.body_html = json["body_html"].string
         self.depth = json["depth"].int ?? 0
@@ -46,6 +50,8 @@ class RedditComment {
         self.author = json["author"].string
         self.created = json["created"].int
         self.children = json["children"].array?.compactMap { $0.string }
+        self.permalink = json["permalink"].string
+        self.replies = json["replies"]
         
         self.isCollapsed = false
         self.isHidden = false
@@ -64,6 +70,25 @@ class RedditComment {
         
         let htmlContent = "<!DOCTYPE html><html>\(style)<body>\(self.body_html?.htmlToAttributedString?.string ?? "")</body></html>"
         self.htmlBody = htmlContent.htmlToAttributedString?.trimEndingNewLine()
+    }
+    
+    func getFlattenedReplies() -> [RedditComment] {
+        if self.replies.string != nil {
+            return  []
+        }
+        
+        return RedditComment.flattenReplies(replies: self.replies).compactMap {
+            RedditComment(json: $0)
+        }
+    }
+    
+    static func flattenReplies(replies: JSON) -> [JSON] {
+        let list: [[JSON]] = replies["data"]["children"].array?.compactMap { val in
+            let data = val["data"]
+            return [data] + RedditComment.flattenReplies(replies: data["replies"])
+            } ?? []
+        
+        return list.reduce([], +)
     }
 }
 
