@@ -38,8 +38,8 @@ class RedditService {
         }
     }
     
-    private func getComments(permalink: String, closure: @escaping ((_ data: JSON?) -> Void)) {
-        let url = "https://www.reddit.com\(permalink).json"
+    private func getComments(permalink: String, args: String = "", closure: @escaping ((_ data: JSON?) -> Void)) {
+        let url = "https://www.reddit.com\(permalink).json?\(args)"
         Alamofire.request(url, headers: RedditService.headers).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
@@ -51,8 +51,15 @@ class RedditService {
         }
     }
     
-    func getFlattenedComments(permalink: String, closure: @escaping ((_ data: [RedditComment]) -> Void)) {
-        self.getComments(permalink: permalink) {
+    func getFlattenedComments(permalink: String, more: Bool = false, closure: @escaping ((_ data: [RedditComment]) -> Void)) {
+        
+        // if we are loading more comments need to pass context
+        // to load from the highest parent - this is so that
+        // we can get the depth levels correct and the
+        // newly loaded comments will look right
+        let args = more ? "context=10000" : ""
+
+        self.getComments(permalink: permalink, args: args) {
             if let comments = $0 {
                 let output = RedditComment.flattenReplies(replies: comments).compactMap {
                     RedditComment(json: $0)
