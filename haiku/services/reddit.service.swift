@@ -2,6 +2,15 @@
 import Alamofire
 import SwiftyJSON
 
+/// TODO: store this thing in userdefaults with
+class RedditAuthentication: Codable {
+    let access_token: String
+    let token_type: String
+    let scope: String
+    let device_id: String
+    let expires_in: Int
+}
+
 class RedditService {
     
     // use custom headers to allow NSFW content
@@ -10,6 +19,42 @@ class RedditService {
         "User-Agent": "Yaiku App :)"
     ]
     static let shared = RedditService()
+    let client_id = "Y2NoNa4zUyLbCA"
+    let password = ""
+    let oauthUrl = "https://www.reddit.com/api/v1/access_token"
+    var accessToken: String?
+    var expires_in: Date?
+
+    init() {
+        self.setupOauth()
+    }
+    
+    func setupOauth() {
+        
+        let credentials = "\(self.client_id):\(self.password)"
+        
+        let headers = [
+            "Authorization": "Basic \(credentials.toBase64())"
+        ]
+        
+        /// TODO: set device ID
+        let params = [
+            "grant_type": "https://oauth.reddit.com/grants/installed_client",
+            "device_id": "DO_NOT_TRACK_THIS_DEVICE"
+        ]
+        
+        Alamofire.request(self.oauthUrl, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: headers).responseData{ response in
+            switch response.result {
+            case .success(let res):
+                if let data = try? JSONDecoder().decode(RedditAuthentication.self, from: res) {
+                    print(data)
+                }
+                break
+            case .failure(let err):
+                print(err)
+            }
+        }
+    }
 
     // returns a list of youtube ID's from youtube haiku
     func getHaikus(after: String?, closure: @escaping (_ data: [RedditPost]) -> Void) {
