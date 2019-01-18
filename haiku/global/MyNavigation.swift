@@ -9,16 +9,15 @@
 import Foundation
 import UIKit
 import AVKit
+import SafariServices
 
 class MyNavigation {
     public static let shared = MyNavigation()
     private let rootViewController = UIApplication.shared.keyWindow!.rootViewController
     
     func presentWebView(url: URL) {
-        let webview = WebViewController()
-        webview.url = url
-        let navController = UINavigationController(rootViewController: webview)
-        self.rootViewController?.present(navController, animated: true)
+        let webview = SFSafariViewController(url: url)
+        self.rootViewController?.present(webview, animated: true)
     }
 
     func presentVideoPlayer(redditViewItem: RedditViewItem) {

@@ -70,7 +70,6 @@
 		A2D70E8C21EED67C00F69F0C /* TapThroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */; };
 		A2DCC61321EBB20500E08453 /* CommentsViewCellMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61221EBB20500E08453 /* CommentsViewCellMore.swift */; };
 		A2DCC61521EC175700E08453 /* CommentsViewCellContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61421EC175700E08453 /* CommentsViewCellContent.swift */; };
-		A2DCC61D21EC242E00E08453 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61C21EC242E00E08453 /* WebViewController.swift */; };
 		A2DCC61F21EC2AE300E08453 /* MyNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61E21EC2AE300E08453 /* MyNavigation.swift */; };
 		A2DCC62121EC2CAA00E08453 /* NSAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC62021EC2CAA00E08453 /* NSAttributedString.swift */; };
 		A2DCC62921EC4ABC00E08453 /* SwiftyMarkdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2DCC62221EC4A6E00E08453 /* SwiftyMarkdown.framework */; };
@@ -159,7 +158,6 @@
 		A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapThroughTextView.swift; sourceTree = "<group>"; };
 		A2DCC61221EBB20500E08453 /* CommentsViewCellMore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewCellMore.swift; sourceTree = "<group>"; };
 		A2DCC61421EC175700E08453 /* CommentsViewCellContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewCellContent.swift; sourceTree = "<group>"; };
-		A2DCC61C21EC242E00E08453 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		A2DCC61E21EC2AE300E08453 /* MyNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNavigation.swift; sourceTree = "<group>"; };
 		A2DCC62021EC2CAA00E08453 /* NSAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAttributedString.swift; sourceTree = "<group>"; };
 		A2DCC62221EC4A6E00E08453 /* SwiftyMarkdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyMarkdown.framework; path = Carthage/Build/iOS/SwiftyMarkdown.framework; sourceTree = "<group>"; };
@@ -338,7 +336,6 @@
 				A27E877A21E10394002501F1 /* main */,
 				A27E877B21E10474002501F1 /* settings */,
 				A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */,
-				A2DCC61C21EC242E00E08453 /* WebViewController.swift */,
 			);
 			path = "view-controllers";
 			sourceTree = "<group>";
@@ -468,7 +465,6 @@
 				A247504221EA6F1A00C0F712 /* CommentsTableView.swift in Sources */,
 				A283B61A21E2E9CC00AE47C6 /* RedditComment.swift in Sources */,
 				A252857E215C655600DCA537 /* TitleCollectionViewCell.swift in Sources */,
-				A2DCC61D21EC242E00E08453 /* WebViewController.swift in Sources */,
 				A2DCC62121EC2CAA00E08453 /* NSAttributedString.swift in Sources */,
 				A25285B02165955800DCA537 /* UIScrollView.swift in Sources */,
 				A242E87C21E2867D004A8026 /* CommentsViewCell.swift in Sources */,
