@@ -44,6 +44,20 @@ extension StorageService {
     func getWatchedRedditPost(redditPost: RedditPost) -> Bool {
         return UserDefaults.standard.bool(forKey: "wrp:\(redditPost.id)")
     }
+    
+    func storeRedditAuthentication(auth: RedditAuthentication) {
+        if let encoded = try? JSONEncoder().encode(auth) {
+            UserDefaults.standard.set(encoded, forKey: "redditAuthentication")
+        }
+    }
+    
+    func getRedditAuthentication() -> RedditAuthentication? {
+        let authString = UserDefaults.standard.data(forKey: "redditAuthentication")
+        if let authString = authString {
+            return try? JSONDecoder().decode(RedditAuthentication.self, from: authString)
+        }
+        return nil
+    }
 }
 
 // realm reddit storage
