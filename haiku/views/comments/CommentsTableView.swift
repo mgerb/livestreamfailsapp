@@ -49,10 +49,10 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         self.contentInset.top = self.frame.height
 
         self.register(CommentsViewCellContent.self, forCellReuseIdentifier: "CommentsViewCellContent")
-        self.register(UITableViewCell.self, forCellReuseIdentifier: "LoadingCell")
         self.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "FooterCell")
         self.register(CommentsViewCellMore.self, forCellReuseIdentifier: "CommentsViewCellMore")
         self.register(CommentsHeaderCell.self, forHeaderFooterViewReuseIdentifier: "HeaderCell")
+        self.register(CommentsLoadingCell.self, forCellReuseIdentifier: "CommentsLoadingCell")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -76,10 +76,9 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         RedditService.shared.getFlattenedComments(permalink: self.redditViewItem.redditPost.permalink) {comments in
             if comments.count > 0 {
                 self.data = comments
+                self.didLoad = true
                 self.reloadData()
                 DispatchQueue.main.async {
-                    self.contentOffset.y = -(self.frame.height / 2)
-                    self.didLoad = true
                     self.setWhiteBackgroundLayout()
                 }
             }
@@ -114,7 +113,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         case let comment as RedditComment:
             if comment.isHidden {
                 return 0
-            } else if comment.isMoreComment || comment.isDeleted || comment.isCollapsed {
+            } else if comment.isMoreComment || comment.isDeleted || comment.isCollapsed || comment.isContinueThread {
                 return 30
             } else {
                 return CommentsViewCell.getHeight(redditComment: comment)
@@ -128,7 +127,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let comment = self.data[indexPath.row] as? RedditComment {
-            if comment.isMoreComment {
+            if comment.isMoreComment || comment.isContinueThread {
                 let cell = self.dequeueReusableCell(withIdentifier: "CommentsViewCellMore", for: indexPath) as! CommentsViewCellMore
                 cell.setRedditComment(c: comment)
                 return cell
@@ -139,10 +138,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
             }
             
         } else {
-            let cell = self.dequeueReusableCell(withIdentifier: "LoadingCell", for: indexPath)
-            cell.textLabel?.text = "Loading..."
-            cell.textLabel?.textAlignment = .center
-            return cell
+            return self.dequeueReusableCell(withIdentifier: "CommentsLoadingCell", for: indexPath)
         }
     }
 
@@ -186,6 +182,8 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
             DispatchQueue.main.async {
                 if comment.isMoreComment {
                     self.redditCommentMorePressed(comment: comment, indexPath: indexPath)
+                } else if comment.isContinueThread {
+                    self.redditCommentContinueThreadPressed()
                 } else {
                     self.redditCommentContentPressed(comment: comment, indexPath: indexPath)
                 }
@@ -224,6 +222,10 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
                 self.endUpdates()
             }
         }
+    }
+    
+    func redditCommentContinueThreadPressed() {
+        print("TODO: continue thread")
     }
     
     /// when user taps on normal content comment

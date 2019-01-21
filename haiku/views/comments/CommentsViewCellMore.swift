@@ -38,7 +38,15 @@ class CommentsViewCellMore: CommentsViewCell {
     
     override func setRedditComment(c: RedditComment) {
         super.setRedditComment(c: c)
-        self.label.text = "Load More (\(c.children?.count ?? 0))"
+        var text = ""
+        
+        if c.isContinueThread {
+            text = "Continue thread..."
+        } else if c.isMoreComment {
+            text = "Load More (\(c.children?.count ?? 0))"
+        }
+        
+        self.label.text = text
         self.layoutSubviews()
     }
 }

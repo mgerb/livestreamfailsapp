@@ -24,7 +24,6 @@
 		A20A70C021E817B800BD3D0C /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70AA21E8178D00BD3D0C /* RealmSwift.framework */; };
 		A20A70C121E817B800BD3D0C /* RealmSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70AA21E8178D00BD3D0C /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70C321E817B800BD3D0C /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A821E8178A00BD3D0C /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A20A70C421E817B800BD3D0C /* PinLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A621E8178800BD3D0C /* PinLayout.framework */; };
 		A20A70C521E817B800BD3D0C /* PinLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A621E8178800BD3D0C /* PinLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70C721E817B800BD3D0C /* Kingfisher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A421E8178300BD3D0C /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70C921E817B800BD3D0C /* IGListKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A221E8178000BD3D0C /* IGListKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -61,6 +60,9 @@
 		A2889F2C217D6FF0001E7061 /* FavoritesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2889F2B217D6FF0001E7061 /* FavoritesCollectionViewController.swift */; };
 		A2889F2E217D70CF001E7061 /* YaikuCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */; };
 		A288A12C215344D000000733 /* MyPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A288A12B215344D000000733 /* MyPlayerView.swift */; };
+		A28E619421F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A28E619321F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework */; };
+		A28E619621F55EA9004B53A7 /* NVActivityIndicatorView_iOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A28E619321F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A28E619821F56368004B53A7 /* CommentsLoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E619721F56368004B53A7 /* CommentsLoadingCell.swift */; };
 		A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29CD0052119363900A5A6EC /* AppDelegate.swift */; };
 		A29CD00D2119363C00A5A6EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A29CD00C2119363C00A5A6EC /* Assets.xcassets */; };
 		A29CD0102119363C00A5A6EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */; };
@@ -87,6 +89,7 @@
 				A20A70B921E817B800BD3D0C /* SwiftyJSON.framework in Embed Frameworks */,
 				A20A70C121E817B800BD3D0C /* RealmSwift.framework in Embed Frameworks */,
 				A20A70CF21E817B800BD3D0C /* Cache.framework in Embed Frameworks */,
+				A28E619621F55EA9004B53A7 /* NVActivityIndicatorView_iOS.framework in Embed Frameworks */,
 				A20A70B721E817B800BD3D0C /* XCDYouTubeKit.framework in Embed Frameworks */,
 				A20A70C721E817B800BD3D0C /* Kingfisher.framework in Embed Frameworks */,
 				A20A70C521E817B800BD3D0C /* PinLayout.framework in Embed Frameworks */,
@@ -147,6 +150,8 @@
 		A2889F2B217D6FF0001E7061 /* FavoritesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCollectionViewController.swift; sourceTree = "<group>"; };
 		A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YaikuCollectionViewController.swift; sourceTree = "<group>"; };
 		A288A12B215344D000000733 /* MyPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlayerView.swift; sourceTree = "<group>"; };
+		A28E619321F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NVActivityIndicatorView_iOS.framework; path = Carthage/Build/iOS/NVActivityIndicatorView_iOS.framework; sourceTree = "<group>"; };
+		A28E619721F56368004B53A7 /* CommentsLoadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsLoadingCell.swift; sourceTree = "<group>"; };
 		A29CD0022119363900A5A6EC /* haiku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = haiku.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A29CD0052119363900A5A6EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A29CD00C2119363C00A5A6EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -170,9 +175,10 @@
 			files = (
 				A20A70D021E817B800BD3D0C /* Alamofire.framework in Frameworks */,
 				A20A709D21E8176F00BD3D0C /* Cache.framework in Frameworks */,
-				A20A70C421E817B800BD3D0C /* PinLayout.framework in Frameworks */,
 				A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */,
 				A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */,
+				A28E619421F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework in Frameworks */,
+				A20A70A721E8178800BD3D0C /* PinLayout.framework in Frameworks */,
 				A20A70A721E8178800BD3D0C /* PinLayout.framework in Frameworks */,
 				A20A70C021E817B800BD3D0C /* RealmSwift.framework in Frameworks */,
 				A20A70BE21E817B800BD3D0C /* RxSwift.framework in Frameworks */,
@@ -190,6 +196,7 @@
 		A20A709921E8176C00BD3D0C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A28E619321F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework */,
 				A2DCC62221EC4A6E00E08453 /* SwiftyMarkdown.framework */,
 				A20A70B421E817AC00BD3D0C /* XCDYouTubeKit.framework */,
 				A20A70B221E817A900BD3D0C /* SwiftyJSON.framework */,
@@ -269,6 +276,7 @@
 				A2DCC61421EC175700E08453 /* CommentsViewCellContent.swift */,
 				A2DCC61221EBB20500E08453 /* CommentsViewCellMore.swift */,
 				A247504521EACBE600C0F712 /* CommentsHeaderCell.swift */,
+				A28E619721F56368004B53A7 /* CommentsLoadingCell.swift */,
 			);
 			path = comments;
 			sourceTree = "<group>";
@@ -463,6 +471,7 @@
 				A2528584215C6F6B00DCA537 /* String.swift in Sources */,
 				A24818C221781807005B8819 /* subjects.swift in Sources */,
 				A247504221EA6F1A00C0F712 /* CommentsTableView.swift in Sources */,
+				A28E619821F56368004B53A7 /* CommentsLoadingCell.swift in Sources */,
 				A283B61A21E2E9CC00AE47C6 /* RedditComment.swift in Sources */,
 				A252857E215C655600DCA537 /* TitleCollectionViewCell.swift in Sources */,
 				A2DCC62121EC2CAA00E08453 /* NSAttributedString.swift in Sources */,

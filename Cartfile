@@ -11,5 +11,5 @@ github "layoutBox/FlexLayout"
 github "layoutBox/PinLayout"
 github "SwiftyJSON/SwiftyJSON" ~> 4.0
 github "SimonFairbairn/SwiftyMarkdown"
-
+github "ninjaprox/NVActivityIndicatorView"
 

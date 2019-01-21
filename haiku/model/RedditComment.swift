@@ -40,6 +40,11 @@ class RedditComment {
         return self.author == "[deleted]"
     }
     
+    /// if comment is "continue this thread" comment
+    var isContinueThread: Bool {
+        return self.id == "_"
+    }
+    
     init(json: JSON) {
         self.id = json["id"].string
         self.parent_id = json["parent_id"].string
