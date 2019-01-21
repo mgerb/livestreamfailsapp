@@ -13,6 +13,7 @@ import SwiftyJSON
 class RedditComment {
     let id: String?
     let parent_id: String?
+    let link_id: String?
     let author: String?
     let body: String?
     let body_html: String?
@@ -42,6 +43,7 @@ class RedditComment {
     init(json: JSON) {
         self.id = json["id"].string
         self.parent_id = json["parent_id"].string
+        self.link_id = json["link_id"].string
         self.body = json["body"].string
         self.body_html = json["body_html"].string
         self.depth = json["depth"].int ?? 0

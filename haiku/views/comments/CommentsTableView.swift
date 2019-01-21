@@ -195,27 +195,28 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     
     /// when user taps load more comments button
     func redditCommentMorePressed(comment: RedditComment, indexPath: IndexPath) {
-        let parentID = comment.parent_id?.split(separator: "_")[1] ?? ""
-        let permalink = self.redditViewItem.redditPost.permalink + String.init(parentID)
-        RedditService.shared.getFlattenedComments(permalink: permalink, more: true) { comments in
-            // grab only comments to be inserted
-            var filteredComments = comments.filter { c in
-                return comment.children?.contains { ch in
-                    return ch == c.id
-                } ?? false
-            }
-
-            if filteredComments.count > 0 {
-                self.data[indexPath.row] = filteredComments.remove(at: 0)
+        RedditService.shared.getMoreComments(comment: comment, link_id: self.redditViewItem.redditPost.name) { comments in
+            
+            // delete load more row if we don't get any comments back
+            if comments.count < 1 {
+                self.data.remove(at: indexPath.row)
                 self.beginUpdates()
-                self.reloadRows(at: [indexPath], with: .automatic)
+                self.deleteRows(at: [indexPath], with: .automatic)
                 self.endUpdates()
+                return
             }
+            
+            var comments = comments
+            
+            self.data[indexPath.row] = comments.remove(at: 0)
+            self.beginUpdates()
+            self.reloadRows(at: [indexPath], with: .automatic)
+            self.endUpdates()
 
             // check if we still have comments left to insert
-            if filteredComments.count > 0 {
-                self.data.insert(contentsOf: filteredComments, at: indexPath.row + 1)
-                let indexPaths = (0...filteredComments.count - 1).map { index in
+            if comments.count > 0 {
+                self.data.insert(contentsOf: comments, at: indexPath.row + 1)
+                let indexPaths = (0...comments.count - 1).map { index in
                     return IndexPath(row: indexPath.row + 1 + index, section: 0)
                 }
                 self.beginUpdates()

@@ -166,4 +166,31 @@ class RedditService: RequestAdapter, RequestRetrier {
             }
         }
     }
+    
+    /// load more comments from children
+    /// link_id - should be the name of the reddit post
+    func getMoreComments(comment: RedditComment, link_id: String, closure: @escaping (_ comments: [RedditComment]) -> Void) {
+        let params: [String: Any] = [
+            "api_type": "json",
+            "children": comment.children?.joined(separator: ",") ?? "",
+            "link_id": link_id,
+            "limit_children": true
+        ]
+        
+        self.oauthClient.request("https://oauth.reddit.com/api/morechildren", parameters: params).validate().responseData { response in
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+                
+                let newComments = json["json"]["data"]["things"].array?.compactMap {
+                    RedditComment(json: $0["data"])
+                } ?? []
+                
+                closure(newComments)
+            case .failure(let error):
+                print(error)
+                closure([])
+            }
+        }
+    }
 }
