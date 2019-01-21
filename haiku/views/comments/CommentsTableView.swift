@@ -27,7 +27,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     
     lazy var whiteBackgroundLayer: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = Config.colors.dark2
         return view
     }()
     
@@ -116,7 +116,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
             } else if comment.isMoreComment || comment.isDeleted || comment.isCollapsed || comment.isContinueThread {
                 return 30
             } else {
-                return CommentsViewCell.getHeight(redditComment: comment)
+                return CommentsViewCellContent.getHeight(redditComment: comment)
             }
         default:
             return 50
@@ -152,7 +152,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let cell = self.dequeueReusableHeaderFooterView(withIdentifier: "FooterCell")
-        cell?.backgroundColor = .white
+        cell?.backgroundColor = Config.colors.dark2
         return cell
     }
 

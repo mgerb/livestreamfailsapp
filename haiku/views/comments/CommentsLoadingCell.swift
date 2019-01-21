@@ -21,6 +21,7 @@ class CommentsLoadingCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        self.backgroundColor = Config.colors.dark2
         self.addSubview(self.loadingView)
         self.loadingView.snp.makeConstraints { make in
             make.centerY.equalTo(self)

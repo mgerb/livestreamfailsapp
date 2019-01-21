@@ -58,7 +58,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setupTabBarController() {
         let tc = MyTabBarController()
         tc.title = "Yaiku"
+        tc.tabBar.isTranslucent = false
         
+        let navigationController = UINavigationController(rootViewController: tc)
+        navigationController.navigationBar.isTranslucent = false
+
         let mainCollectionViewController = MainCollectionViewController()
         mainCollectionViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 0)
         mainCollectionViewController.tabBarItem.setIcon(icon: .ionicons(.home), size: nil, textColor: Config.colors.primaryLight)
@@ -73,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         tc.viewControllers = [mainCollectionViewController, favoritesCollectionViewController, settingsViewController]
         
-        self.window!.rootViewController = UINavigationController(rootViewController: tc)
+        self.window!.rootViewController = navigationController
         self.window?.makeKeyAndVisible()
     }
 }

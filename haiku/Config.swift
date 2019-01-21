@@ -17,6 +17,11 @@ class Colors {
     let red: UIColor = .red
     let white: UIColor = .white
     let blueLink = UIColor(red: 0.204, green: 0.459, blue: 1.000, alpha: 1.0)
+    
+    // TODO: use neutral names for color schemes
+    let dark1: UIColor = UIColor(hexString: "#44475a")
+    let dark2: UIColor = UIColor(hexString: "#282a36")
+    let foreground: UIColor = UIColor(hexString: "#f8f8f2")
 }
 
 class Config {

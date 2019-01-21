@@ -67,7 +67,8 @@ class RedditComment {
             <style type=\"text/css\">
                 body {
                     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-                    font-size: 12px;
+                    font-size: 14px;
+                    color: #f8f8f2;
                 }
                 a {
                     text-decoration: none;

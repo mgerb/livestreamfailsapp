@@ -11,16 +11,31 @@ import UIKit
 
 class CommentsViewCellContent: CommentsViewCell {
     
+    /// Get the total height of this cell
+    /// Heights
+    /// - 5 top margin
+    /// - 5 bottom margin
+    /// - 15 header height
+    /// - ? body height
+    /// - 5 body top margin
+    /// - 5 body bottom margin
+    /// - 20 body horizontal margin
+    public static func getHeight(redditComment: RedditComment) -> CGFloat {
+        let width = UIScreen.main.bounds.width - CGFloat(redditComment.depth * 10) - 20
+        return 35 + (redditComment.htmlBody?.height(containerWidth: width) ?? 0)
+    }
+    
     lazy var authorLabel: UILabel = {
         let label = UILabel()
         label.font = Config.smallBoldFont
-        label.textColor = Config.colors.blueLink
+        label.textColor = Config.colors.foreground
         return label
     }()
     
     lazy var scoreLabel: UILabel = {
         let label = UILabel()
         label.font = Config.smallBoldFont
+        label.textColor = Config.colors.foreground
         return label
     }()
     
@@ -38,6 +53,7 @@ class CommentsViewCellContent: CommentsViewCell {
     lazy var body: TapThroughTextView = {
         let view = TapThroughTextView()
         self.bgView.addSubview(view)
+        view.backgroundColor = Config.colors.dark2
         view.isScrollEnabled = false
         view.isEditable = false
         view.textContainerInset = .zero
@@ -58,7 +74,7 @@ class CommentsViewCellContent: CommentsViewCell {
         
         self.header.pin.top().left().right().height(15)
         self.header.flex.layout()
-        self.body.pin.below(of: self.header).left().right().bottom().margin(5, 15)
+        self.body.pin.below(of: self.header).left().right().bottom().margin(5, 10)
     }
     
     override func prepareForReuse() {
