@@ -22,6 +22,7 @@ class RedditComment {
     let ups: Int?
     let score: Int?
     let created: Int?
+    let created_utc: Int?
     let children: [String]?
     let permalink: String?
     let replies: JSON
@@ -45,6 +46,12 @@ class RedditComment {
         return self.id == "_"
     }
     
+    /// return how much time past since now in readable format
+    lazy var humanTimeStamp: String = {
+        let timestamp = Date(timeIntervalSince1970: Double(self.created_utc ?? 0))
+        return Date().offset(from: timestamp)
+    }()
+
     init(json: JSON) {
         self.id = json["id"].string
         self.parent_id = json["parent_id"].string
@@ -56,6 +63,7 @@ class RedditComment {
         self.score = json["score"].int
         self.author = json["author"].string
         self.created = json["created"].int
+        self.created_utc = json["created_utc"].int
         self.children = json["children"].array?.compactMap { $0.string }
         self.permalink = json["permalink"].string
         self.replies = json["replies"]
@@ -63,7 +71,7 @@ class RedditComment {
         self.isCollapsed = false
         self.isHidden = false
     }
-
+    
     func renderHtml() {
         let style = """
             <style type=\"text/css\">

@@ -14,8 +14,8 @@ class Colors {
     let font1: UIColor = .darkText
     let font2: UIColor = .gray
     let bg1: UIColor = .white
-    let bg2: UIColor = UIColor(hexString: "#e0e0e0")
-    let bg3: UIColor = UIColor(hexString: "#f7f7f7")
+    let bg2: UIColor = UIColor(hexString: "#f7f7f7")
+    let bg3: UIColor = UIColor(hexString: "#e0e0e0")
 
     // ios color palette
     let red = UIColor(red: 255 / 255, green: 59 / 255, blue: 48 / 255, alpha: 1)

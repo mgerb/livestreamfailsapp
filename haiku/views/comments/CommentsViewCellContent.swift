@@ -17,12 +17,12 @@ class CommentsViewCellContent: CommentsViewCell {
     /// - 5 bottom margin
     /// - 15 header height
     /// - ? body height
-    /// - 5 body top margin
-    /// - 5 body bottom margin
+    /// - 10 body top margin
+    /// - 10 body bottom margin
     /// - 20 body horizontal margin
     public static func getHeight(redditComment: RedditComment) -> CGFloat {
         let width = UIScreen.main.bounds.width - CGFloat(redditComment.depth * 10) - 20
-        return 35 + (redditComment.htmlBody?.height(containerWidth: width) ?? 0)
+        return 45 + (redditComment.htmlBody?.height(containerWidth: width) ?? 0)
     }
     
     lazy var authorLabel: UILabel = {
@@ -39,11 +39,21 @@ class CommentsViewCellContent: CommentsViewCell {
         return label
     }()
     
+    lazy var timeStampLabel: UILabel = {
+        let label = UILabel()
+        label.font = Config.smallFont
+        label.textColor = Config.colors.font2
+        return label
+    }()
+    
     lazy var header: UIView = {
         let view = UIView()
         view.flex.paddingLeft(10).paddingRight(10).justifyContent(.spaceBetween).direction(.row).define { flex in
-            flex.addItem(self.authorLabel)
-            flex.addItem(self.scoreLabel)
+            flex.addItem().direction(.row).define { flex in
+                flex.addItem(self.authorLabel)
+                flex.addItem(self.scoreLabel).marginLeft(5)
+            }
+            flex.addItem(self.timeStampLabel)
         }
         
         self.bgView.addSubview(view)
@@ -93,6 +103,9 @@ class CommentsViewCellContent: CommentsViewCell {
         
         self.scoreLabel.text = String(c.score ?? 0)
         self.scoreLabel.flex.markDirty()
+        
+        self.timeStampLabel.text = c.humanTimeStamp
+        self.timeStampLabel.flex.markDirty()
 
         self.layoutSubviews()
     }

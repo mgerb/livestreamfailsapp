@@ -69,6 +69,7 @@
 		A2B0098221F01E9200888476 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */; };
 		A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */; };
 		A2B7C2442198C211008DB7E6 /* RedditViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */; };
+		A2D5FC6F21F6CA220098A884 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D5FC6E21F6CA220098A884 /* Date.swift */; };
 		A2D70E8C21EED67C00F69F0C /* TapThroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */; };
 		A2DCC61321EBB20500E08453 /* CommentsViewCellMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61221EBB20500E08453 /* CommentsViewCellMore.swift */; };
 		A2DCC61521EC175700E08453 /* CommentsViewCellContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61421EC175700E08453 /* CommentsViewCellContent.swift */; };
@@ -160,6 +161,7 @@
 		A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
 		A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditViewItem.swift; sourceTree = "<group>"; };
+		A2D5FC6E21F6CA220098A884 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapThroughTextView.swift; sourceTree = "<group>"; };
 		A2DCC61221EBB20500E08453 /* CommentsViewCellMore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewCellMore.swift; sourceTree = "<group>"; };
 		A2DCC61421EC175700E08453 /* CommentsViewCellContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewCellContent.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				A247504721EAF0EE00C0F712 /* UIColor.swift */,
 				A2DCC62021EC2CAA00E08453 /* NSAttributedString.swift */,
 				A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */,
+				A2D5FC6E21F6CA220098A884 /* Date.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -478,6 +481,7 @@
 				A25285B02165955800DCA537 /* UIScrollView.swift in Sources */,
 				A242E87C21E2867D004A8026 /* CommentsViewCell.swift in Sources */,
 				A24818C0217815C8005B8819 /* Util.swift in Sources */,
+				A2D5FC6F21F6CA220098A884 /* Date.swift in Sources */,
 				A2889F2E217D70CF001E7061 /* YaikuCollectionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
