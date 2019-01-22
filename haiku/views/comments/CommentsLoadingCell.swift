@@ -8,22 +8,16 @@
 
 import Foundation
 import UIKit
-import NVActivityIndicatorView_iOS
 
 class CommentsLoadingCell: UITableViewCell {
-    
-    lazy var loadingView: NVActivityIndicatorView = {
-        let view = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 60, height: 60), type: .ballScaleMultiple, color: Config.colors.blue, padding: 0)
-        view.alpha = 0.5
-        view.startAnimating()
-        return view
-    }()
     
     override func layoutSubviews() {
         super.layoutSubviews()
         self.backgroundColor = Config.colors.bg1
-        self.addSubview(self.loadingView)
-        self.loadingView.snp.makeConstraints { make in
+        let ai = UIActivityIndicatorView.init(activityIndicatorStyle: .gray)
+        ai.startAnimating()
+        self.addSubview(ai)
+        ai.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.centerX.equalTo(self)
         }

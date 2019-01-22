@@ -46,7 +46,7 @@ class CommentsHeaderCell: UITableViewHeaderFooterView {
     
     func getBorder() -> UIView {
         let view = UIView()
-        view.backgroundColor = Config.colors.bg3
+        view.backgroundColor = Config.colors.bg2
         return view
     }
 }

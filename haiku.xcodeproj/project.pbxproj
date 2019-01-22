@@ -60,8 +60,6 @@
 		A2889F2C217D6FF0001E7061 /* FavoritesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2889F2B217D6FF0001E7061 /* FavoritesCollectionViewController.swift */; };
 		A2889F2E217D70CF001E7061 /* YaikuCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */; };
 		A288A12C215344D000000733 /* MyPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A288A12B215344D000000733 /* MyPlayerView.swift */; };
-		A28E619421F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A28E619321F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework */; };
-		A28E619621F55EA9004B53A7 /* NVActivityIndicatorView_iOS.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A28E619321F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A28E619821F56368004B53A7 /* CommentsLoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E619721F56368004B53A7 /* CommentsLoadingCell.swift */; };
 		A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29CD0052119363900A5A6EC /* AppDelegate.swift */; };
 		A29CD00D2119363C00A5A6EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A29CD00C2119363C00A5A6EC /* Assets.xcassets */; };
@@ -90,7 +88,6 @@
 				A20A70B921E817B800BD3D0C /* SwiftyJSON.framework in Embed Frameworks */,
 				A20A70C121E817B800BD3D0C /* RealmSwift.framework in Embed Frameworks */,
 				A20A70CF21E817B800BD3D0C /* Cache.framework in Embed Frameworks */,
-				A28E619621F55EA9004B53A7 /* NVActivityIndicatorView_iOS.framework in Embed Frameworks */,
 				A20A70B721E817B800BD3D0C /* XCDYouTubeKit.framework in Embed Frameworks */,
 				A20A70C721E817B800BD3D0C /* Kingfisher.framework in Embed Frameworks */,
 				A20A70C521E817B800BD3D0C /* PinLayout.framework in Embed Frameworks */,
@@ -179,7 +176,6 @@
 				A20A709D21E8176F00BD3D0C /* Cache.framework in Frameworks */,
 				A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */,
 				A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */,
-				A28E619421F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework in Frameworks */,
 				A20A70A721E8178800BD3D0C /* PinLayout.framework in Frameworks */,
 				A20A70A721E8178800BD3D0C /* PinLayout.framework in Frameworks */,
 				A20A70C021E817B800BD3D0C /* RealmSwift.framework in Frameworks */,

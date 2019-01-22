@@ -14,7 +14,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
 
     var didLoad = false
     var data: [Any] = ["loading"]
-    private let footerHeight: CGFloat = 400
+    private let footerHeight: CGFloat = 600
     let redditViewItem: RedditViewItem
     
     lazy var bgView: UIView = {
@@ -65,7 +65,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
                 UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
                     self.contentOffset.y = -(self.frame.height / 2)
                 }, completion: {_ in
-                    self.contentInset.bottom = -self.footerHeight
+                    self.contentInset.bottom = -(self.footerHeight - 100)
                     self.fetchComments()
                 })
             }
