@@ -68,7 +68,7 @@ class RedditComment {
                 body {
                     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
                     font-size: 14px;
-                    color: #f8f8f2;
+                    color: #424242;
                 }
                 a {
                     text-decoration: none;
@@ -88,6 +88,21 @@ class RedditComment {
         return RedditComment.flattenReplies(replies: self.replies).compactMap {
             RedditComment(json: $0)
         }
+    }
+    
+    func getLeftBorderColor() -> UIColor {
+        let colors = [
+            Config.colors.yellow,
+            Config.colors.blue,
+            Config.colors.red,
+            Config.colors.green,
+            Config.colors.purple,
+            Config.colors.orange,
+            Config.colors.tealBlue,
+            Config.colors.pink,
+        ]
+        
+        return colors[self.depth % 8]
     }
     
     static func flattenReplies(replies: JSON) -> [JSON] {

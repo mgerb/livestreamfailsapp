@@ -13,7 +13,7 @@ import NVActivityIndicatorView_iOS
 class CommentsLoadingCell: UITableViewCell {
     
     lazy var loadingView: NVActivityIndicatorView = {
-        let view = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 60, height: 60), type: .ballScaleMultiple, color: Config.colors.blueLink, padding: 0)
+        let view = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 60, height: 60), type: .ballScaleMultiple, color: Config.colors.blue, padding: 0)
         view.alpha = 0.5
         view.startAnimating()
         return view
@@ -21,7 +21,7 @@ class CommentsLoadingCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.backgroundColor = Config.colors.dark2
+        self.backgroundColor = Config.colors.bg1
         self.addSubview(self.loadingView)
         self.loadingView.snp.makeConstraints { make in
             make.centerY.equalTo(self)

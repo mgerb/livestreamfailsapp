@@ -14,7 +14,7 @@ class CommentsViewCellMore: CommentsViewCell {
     lazy var label: UILabel = {
         let l = UILabel()
         l.font = Config.smallerFont
-        l.textColor = Config.colors.blueLink
+        l.textColor = Config.colors.blue
         self.bgView.addSubview(l)
         return l
     }()

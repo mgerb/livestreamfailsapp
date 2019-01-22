@@ -17,39 +17,32 @@ class CommentsViewCell: UITableViewCell {
 
     lazy var bgView: UIView = {
         let view = UIView()
-        view.backgroundColor = Config.colors.dark2
+        view.backgroundColor = Config.colors.bg1
         self.addSubview(view)
         return view
     }()
     
     lazy var bottomBorder: UIView = {
         let view = UIView()
-        view.backgroundColor = Config.colors.dark1
+        view.backgroundColor = Config.colors.bg3
         self.addSubview(view)
         return view
     }()
     
     lazy var leftBorder: UIView = {
         let view = UIView()
-        view.layer.insertSublayer(self.leftBorderGradient, at: 0)
         self.bgView.addSubview(view)
         return view
     }()
-    
-    lazy var leftBorderGradient: CAGradientLayer = {
-        let gradient = CAGradientLayer()
-        gradient.colors = [UIColor(hexString: "#fc00ff").cgColor, UIColor(hexString: "#00dbde").cgColor]
-        return gradient
-    }()
-    
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         // set light gray highlight color
         self.selectionStyle = .gray
         let bgColorView = UIView()
-        bgColorView.backgroundColor = Config.colors.dark1
+        bgColorView.backgroundColor = Config.colors.bg2
         self.selectedBackgroundView = bgColorView
-        self.backgroundColor = Config.colors.dark2
+        self.backgroundColor = Config.colors.bg1
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -64,8 +57,6 @@ class CommentsViewCell: UITableViewCell {
         self.bgView.pin.all().marginLeft(marginLeft).marginTop(5).marginBottom(5)
         self.bottomBorder.pin.left().bottom().right().height(1).marginLeft(marginLeft + 10)
         self.leftBorder.pin.left().top().bottom().width(2).margin(5, 0)
-        self.leftBorderGradient.frame = self.leftBorder.bounds
-        self.leftBorderGradient.cornerRadius = 1
     }
     
     override func prepareForReuse() {
@@ -76,6 +67,7 @@ class CommentsViewCell: UITableViewCell {
         self.redditComment = c
         self.isHidden = c.isHidden
         self.leftBorder.isHidden = c.depth == 0
+        self.leftBorder.backgroundColor = c.getLeftBorderColor()
     }
     
     static func calculateLeftMargin(depth: Int) -> CGFloat {

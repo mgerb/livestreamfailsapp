@@ -28,14 +28,14 @@ class CommentsViewCellContent: CommentsViewCell {
     lazy var authorLabel: UILabel = {
         let label = UILabel()
         label.font = Config.smallBoldFont
-        label.textColor = Config.colors.foreground
+        label.textColor = Config.colors.font1
         return label
     }()
     
     lazy var scoreLabel: UILabel = {
         let label = UILabel()
-        label.font = Config.smallBoldFont
-        label.textColor = Config.colors.foreground
+        label.font = Config.smallFont
+        label.textColor = Config.colors.font2
         return label
     }()
     
@@ -53,7 +53,7 @@ class CommentsViewCellContent: CommentsViewCell {
     lazy var body: TapThroughTextView = {
         let view = TapThroughTextView()
         self.bgView.addSubview(view)
-        view.backgroundColor = Config.colors.dark2
+        view.backgroundColor = Config.colors.bg1
         view.isScrollEnabled = false
         view.isEditable = false
         view.textContainerInset = .zero

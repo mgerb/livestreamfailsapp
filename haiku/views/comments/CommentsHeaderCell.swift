@@ -13,7 +13,7 @@ class CommentsHeaderCell: UITableViewHeaderFooterView {
     
     lazy var label: UILabel = {
         let l = UILabel()
-        l.textColor = Config.colors.primaryFont
+        l.textColor = Config.colors.font1
         l.text = "Comments"
         l.textAlignment = .center
         l.font = Config.smallFont
@@ -46,7 +46,7 @@ class CommentsHeaderCell: UITableViewHeaderFooterView {
     
     func getBorder() -> UIView {
         let view = UIView()
-        view.backgroundColor = Config.colors.primaryLight2
+        view.backgroundColor = Config.colors.bg3
         return view
     }
 }

@@ -65,15 +65,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let mainCollectionViewController = MainCollectionViewController()
         mainCollectionViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 0)
-        mainCollectionViewController.tabBarItem.setIcon(icon: .ionicons(.home), size: nil, textColor: Config.colors.primaryLight)
+        mainCollectionViewController.tabBarItem.setIcon(icon: .ionicons(.home), size: nil, textColor: Config.colors.font2)
         
         let favoritesCollectionViewController = FavoritesCollectionViewController()
         favoritesCollectionViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
-        favoritesCollectionViewController.tabBarItem.setIcon(icon: .ionicons(.iosHeart), size: nil, textColor: Config.colors.primaryLight)
+        favoritesCollectionViewController.tabBarItem.setIcon(icon: .ionicons(.iosHeart), size: nil, textColor: Config.colors.font2)
         
         let settingsViewController = SettingsViewController()
         settingsViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 2)
-        settingsViewController.tabBarItem.setIcon(icon: .ionicons(.settings), size: nil, textColor: Config.colors.primaryLight)
+        settingsViewController.tabBarItem.setIcon(icon: .ionicons(.settings), size: nil, textColor: Config.colors.font2)
         
         tc.viewControllers = [mainCollectionViewController, favoritesCollectionViewController, settingsViewController]
         

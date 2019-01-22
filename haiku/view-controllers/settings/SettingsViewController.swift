@@ -42,7 +42,7 @@ class SettingsViewController: UITableViewController {
         switchView.tag = indexPath.row // for detect which row switch Changed
         switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
         cell.accessoryView = switchView
-        cell.textLabel?.textColor = Config.colors.blueLink
+        cell.textLabel?.textColor = Config.colors.blue
         return cell
     }
     

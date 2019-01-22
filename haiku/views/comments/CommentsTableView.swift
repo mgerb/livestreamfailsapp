@@ -27,7 +27,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     
     lazy var whiteBackgroundLayer: UIView = {
         let view = UIView()
-        view.backgroundColor = Config.colors.dark2
+        view.backgroundColor = Config.colors.bg1
         return view
     }()
     
@@ -152,7 +152,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let cell = self.dequeueReusableHeaderFooterView(withIdentifier: "FooterCell")
-        cell?.backgroundColor = Config.colors.dark2
+        cell?.backgroundColor = Config.colors.bg1
         return cell
     }
 

@@ -20,7 +20,7 @@ class TitleCollectionViewCell: UICollectionViewCell {
     lazy private var label: UILabel = {
         let label = UILabel()
         label.font = Config.defaultFont
-        label.textColor = Config.colors.primaryFont
+        label.textColor = Config.colors.font1
         return label
     }()
 
@@ -29,7 +29,7 @@ class TitleCollectionViewCell: UICollectionViewCell {
         self.label.text = item.redditPost.title.replaceEncoding()
         self.label.numberOfLines = 0
         _ = self.redditViewItem?.markedAsWatched.takeUntil(self.rxUnsubscribe).subscribe(onNext: { watched in
-            self.label.textColor = watched && self.redditViewItem?.context == .home ? Config.colors.primaryLight : Config.colors.primaryFont
+            self.label.textColor = watched && self.redditViewItem?.context == .home ? Config.colors.font2 : Config.colors.font1
         })
     }
 
