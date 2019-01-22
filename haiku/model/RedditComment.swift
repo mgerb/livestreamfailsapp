@@ -17,7 +17,7 @@ class RedditComment {
     let author: String?
     let body: String?
     let body_html: String?
-    let htmlBody: NSMutableAttributedString?
+    var htmlBody: NSMutableAttributedString?
     let depth: Int
     let ups: Int?
     let score: Int?
@@ -62,7 +62,9 @@ class RedditComment {
         
         self.isCollapsed = false
         self.isHidden = false
+    }
 
+    func renderHtml() {
         let style = """
             <style type=\"text/css\">
                 body {

@@ -134,8 +134,8 @@ class RedditService: RequestAdapter, RequestRetrier {
         }
     }
     
-    private func getComments(permalink: String, args: String = "", closure: @escaping ((_ data: JSON?) -> Void)) {
-        let url = "https://www.reddit.com\(permalink).json?\(args)"
+    private func getComments(permalink: String, closure: @escaping ((_ data: JSON?) -> Void)) {
+        let url = "https://www.reddit.com\(permalink).json"
         Alamofire.request(url, headers: self.headers).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
@@ -148,19 +148,39 @@ class RedditService: RequestAdapter, RequestRetrier {
     }
     
     func getFlattenedComments(permalink: String, more: Bool = false, closure: @escaping ((_ data: [RedditComment]) -> Void)) {
-        
-        // if we are loading more comments need to pass context
-        // to load from the highest parent - this is so that
-        // we can get the depth levels correct and the
-        // newly loaded comments will look right
-        let args = more ? "context=10000" : ""
-
-        self.getComments(permalink: permalink, args: args) {
+        self.getComments(permalink: permalink) {
             if let comments = $0 {
-                let output = RedditComment.flattenReplies(replies: comments).compactMap {
-                    RedditComment(json: $0)
+                
+                // This is a hack to load comments more quickly because it's a little
+                // slow rendering all the html into an NSAttributedString.
+                // All html is rendered asynchronously on the globa queue,
+                // but we only wait for the first 10 to render before the callback.
+                // This is so that we have them first rendered when the list shows
+                // up. The rest of the comments will continue to render asynchronously
+                // on the global queue, but we won't wait for them. Seems to work
+                // okay only waiting for 10.
+                // https://www.raywenderlich.com/5371-grand-central-dispatch-tutorial-for-swift-4-part-2-2
+                var count = 0
+                let dispatchGroup = DispatchGroup()
+                let output: [RedditComment] = RedditComment.flattenReplies(replies: comments).compactMap {
+                    let c = RedditComment(json: $0)
+                    if count < 10 {
+                        dispatchGroup.enter()
+                        DispatchQueue.global().async {
+                            c.renderHtml()
+                            dispatchGroup.leave()
+                        }
+                        count += 1
+                    } else {
+                        DispatchQueue.global().async {
+                            c.renderHtml()
+                        }
+                    }
+                    return c
                 }
-                closure(output)
+                dispatchGroup.notify(queue: DispatchQueue.main) {
+                    closure(output)
+                }
             } else {
                 closure([])
             }
@@ -182,8 +202,11 @@ class RedditService: RequestAdapter, RequestRetrier {
             case .success(let value):
                 let json = JSON(value)
                 
-                let newComments = json["json"]["data"]["things"].array?.compactMap {
-                    RedditComment(json: $0["data"])
+                // TODO: may need to implement asynchronous html render here like above
+                let newComments: [RedditComment] = json["json"]["data"]["things"].array?.compactMap {
+                    let c = RedditComment(json: $0["data"])
+                    c.renderHtml()
+                    return c
                 } ?? []
                 
                 closure(newComments)
