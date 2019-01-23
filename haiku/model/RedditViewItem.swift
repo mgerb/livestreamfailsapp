@@ -50,6 +50,10 @@ class RedditViewItem {
         return view
     }()
     private var cachedPlayerItem: CachingPlayerItem? = nil
+    
+    lazy var humanTimeStampExtended: String = {
+        return Date().offsetExtended(from: Date(timeIntervalSince1970: TimeInterval(Int(self.redditPost.created_utc))))
+    }()
 
     init(_ redditPost: RedditPost, context: RedditViewItemContext) {
         self.redditPost = redditPost

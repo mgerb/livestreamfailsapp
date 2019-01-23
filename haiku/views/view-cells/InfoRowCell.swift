@@ -33,6 +33,13 @@ class InfoRowCell: UICollectionViewCell {
         return label
     }()
     
+    let timeStampLabel: UILabel = {
+        let label = UILabel()
+        label.font = Config.smallFont
+        label.textColor = Config.colors.font2
+        return label
+    }()
+    
     lazy private var commentsButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
@@ -61,10 +68,11 @@ class InfoRowCell: UICollectionViewCell {
                     l.setIcon(icon: .googleMaterialDesign(.arrowUpward), iconSize: 20)
                     l.textColor = Config.colors.font1
                     
-                    flex.addItem(l)
+                    flex.addItem(l).marginLeft(-5)
                     flex.addItem(self.scoreLabel)
                     flex.addItem(self.commentBubble).marginLeft(10)
                     flex.addItem(self.commentsButton)
+                    flex.addItem(self.timeStampLabel)
                 }
                 
                 flex.addItem().direction(.row).define{ flex in
@@ -95,6 +103,8 @@ class InfoRowCell: UICollectionViewCell {
         self.commentsButton.setTitle(String(item.redditPost.num_comments), for: .normal)
         self.commentsButton.flex.markDirty()
         self.commentBubble.flex.markDirty()
+        self.timeStampLabel.text = item.humanTimeStampExtended
+        self.timeStampLabel.flex.markDirty()
         self.rootViewContainer.flex.layout(mode: .adjustHeight)
         _ = self.redditViewItem?.favorited.takeUntil(self.rxUnsubscribe.asObservable()).subscribe(onNext: { favorited in
             self.setFavoriteButton(favorited)

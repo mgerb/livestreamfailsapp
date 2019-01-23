@@ -65,7 +65,10 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
                 UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
                     self.contentOffset.y = -(self.frame.height / 2)
                 }, completion: {_ in
-                    self.contentInset.bottom = -(self.footerHeight - 100)
+                    DispatchQueue.main.async {
+                        self.setWhiteBackgroundLayout()
+                        self.contentInset.bottom = -(self.footerHeight - 100)
+                    }
                     self.fetchComments()
                 })
             }
@@ -74,14 +77,9 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
 
     func fetchComments () {
         RedditService.shared.getFlattenedComments(permalink: self.redditViewItem.redditPost.permalink) {comments in
-            if comments.count > 0 {
-                self.data = comments
-                self.didLoad = true
-                self.reloadData()
-                DispatchQueue.main.async {
-                    self.setWhiteBackgroundLayout()
-                }
-            }
+            self.data = comments.count > 0 ? comments : ["no comments"]
+            self.didLoad = true
+            self.reloadData()
         }
     }
     
@@ -107,7 +105,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch self.data[indexPath.row] {
         case let s as String:
-            if s == "loading" {
+            if s == "loading" || s == "no comments" {
                 return 300
             }
         case let comment as RedditComment:
@@ -137,6 +135,10 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
                 return cell
             }
             
+        } else if let c = self.data[indexPath.row] as? String {
+            let cell = self.dequeueReusableCell(withIdentifier: "CommentsLoadingCell", for: indexPath) as! CommentsLoadingCell
+            c == "loading" ? cell.setLoading() : cell.setNoComments()
+            return cell
         } else {
             return self.dequeueReusableCell(withIdentifier: "CommentsLoadingCell", for: indexPath)
         }

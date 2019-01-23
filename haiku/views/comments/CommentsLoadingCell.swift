@@ -11,13 +11,41 @@ import UIKit
 
 class CommentsLoadingCell: UITableViewCell {
     
+    let noCommentsLabel: UILabel = {
+        let label = UILabel()
+        label.text = "There doesn't seem to be anything here."
+        label.font = Config.smallFont
+        return label
+    }()
+    
+    let loadingView: UIActivityIndicatorView = {
+        let ai = UIActivityIndicatorView.init(activityIndicatorStyle: .gray)
+        ai.startAnimating()
+        return ai
+    }()
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         self.backgroundColor = Config.colors.bg1
-        let ai = UIActivityIndicatorView.init(activityIndicatorStyle: .gray)
-        ai.startAnimating()
-        self.addSubview(ai)
-        ai.snp.makeConstraints { make in
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.loadingView.removeFromSuperview()
+        self.noCommentsLabel.removeFromSuperview()
+    }
+    
+    func setLoading() {
+        self.addSubview(self.loadingView)
+        self.loadingView.snp.makeConstraints { make in
+            make.centerY.equalTo(self)
+            make.centerX.equalTo(self)
+        }
+    }
+    
+    func setNoComments() {
+        self.addSubview(self.noCommentsLabel)
+        self.noCommentsLabel.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.centerX.equalTo(self)
         }
