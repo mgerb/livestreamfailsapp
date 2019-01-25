@@ -140,8 +140,10 @@ class PlayerCell: UICollectionViewCell {
     }
     
     @objc func onTap() {
-        self.redditViewItem?.updateGlobalPlayer()
-        self.toggleFullScreenButton()
+        DispatchQueue.main.async {
+            self.redditViewItem!.updateGlobalPlayer()
+            self.toggleFullScreenButton()
+        }
     }
     
     var fullScreenTimeoutTask: DispatchWorkItem?

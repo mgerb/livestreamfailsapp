@@ -17,7 +17,11 @@ class MainCollectionViewController: YaikuCollectionViewController {
 
     override func fetchHaikus(_ after: String? = nil) {
         RedditService.shared.getHaikus(after: after){ redditPosts in
-            let redditViewItems = redditPosts.map{ RedditViewItem($0, context: .home) }
+            let redditViewItems: [RedditViewItem] = redditPosts.compactMap {
+                let item = RedditViewItem($0, context: .home)
+                // filter out items with bad url's
+                return item.videoType == .other ? nil : item
+            }
             self.data = after == nil ? redditViewItems : self.data + redditViewItems
             self.adapter.performUpdates(animated: true, completion: { _ in
                 self.refreshControl.endRefreshing()

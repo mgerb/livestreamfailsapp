@@ -22,9 +22,19 @@ enum RedditViewItemPlayerState {
     case error
 }
 
+enum RedditViewItemVideoType {
+    case youtube
+    case twitch
+    case neatclip
+    case livestreamfails
+    case streamable
+    case other
+}
+
 class RedditViewItem {
     let redditPost: RedditPost
     let disposeBag = DisposeBag()
+    let videoType: RedditViewItemVideoType
     
     /// context of where item is being used - either home or favorites page
     var context: RedditViewItemContext
@@ -58,6 +68,25 @@ class RedditViewItem {
     init(_ redditPost: RedditPost, context: RedditViewItemContext) {
         self.redditPost = redditPost
         self.context = context
+
+        // set video type based on the url
+        var type: RedditViewItemVideoType
+        let url = self.redditPost.url
+        if url?.youtubeID != nil {
+            type = .youtube
+        }  else if url?.twitchID != nil {
+            type = .twitch
+        }  else if url?.liveStreamFails != nil {
+            type = .livestreamfails
+        }  else if url?.streamable != nil {
+            type = .streamable
+        } else if url?.neatclipID != nil {
+            type = .neatclip
+        } else {
+            type = .other
+        }
+        
+        self.videoType = type
         self.setupSubscriptions()
     }
     
@@ -77,35 +106,47 @@ class RedditViewItem {
                 return dispose
             }
             
-                if let id = self.redditPost.url?.youtubeID {
-                    let client = XCDYouTubeClient.default()
-                    client.getVideoWithIdentifier(id) { (info, err) -> Void in
-                        // if video is unavailable in country set this flag
-                        if let e = (err as NSError?) {
-                            if e.domain == XCDYouTubeVideoErrorDomain {
-                                self.unavailable = true
-                            }
-                        } else if let streamUrl =  info?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue]
-                            ?? info?.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] {
-                            self.cachedPlayerItem = CachingPlayerItem(url: streamUrl, customFileExtension: "mp4")
-                            self.cachedPlayerItem?.delegate = self
-                            observer.onNext(self.cachedPlayerItem)
+            // TODO:
+            RedditService.shared.getFirstComment(permalink: self.redditPost.permalink) { comment in
+                if let body = comment?.body {
+                    if let streamable = body.streamable {
+                        print(streamable)
+                    }
+                    if let livestreamfails = body.liveStreamFails {
+                        print(livestreamfails)
+                    }
+                }
+            }
+            
+            if let urlString = self.redditPost.url {
+                ClipUrlService.shared.getClipUrl(url: urlString, urlType: self.videoType) {url in
+                    if let url = url {
+                        if urlString.hasSuffix("mp4") {
+                            self.cachedPlayerItem = CachingPlayerItem(url: url)
+                        } else {
+                            self.cachedPlayerItem = CachingPlayerItem(url: url, customFileExtension: "mp4")
                         }
+                        self.cachedPlayerItem?.delegate = self
+                        observer.onNext(self.cachedPlayerItem)
+                        observer.onCompleted()
+                    } else {
                         observer.onCompleted()
                     }
-                } else {
-                    observer.onCompleted()
                 }
+            } else {
+                observer.onCompleted()
+            }
+
             return dispose
         }.share()
     }
-    
+
     func updateGlobalPlayer() {
         self.getPlayerItem().subscribe(onNext: { item in
             StorageService.shared.storeWatchedRedditPost(redditPost: self.redditPost)
             self.markedAsWatched.onNext(true)
             GlobalPlayer.shared.replaceItem(item!, self)
-        }).dispose()
+        })
     }
     
     func toggleFavorite() {

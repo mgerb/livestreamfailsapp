@@ -30,8 +30,6 @@
 		A20A70CB21E817B800BD3D0C /* FlexLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A021E8177800BD3D0C /* FlexLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70CD21E817B800BD3D0C /* DynamicJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709E21E8177500BD3D0C /* DynamicJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70CF21E817B800BD3D0C /* Cache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709C21E8176F00BD3D0C /* Cache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A20A70D021E817B800BD3D0C /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709A21E8176C00BD3D0C /* Alamofire.framework */; };
-		A20A70D121E817B800BD3D0C /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709A21E8176C00BD3D0C /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A240BA252159BD74004E8419 /* PlayerCell.swift */; };
 		A242E87C21E2867D004A8026 /* CommentsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A242E87B21E2867D004A8026 /* CommentsViewCell.swift */; };
 		A242E87E21E294CB004A8026 /* TapThroughCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A242E87D21E294CB004A8026 /* TapThroughCollectionView.swift */; };
@@ -75,6 +73,10 @@
 		A2DCC62121EC2CAA00E08453 /* NSAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC62021EC2CAA00E08453 /* NSAttributedString.swift */; };
 		A2DCC62921EC4ABC00E08453 /* SwiftyMarkdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2DCC62221EC4A6E00E08453 /* SwiftyMarkdown.framework */; };
 		A2DCC62B21EC4AC000E08453 /* SwiftyMarkdown.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2DCC62221EC4A6E00E08453 /* SwiftyMarkdown.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A2DE2DB621FAA578003F66D1 /* clip-url.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DE2DB521FAA578003F66D1 /* clip-url.service.swift */; };
+		A2DE2DB821FABFA8003F66D1 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709A21E8176C00BD3D0C /* Alamofire.framework */; };
+		A2DE2DB921FABFA8003F66D1 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709A21E8176C00BD3D0C /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A2E7018221F823BD00029C75 /* twitch.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E7018121F823BD00029C75 /* twitch.service.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -95,9 +97,9 @@
 				A20A70BB21E817B800BD3D0C /* SwiftIcons.framework in Embed Frameworks */,
 				A20A70CD21E817B800BD3D0C /* DynamicJSON.framework in Embed Frameworks */,
 				A20A70CB21E817B800BD3D0C /* FlexLayout.framework in Embed Frameworks */,
-				A20A70D121E817B800BD3D0C /* Alamofire.framework in Embed Frameworks */,
 				A2DCC62B21EC4AC000E08453 /* SwiftyMarkdown.framework in Embed Frameworks */,
 				A20A70BD21E817B800BD3D0C /* SnapKit.framework in Embed Frameworks */,
+				A2DE2DB921FABFA8003F66D1 /* Alamofire.framework in Embed Frameworks */,
 				A20A70C921E817B800BD3D0C /* IGListKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -165,6 +167,8 @@
 		A2DCC61E21EC2AE300E08453 /* MyNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNavigation.swift; sourceTree = "<group>"; };
 		A2DCC62021EC2CAA00E08453 /* NSAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAttributedString.swift; sourceTree = "<group>"; };
 		A2DCC62221EC4A6E00E08453 /* SwiftyMarkdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyMarkdown.framework; path = Carthage/Build/iOS/SwiftyMarkdown.framework; sourceTree = "<group>"; };
+		A2DE2DB521FAA578003F66D1 /* clip-url.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "clip-url.service.swift"; sourceTree = "<group>"; };
+		A2E7018121F823BD00029C75 /* twitch.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = twitch.service.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,7 +176,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A20A70D021E817B800BD3D0C /* Alamofire.framework in Frameworks */,
 				A20A709D21E8176F00BD3D0C /* Cache.framework in Frameworks */,
 				A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */,
 				A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */,
@@ -184,6 +187,7 @@
 				A20A70BA21E817B800BD3D0C /* SwiftIcons.framework in Frameworks */,
 				A20A70B821E817B800BD3D0C /* SwiftyJSON.framework in Frameworks */,
 				A2DCC62921EC4ABC00E08453 /* SwiftyMarkdown.framework in Frameworks */,
+				A2DE2DB821FABFA8003F66D1 /* Alamofire.framework in Frameworks */,
 				A20A70B621E817B800BD3D0C /* XCDYouTubeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -263,6 +267,8 @@
 			children = (
 				A2591250211BD28200B09D73 /* reddit.service.swift */,
 				A25285B52165B7DB00DCA537 /* storage.service.swift */,
+				A2E7018121F823BD00029C75 /* twitch.service.swift */,
+				A2DE2DB521FAA578003F66D1 /* clip-url.service.swift */,
 			);
 			path = services;
 			sourceTree = "<group>";
@@ -443,6 +449,7 @@
 				A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */,
 				A25285AA21615AC800DCA537 /* CachingPlayerItem.swift in Sources */,
 				A25285B8216ACADD00DCA537 /* Config.swift in Sources */,
+				A2DE2DB621FAA578003F66D1 /* clip-url.service.swift in Sources */,
 				A2889F2C217D6FF0001E7061 /* FavoritesCollectionViewController.swift in Sources */,
 				A247504621EACBE600C0F712 /* CommentsHeaderCell.swift in Sources */,
 				A247504421EA726D00C0F712 /* TapThroughTableView.swift in Sources */,
@@ -457,6 +464,7 @@
 				A2B0098221F01E9200888476 /* NSMutableAttributedString.swift in Sources */,
 				A242E87E21E294CB004A8026 /* TapThroughCollectionView.swift in Sources */,
 				A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */,
+				A2E7018221F823BD00029C75 /* twitch.service.swift in Sources */,
 				A2591251211BD28200B09D73 /* reddit.service.swift in Sources */,
 				A2528581215C6E9C00DCA537 /* RedditPost.swift in Sources */,
 				A269478421CEF93000A07F69 /* RedditAlertController.swift in Sources */,

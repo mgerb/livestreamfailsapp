@@ -35,6 +35,14 @@ class SettingsViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.row == 0 && indexPath.section == 0  {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath)
+            cell.textLabel?.text = "Clear Cache"
+            cell.textLabel?.textAlignment = .center
+            cell.textLabel?.textColor = Config.colors.blue
+            return cell
+        }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath)
         cell.textLabel?.text = "Cell at row \(indexPath.row)"
         let switchView = UISwitch(frame: .zero)
@@ -44,6 +52,13 @@ class SettingsViewController: UITableViewController {
         cell.accessoryView = switchView
         cell.textLabel?.textColor = Config.colors.blue
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 && indexPath.section == 0  {
+            StorageService.shared.clearVideoCache()
+            self.tableView.cellForRow(at: indexPath)?.setSelected(false, animated: false)
+        }
     }
     
     @objc func switchChanged(_ sender: UISwitch) {

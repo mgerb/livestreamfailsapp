@@ -11,10 +11,45 @@ import UIKit
 
 extension String {
     var youtubeID: String? {
-        let pattern = "((?<=(v|V)/)|(?<=be/)|(?<=(\\?|\\&)v=)|(?<=embed/))([\\w-]++)"
+
+        let workingString = self.replaceEncoding()
+        let range = NSRange(location: 0, length: workingString.count)
+
+        // check if valid youtube url first
+        let p = "((?:https?:)?\\/\\/)?((?:www|m)\\.)?(youtube\\.com|youtu.be)"
+        let r = try? NSRegularExpression(pattern: p, options: .caseInsensitive)
         
+        if r?.firstMatch(in: workingString, options: [], range: range) == nil {
+            return nil
+        }
+        
+        let pattern = "((?<=(v|V)/)|(?<=be/)|(?<=(\\?|\\&)v=)|(?<=embed/))([\\w-]++)"
+        return self.extractText(pattern: pattern)
+    }
+    
+    var twitchID: String? {
+        let pattern = "(?<=(https:\\/\\/)?clips\\.twitch\\.tv\\/)([\\w-]++)"
+        return self.extractText(pattern: pattern)
+    }
+
+    /// TODO:
+    var neatclipID: String? {
+        return ""
+    }
+
+    var liveStreamFails: String? {
+        let pattern = "(?<=\\()((https:\\/\\/)?(www\\.)?livestreamfails\\.com\\/post\\/[\\w-]++)"
+        return self.extractText(pattern: pattern)
+    }
+
+    var streamable: String? {
+        let pattern = "(?<=\\()((https:\\/\\/)?(www\\.)?streamable\\.com\\/[\\w-]++)"
+        return self.extractText(pattern: pattern)
+    }
+    
+    func extractText(pattern: String) -> String? {
         let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive)
-        let range = NSRange(location: 0, length: count)
+        let range = NSRange(location: 0, length: self.count)
         
         guard let result = regex?.firstMatch(in: self, options: [], range: range) else {
             return nil
@@ -22,7 +57,7 @@ extension String {
         
         return (self as NSString).substring(with: result.range)
     }
-    
+
     /// parse the end time in seconds from youtube URL
     var youtubeEndTime: Int? {
         let end = Util.getQueryStringParameter(self, "end")

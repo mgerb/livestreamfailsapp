@@ -61,10 +61,11 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
     override func didSelectItem(at index: Int) {}
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {
-        if let controller = sectionController as? RedditViewItemSectionController {
-            // pre load player item
-            controller.redditViewItem?.getPlayerItem().subscribe()
-        }
+        // TODO: maybe change this back?
+    //    if let controller = sectionController as? RedditViewItemSectionController {
+    //         // pre load player item
+    //        controller.redditViewItem?.getPlayerItem().subscribe()
+    //    }
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerDidExitWorkingRange sectionController: ListSectionController) {

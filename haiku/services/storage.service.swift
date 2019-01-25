@@ -24,12 +24,20 @@ class StorageService {
         transformer: TransformerFactory.forCodable(ofType: Data.self)
     )
 
+}
+
+/// data storage with Cache
+extension StorageService {
     func cacheVideoData(data: Data, id: String) {
         try? self.videoStorage!.setObject(data, forKey: id)
     }
     
     func getCachedVideo(id: String) -> Data? {
         return try? self.videoStorage!.object(forKey: id)
+    }
+    
+    func clearVideoCache() {
+        try? self.videoStorage!.removeAll()
     }
 }
 

@@ -109,7 +109,7 @@ class RedditService: RequestAdapter, RequestRetrier {
 
     // returns a list of youtube ID's from youtube haiku
     func getHaikus(after: String?, closure: @escaping (_ data: [RedditPost]) -> Void) {
-        var url = "https://reddit.com/r/youtubehaiku.json?limit=25"
+        var url = "https://reddit.com/r/livestreamfail.json?limit=25"
         if (after != nil) {
             url = url + ("&after=" + after!)
         }
@@ -118,14 +118,7 @@ class RedditService: RequestAdapter, RequestRetrier {
             switch response.result {
             case .success(let res):
                 if let data = try? JSONDecoder().decode(RedditPostListing.self, from: res) {
-                    let newData = data.data.children.compactMap { val -> RedditPost? in
-                        // filter out reddit posts that don't contain youtube link
-                        if val.data.url?.youtubeID == nil {
-                            return nil
-                        }
-                        return val.data
-                    }
-                    
+                    let newData = data.data.children.compactMap { $0.data }
                     closure(newData)
                 }
             case .failure(_):
@@ -134,9 +127,9 @@ class RedditService: RequestAdapter, RequestRetrier {
         }
     }
     
-    private func getComments(permalink: String, closure: @escaping ((_ data: JSON?) -> Void)) {
+    private func getComments(permalink: String, params: Parameters = [:], closure: @escaping ((_ data: JSON?) -> Void)) {
         let url = "https://www.reddit.com\(permalink).json"
-        Alamofire.request(url, headers: self.headers).validate().responseJSON { response in
+        Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.httpBody, headers: self.headers).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
                 closure(JSON(value)[1])
@@ -147,7 +140,17 @@ class RedditService: RequestAdapter, RequestRetrier {
         }
     }
     
-    func getFlattenedComments(permalink: String, more: Bool = false, closure: @escaping ((_ data: [RedditComment]) -> Void)) {
+    func getFirstComment(permalink: String, closure: @escaping ((_ data: RedditComment?) -> Void)) {
+        self.getComments(permalink: permalink, params: ["limit": 1]) {
+            if let data = $0?["data"]["children"][0]["data"] {
+                closure(RedditComment(json: data))
+            } else {
+                closure(nil)
+            }
+        }
+    }
+
+    func getFlattenedComments(permalink: String, closure: @escaping ((_ data: [RedditComment]) -> Void)) {
         self.getComments(permalink: permalink) {
             if let comments = $0 {
                 
