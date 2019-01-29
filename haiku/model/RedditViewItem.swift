@@ -92,6 +92,7 @@ class RedditViewItem {
     
     func getPlayerItem() -> Observable<CachingPlayerItem?> {
         return Observable.create { observer in
+
             let dispose = Disposables.create()
             
             if self.cachedPlayerItem == nil {
@@ -119,13 +120,19 @@ class RedditViewItem {
             }
             
             if let urlString = self.redditPost.url {
-                ClipUrlService.shared.getClipUrl(url: urlString, urlType: self.videoType) {url in
-                    if let url = url {
+                ClipUrlService.shared.getClipUrl(redditPost: self.redditPost, urlType: self.videoType) {res in
+                    if let res = res {
                         if urlString.hasSuffix("mp4") {
-                            self.cachedPlayerItem = CachingPlayerItem(url: url)
+                            self.cachedPlayerItem = CachingPlayerItem(url: res.videoUrl)
                         } else {
-                            self.cachedPlayerItem = CachingPlayerItem(url: url, customFileExtension: "mp4")
+                            self.cachedPlayerItem = CachingPlayerItem(url: res.videoUrl, customFileExtension: "mp4")
                         }
+                        
+                        // set thumbnail if we get it back
+                        if let thumbnailUrl = res.thumbnailUrl {
+                            self.thumbnail.kf.setImage(with: thumbnailUrl)
+                        }
+                        
                         self.cachedPlayerItem?.delegate = self
                         observer.onNext(self.cachedPlayerItem)
                         observer.onCompleted()
