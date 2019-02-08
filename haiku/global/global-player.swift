@@ -52,7 +52,7 @@ class GlobalPlayer: NSObject {
     }
 
     func pause() {
-        // self.stopTimeObserver()
+//        self.stopTimeObserver()
         self.player.pause()
         self.playing = false
     }
@@ -60,16 +60,16 @@ class GlobalPlayer: NSObject {
     func play() {
         self.player.play()
         self.playing = true
-        // self.startTimeObserver()
+//        self.startTimeObserver()
     }
     
     private func togglePlaying() {
         self.playing ? self.pause() : self.play()
     }
     
-    private func intervalTick() {
+    private func intervalTick(_ time: CMTime) {
         if let duration = self.player.currentItem?.asset.duration.seconds {
-            let percent = (self.player.currentTime().seconds / duration)
+            let percent = (time.seconds / duration)
             try? self.activeRedditViewItem.value()?.playerProgress.onNext(percent)
         }
     }
@@ -78,7 +78,7 @@ class GlobalPlayer: NSObject {
         let timeScale = CMTimeScale(NSEC_PER_SEC)
         let time = CMTime(seconds: 0.01, preferredTimescale: timeScale)
         self.timeObserverToken = self.player.addPeriodicTimeObserver(forInterval: time, queue: .main) { [weak self] time in
-            self?.intervalTick()
+            self?.intervalTick(time)
         }
     }
     

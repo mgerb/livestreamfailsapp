@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 extension String {
+    
+    /// extract youtube id from twitch url
     var youtubeID: String? {
 
         let workingString = self.replaceEncoding()
@@ -27,24 +29,39 @@ extension String {
         return self.extractText(pattern: pattern)
     }
     
+    /// extract twitch id from twitch url
     var twitchID: String? {
         let pattern = "(?<=(https:\\/\\/)?clips\\.twitch\\.tv\\/)([\\w-]++)"
         return self.extractText(pattern: pattern)
     }
 
     /// TODO:
-    var neatclipID: String? {
-        return ""
+    var neatclipUrl: String? {
+        return nil
+    }
+    
+    var isNeatclipUrl: Bool {
+        return false
     }
 
+    /// extract url from markdown
     var liveStreamFails: String? {
         let pattern = "(?<=\\()((https:\\/\\/)?(www\\.)?livestreamfails\\.com\\/post\\/[\\w-]++)"
         return self.extractText(pattern: pattern)
     }
+    
+    var isLiveStreamFailsUrl: Bool {
+        return self.contains("livestreamfails.com")
+    }
 
-    var streamable: String? {
+    /// extract url from markdown
+    var streamableUrl: String? {
         let pattern = "(?<=\\()((https:\\/\\/)?(www\\.)?streamable\\.com\\/[\\w-]++)"
         return self.extractText(pattern: pattern)
+    }
+    
+    var isStreamableUrl: Bool {
+        return self.contains("livestreamfails.com")
     }
     
     func extractText(pattern: String) -> String? {

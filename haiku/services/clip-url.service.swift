@@ -9,72 +9,115 @@
 import Foundation
 import Alamofire
 import XCDYouTubeKit
-
-struct ClipUrlResponse {
-    let videoUrl: URL
-    let thumbnailUrl: URL?
-}
+import SwiftSoup
 
 /// service to get direct video url for different service providers
 class ClipUrlService: NSObject {
     static let shared = ClipUrlService()
 
-    func getClipUrl(redditPost: RedditPost, urlType: RedditViewItemVideoType, closure: @escaping (_ url: ClipUrlResponse?) -> Void) {
-    
-        if let id = redditPost.url?.youtubeID {
-            self.getYoutubeUrl(id: id) { closure($0) }
-        } else if let id = redditPost.url?.twitchID {
-            self.getTwitchUrl(id: id) { closure($0) }
-        } else if let url = redditPost.url?.neatclipID {
-            self.getNeatClipUrl(url: url) { closure($0) }
-        } else if let url = redditPost.url?.liveStreamFails {
-            self.getLiveStreamFailsUrl(url: url) { closure($0) }
-        } else if let url = redditPost.url?.streamable {
-            self.getStreamableUrl(url: url) { closure($0) }
-        } else {
-            closure(nil)
+    /// return videoUrl, thumbnailUrl
+    func getClipInfo(redditPost: RedditPost, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
+        // get first comment to check for stickied mirror links from live stream fails bot
+        RedditService.shared.getFirstComment(permalink: redditPost.permalink) { comment in
+            let queue = [comment?.body?.liveStreamFails, comment?.body?.streamableUrl, redditPost.url]
+            self.processUrlQueue(queue: queue.compactMap { $0 }) { res in
+                closure(res)
+            }
         }
     }
     
-    func getYoutubeUrl(id: String, closure: @escaping (_ url: ClipUrlResponse?) -> Void) {
+    private func processUrlQueue(queue: [String], closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
+        if queue.count > 0 {
+            var queue = queue
+            let urlString = queue.removeFirst()
+            self.getClipUrl(urlString: urlString) { res in
+                if res != (nil, nil) {
+                    closure(res)
+                } else if queue.count > 0 {
+                    self.processUrlQueue(queue: queue) { closure($0) }
+                } else {
+                    closure((nil, nil))
+                }
+            }
+        } else {
+            closure((nil, nil))
+        }
+    }
+    
+    private func getClipUrl(urlString: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
+        if let id = urlString.youtubeID {
+            self.getYoutubeUrl(id) { closure($0) }
+        } else if let id = urlString.twitchID {
+            self.getTwitchUrl(id) { closure($0) }
+        } else if urlString.isNeatclipUrl {
+            self.getNeatClipUrl(urlString) { closure($0) }
+        } else if urlString.isLiveStreamFailsUrl {
+            self.getLiveStreamFailsUrl(urlString) { closure($0) }
+        } else if urlString.isStreamableUrl {
+            self.getStreamableUrl(urlString) { closure($0) }
+        } else {
+            closure((nil, nil))
+        }
+    }
+    
+    private func getYoutubeUrl(_ id: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
         let client = XCDYouTubeClient.default()
         client.getVideoWithIdentifier(id) { (info, err) -> Void in
             if let streamUrl =  info?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue]
                 ?? info?.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] {
-                closure(ClipUrlResponse(videoUrl: streamUrl, thumbnailUrl: nil))
+                closure((streamUrl, nil))
                 return
             }
-            closure(nil)
+            closure((nil, nil))
         }
     }
 
-    func getTwitchUrl(id: String, closure: @escaping (_ url: ClipUrlResponse?) -> Void) {
+    private func getTwitchUrl(_ id: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
         TwitchService.shared.getTwitchClipUrl(clipID: id) { res in
             closure(res)
         }
     }
     
-    func getNeatClipUrl(url: String, closure: @escaping (_ url: ClipUrlResponse?) -> Void) {
-        if let test = url.neatclipID {
-            
-        } else {
-            closure(nil)
-        }
+    private func getNeatClipUrl(_ urlString: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
+        closure((nil, nil))
     }
     
-    func getLiveStreamFailsUrl(url: String, closure: @escaping (_ url: ClipUrlResponse?) -> Void) {
-        if let test = url.liveStreamFails {
-            
-        } else {
-            closure(nil)
-        }
+    private func getLiveStreamFailsUrl(_ urlString: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
+        self.getUrlsFromHtml(urlString) { closure($0) }
     }
     
-    func getStreamableUrl(url: String, closure: @escaping (_ url: ClipUrlResponse?) -> Void) {
-        if let test = url.streamable {
-            
-        } else {
-            closure(nil)
+    private func getStreamableUrl(_ urlString: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
+        self.getUrlsFromHtml(urlString) { closure($0) }
+    }
+    
+    /// fetch html page and parse source URL's from video element
+    private func getUrlsFromHtml(_ urlString: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
+        Alamofire.request(urlString).validate().responseString { res in
+            switch res.result {
+            case .success(let val):
+                do {
+                    let html = try SwiftSoup.parse(val)
+                    
+                    let videoElem = try html.getElementsByTag("video")
+                    let sourceElem = try html.getElementsByTag("source")
+
+                    let video = try sourceElem.first()?.attr("src")
+                    let thumbnail = try videoElem.first()?.attr("poster")
+
+                    if let video = video, let thumbnail = thumbnail {
+                        let videoUrl = URL(string: video)
+                        let thumbnailUrl = URL(string: thumbnail)
+                        closure((videoUrl, thumbnailUrl))
+                    } else {
+                        closure((nil, nil))
+                    }
+                } catch {
+                    closure((nil, nil))
+                }
+            case .failure(let error):
+                print(error)
+                closure((nil, nil))
+            }
         }
     }
 }

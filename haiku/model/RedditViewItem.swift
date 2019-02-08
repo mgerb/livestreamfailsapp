@@ -10,6 +10,7 @@ import Foundation
 import IGListKit
 import XCDYouTubeKit
 import RxSwift
+import Kingfisher
 
 enum RedditViewItemContext {
     case home
@@ -22,31 +23,16 @@ enum RedditViewItemPlayerState {
     case error
 }
 
-enum RedditViewItemVideoType {
-    case youtube
-    case twitch
-    case neatclip
-    case livestreamfails
-    case streamable
-    case other
-}
-
 class RedditViewItem {
     let redditPost: RedditPost
     let disposeBag = DisposeBag()
-    let videoType: RedditViewItemVideoType
-    
+
     /// context of where item is being used - either home or favorites page
     var context: RedditViewItemContext
     
     lazy var favorited = BehaviorSubject<Bool>(value: StorageService.shared.redditPostFavoriteExists(id: self.redditPost.id))
     lazy var markedAsWatched = BehaviorSubject<Bool>(value: StorageService.shared.getWatchedRedditPost(redditPost: self.redditPost))
-    /// TODO: what state the player is in
-    lazy var playerState = BehaviorSubject<RedditViewItemPlayerState>(value: .idle)
     lazy var playerProgress = BehaviorSubject<Double>(value: 0.0)
-    
-    /// if XCDYouTubeKit fails to load the video
-    var unavailable = false
 
     lazy var videoStartTime: Int = self.redditPost.url?.youtubeStartTime ?? 0
     lazy var videoEndTime: Int? = self.redditPost.url?.youtubeEndTime
@@ -56,6 +42,9 @@ class RedditViewItem {
         if let youtubeID = self.redditPost.url?.youtubeID {
             // cache thumbnail with KF
             view.kf.setImage(with: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")!)
+        } else {
+            // TODO: cache image url's here somehow
+            self.getPlayerItem().subscribe()
         }
         return view
     }()
@@ -68,29 +57,10 @@ class RedditViewItem {
     init(_ redditPost: RedditPost, context: RedditViewItemContext) {
         self.redditPost = redditPost
         self.context = context
-
-        // set video type based on the url
-        var type: RedditViewItemVideoType
-        let url = self.redditPost.url
-        if url?.youtubeID != nil {
-            type = .youtube
-        }  else if url?.twitchID != nil {
-            type = .twitch
-        }  else if url?.liveStreamFails != nil {
-            type = .livestreamfails
-        }  else if url?.streamable != nil {
-            type = .streamable
-        } else if url?.neatclipID != nil {
-            type = .neatclip
-        } else {
-            type = .other
-        }
-        
-        self.videoType = type
         self.setupSubscriptions()
     }
     
-    func getPlayerItem() -> Observable<CachingPlayerItem?> {
+    func getPlayerItem() -> Observable<(CachingPlayerItem?, URL?)> {
         return Observable.create { observer in
 
             let dispose = Disposables.create()
@@ -102,45 +72,34 @@ class RedditViewItem {
             }
             
             if self.cachedPlayerItem != nil {
-                observer.onNext(self.cachedPlayerItem)
+                observer.onNext((self.cachedPlayerItem, nil))
                 observer.onCompleted()
                 return dispose
             }
+
             
-            // TODO:
-            RedditService.shared.getFirstComment(permalink: self.redditPost.permalink) { comment in
-                if let body = comment?.body {
-                    if let streamable = body.streamable {
-                        print(streamable)
-                    }
-                    if let livestreamfails = body.liveStreamFails {
-                        print(livestreamfails)
-                    }
-                }
-            }
-            
-            if let urlString = self.redditPost.url {
-                ClipUrlService.shared.getClipUrl(redditPost: self.redditPost, urlType: self.videoType) {res in
-                    if let res = res {
-                        if urlString.hasSuffix("mp4") {
-                            self.cachedPlayerItem = CachingPlayerItem(url: res.videoUrl)
-                        } else {
-                            self.cachedPlayerItem = CachingPlayerItem(url: res.videoUrl, customFileExtension: "mp4")
-                        }
-                        
-                        // set thumbnail if we get it back
-                        if let thumbnailUrl = res.thumbnailUrl {
-                            self.thumbnail.kf.setImage(with: thumbnailUrl)
-                        }
-                        
-                        self.cachedPlayerItem?.delegate = self
-                        observer.onNext(self.cachedPlayerItem)
-                        observer.onCompleted()
+            ClipUrlService.shared.getClipInfo(redditPost: self.redditPost) { (videoUrl, thumbnailUrl) in
+                // if we get video url
+                if let videoUrl = videoUrl {
+                    if videoUrl.absoluteString.hasSuffix("mp4") {
+                        self.cachedPlayerItem = CachingPlayerItem(url: videoUrl)
                     } else {
-                        observer.onCompleted()
+                        self.cachedPlayerItem = CachingPlayerItem(url: videoUrl, customFileExtension: "mp4")
+                    }
+
+                    self.cachedPlayerItem?.delegate = self
+                }
+
+                // if we get image url
+                // TODO: this will be changed
+                if let thumbnailUrl = thumbnailUrl {
+                    // set thumbnail if we get it back
+                    DispatchQueue.main.async {
+                        self.thumbnail.kf.setImage(with: thumbnailUrl)
                     }
                 }
-            } else {
+                
+                observer.onNext((self.cachedPlayerItem, thumbnailUrl))
                 observer.onCompleted()
             }
 
@@ -149,10 +108,12 @@ class RedditViewItem {
     }
 
     func updateGlobalPlayer() {
-        self.getPlayerItem().subscribe(onNext: { item in
-            StorageService.shared.storeWatchedRedditPost(redditPost: self.redditPost)
-            self.markedAsWatched.onNext(true)
-            GlobalPlayer.shared.replaceItem(item!, self)
+        self.getPlayerItem().subscribe(onNext: { (item, _) in
+            if let item = item {
+                StorageService.shared.storeWatchedRedditPost(redditPost: self.redditPost)
+                self.markedAsWatched.onNext(true)
+                GlobalPlayer.shared.replaceItem(item, self)
+            }
         })
     }
     

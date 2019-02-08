@@ -28,7 +28,6 @@
 		A20A70C721E817B800BD3D0C /* Kingfisher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A421E8178300BD3D0C /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70C921E817B800BD3D0C /* IGListKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A221E8178000BD3D0C /* IGListKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70CB21E817B800BD3D0C /* FlexLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A021E8177800BD3D0C /* FlexLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A20A70CD21E817B800BD3D0C /* DynamicJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709E21E8177500BD3D0C /* DynamicJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70CF21E817B800BD3D0C /* Cache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709C21E8176F00BD3D0C /* Cache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A240BA252159BD74004E8419 /* PlayerCell.swift */; };
 		A242E87C21E2867D004A8026 /* CommentsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A242E87B21E2867D004A8026 /* CommentsViewCell.swift */; };
@@ -65,14 +64,14 @@
 		A2B0098221F01E9200888476 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */; };
 		A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */; };
 		A2B7C2442198C211008DB7E6 /* RedditViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */; };
+		A2D5EA4B220D3C080086A394 /* SwiftSoup.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2D5EA49220D3C020086A394 /* SwiftSoup.framework */; };
+		A2D5EA4C220D3C080086A394 /* SwiftSoup.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2D5EA49220D3C020086A394 /* SwiftSoup.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2D5FC6F21F6CA220098A884 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D5FC6E21F6CA220098A884 /* Date.swift */; };
 		A2D70E8C21EED67C00F69F0C /* TapThroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */; };
 		A2DCC61321EBB20500E08453 /* CommentsViewCellMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61221EBB20500E08453 /* CommentsViewCellMore.swift */; };
 		A2DCC61521EC175700E08453 /* CommentsViewCellContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61421EC175700E08453 /* CommentsViewCellContent.swift */; };
 		A2DCC61F21EC2AE300E08453 /* MyNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61E21EC2AE300E08453 /* MyNavigation.swift */; };
 		A2DCC62121EC2CAA00E08453 /* NSAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC62021EC2CAA00E08453 /* NSAttributedString.swift */; };
-		A2DCC62921EC4ABC00E08453 /* SwiftyMarkdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2DCC62221EC4A6E00E08453 /* SwiftyMarkdown.framework */; };
-		A2DCC62B21EC4AC000E08453 /* SwiftyMarkdown.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2DCC62221EC4A6E00E08453 /* SwiftyMarkdown.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2DE2DB621FAA578003F66D1 /* clip-url.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DE2DB521FAA578003F66D1 /* clip-url.service.swift */; };
 		A2DE2DB821FABFA8003F66D1 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709A21E8176C00BD3D0C /* Alamofire.framework */; };
 		A2DE2DB921FABFA8003F66D1 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709A21E8176C00BD3D0C /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -95,9 +94,8 @@
 				A20A70C521E817B800BD3D0C /* PinLayout.framework in Embed Frameworks */,
 				A20A70C321E817B800BD3D0C /* Realm.framework in Embed Frameworks */,
 				A20A70BB21E817B800BD3D0C /* SwiftIcons.framework in Embed Frameworks */,
-				A20A70CD21E817B800BD3D0C /* DynamicJSON.framework in Embed Frameworks */,
+				A2D5EA4C220D3C080086A394 /* SwiftSoup.framework in Embed Frameworks */,
 				A20A70CB21E817B800BD3D0C /* FlexLayout.framework in Embed Frameworks */,
-				A2DCC62B21EC4AC000E08453 /* SwiftyMarkdown.framework in Embed Frameworks */,
 				A20A70BD21E817B800BD3D0C /* SnapKit.framework in Embed Frameworks */,
 				A2DE2DB921FABFA8003F66D1 /* Alamofire.framework in Embed Frameworks */,
 				A20A70C921E817B800BD3D0C /* IGListKit.framework in Embed Frameworks */,
@@ -160,6 +158,7 @@
 		A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
 		A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		A2B7C2432198C211008DB7E6 /* RedditViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditViewItem.swift; sourceTree = "<group>"; };
+		A2D5EA49220D3C020086A394 /* SwiftSoup.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftSoup.framework; path = Carthage/Build/iOS/SwiftSoup.framework; sourceTree = "<group>"; };
 		A2D5FC6E21F6CA220098A884 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapThroughTextView.swift; sourceTree = "<group>"; };
 		A2DCC61221EBB20500E08453 /* CommentsViewCellMore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewCellMore.swift; sourceTree = "<group>"; };
@@ -185,8 +184,8 @@
 				A20A70BE21E817B800BD3D0C /* RxSwift.framework in Frameworks */,
 				A20A70AF21E817A100BD3D0C /* SnapKit.framework in Frameworks */,
 				A20A70BA21E817B800BD3D0C /* SwiftIcons.framework in Frameworks */,
+				A2D5EA4B220D3C080086A394 /* SwiftSoup.framework in Frameworks */,
 				A20A70B821E817B800BD3D0C /* SwiftyJSON.framework in Frameworks */,
-				A2DCC62921EC4ABC00E08453 /* SwiftyMarkdown.framework in Frameworks */,
 				A2DE2DB821FABFA8003F66D1 /* Alamofire.framework in Frameworks */,
 				A20A70B621E817B800BD3D0C /* XCDYouTubeKit.framework in Frameworks */,
 			);
@@ -198,6 +197,7 @@
 		A20A709921E8176C00BD3D0C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A2D5EA49220D3C020086A394 /* SwiftSoup.framework */,
 				A28E619321F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework */,
 				A2DCC62221EC4A6E00E08453 /* SwiftyMarkdown.framework */,
 				A20A70B421E817AC00BD3D0C /* XCDYouTubeKit.framework */,

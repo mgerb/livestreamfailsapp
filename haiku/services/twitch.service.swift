@@ -23,21 +23,21 @@ class TwitchService {
         "Accept": "application/vnd.twitchtv.v5+json"
     ]
     
-    func getTwitchClipUrl(clipID: String, closure: @escaping (_ url: ClipUrlResponse?) -> Void) {
+    func getTwitchClipUrl(clipID: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
         let url = self.clipsBaseUrl + clipID
         Alamofire.request(url, headers: self.headers).responseData{ response in
             switch response.result {
             case .success(let res):
                 let json = JSON(res)
                 if let urlString = self.getClipUrl(json: json), let url = URL(string: urlString) {
-                    closure(ClipUrlResponse(videoUrl: url, thumbnailUrl: self.getClipThumbnailUrl(json: json)))
+                    closure((url, self.getClipThumbnailUrl(json: json)))
                     return
                 }
                 break
             case .failure(_):
                 break;
             }
-            closure(nil)
+            closure((nil, nil))
         }
     }
     
