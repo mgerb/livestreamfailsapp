@@ -56,7 +56,7 @@ class SettingsViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0 && indexPath.section == 0  {
-            StorageService.shared.clearVideoCache()
+            StorageService.shared.clearDiskCache()
             self.tableView.cellForRow(at: indexPath)?.setSelected(false, animated: false)
         }
     }

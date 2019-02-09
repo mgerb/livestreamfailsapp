@@ -16,11 +16,11 @@ class StorageService {
     
     private lazy var realm = try? Realm()
 
-    private let videoDiskConfig = DiskConfig(name: "videoData")
-    private let videoMemoryConfig = MemoryConfig(expiry: .never, countLimit: 50, totalCostLimit: 10)
-    lazy private var videoStorage: Storage<Data>? = try? Storage(
-        diskConfig: self.videoDiskConfig,
-        memoryConfig: self.videoMemoryConfig,
+    private let diskConfig = DiskConfig(name: "diskData")
+    private let memoryConfig = MemoryConfig(expiry: .never, countLimit: 5, totalCostLimit: 10)
+    lazy private var diskStorage: Storage<Data>? = try? Storage(
+        diskConfig: self.diskConfig,
+        memoryConfig: self.memoryConfig,
         transformer: TransformerFactory.forCodable(ofType: Data.self)
     )
 
@@ -28,16 +28,39 @@ class StorageService {
 
 /// data storage with Cache
 extension StorageService {
-    func cacheVideoData(data: Data, id: String) {
-        try? self.videoStorage!.setObject(data, forKey: id)
+    private func diskCacheData(data: Data, id: String) {
+        self.diskStorage!.async.setObject(data, forKey: id) { $0 }
     }
     
-    func getCachedVideo(id: String) -> Data? {
-        return try? self.videoStorage!.object(forKey: id)
+    private func getDiskCacheData(id: String, closure: @escaping (_ data: Data?) -> Void) {
+        self.diskStorage!.async.object(forKey: id) { result in
+            switch result {
+            case .value(let val):
+                closure(val)
+            case .error(let err):
+                closure(nil)
+            }
+        }
     }
     
-    func clearVideoCache() {
-        try? self.videoStorage!.removeAll()
+    func cacheVideo(data: Data, id: String) {
+        self.diskCacheData(data: data, id: "video:\(id)")
+    }
+    
+    func cacheImage(data: Data, id: String) {
+        self.diskCacheData(data: data, id: "image:\(id)")
+    }
+    
+    func getCachedVideo(id: String, closure: @escaping (_ data: Data?) -> Void) {
+        self.getDiskCacheData(id: "video:\(id)") { closure($0) }
+    }
+    
+    func getCachedImage(id: String, closure: @escaping (_ data: Data?) -> Void) {
+        self.getDiskCacheData(id: "image:\(id)") { closure($0) }
+    }
+
+    func clearDiskCache() {
+        try? self.diskStorage!.removeAll()
     }
 }
 

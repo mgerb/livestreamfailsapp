@@ -39,16 +39,14 @@ class RedditViewItem {
 
     lazy var thumbnail: UIImageView = {
         let view = UIImageView()
-        if let youtubeID = self.redditPost.url?.youtubeID {
-            // cache thumbnail with KF
-            view.kf.setImage(with: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")!)
-        } else {
-            // TODO: cache image url's here somehow
-            self.getPlayerItem().subscribe()
+        self.getThumbnailImage() { image in
+            view.image = image
         }
         return view
     }()
     private var cachedPlayerItem: CachingPlayerItem? = nil
+    private var cachedVideoUrl: URL?
+    private var cachedThumbnailUrl: URL?
     
     lazy var humanTimeStampExtended: String = {
         return Date().offsetExtended(from: Date(timeIntervalSince1970: TimeInterval(Int(self.redditPost.created_utc))))
@@ -60,47 +58,75 @@ class RedditViewItem {
         self.setupSubscriptions()
     }
     
+    // return videoUrl and thumbnailUrl and cache them on object
+    private func getClipUrlInfo() -> Observable<(URL?, URL?)> {
+        return Observable.create { observer in
+            
+            // return cached url's if they exist
+            if let videoUrl = self.cachedVideoUrl, let thumbnailUrl = self.cachedThumbnailUrl {
+                observer.onNext((videoUrl, thumbnailUrl))
+                observer.onCompleted()
+            } else {
+                ClipUrlService.shared.getClipInfo(redditPost: self.redditPost) { (videoUrl, thumbnailUrl) in
+                    self.cachedVideoUrl = videoUrl
+                    self.cachedThumbnailUrl = thumbnailUrl
+                    observer.onNext((videoUrl, thumbnailUrl))
+                    observer.onCompleted()
+                }
+            }
+            
+            return Disposables.create()
+        }.share()
+    }
+    
     func getPlayerItem() -> Observable<(CachingPlayerItem?, URL?)> {
         return Observable.create { observer in
 
             let dispose = Disposables.create()
             
-            if self.cachedPlayerItem == nil {
-                if let storedItemData = StorageService.shared.getCachedVideo(id: self.redditPost.id) {
-                    self.cachedPlayerItem = CachingPlayerItem(data: storedItemData, mimeType: "video/mp4", fileExtension: "mp4")
-                }
-            }
-            
-            if self.cachedPlayerItem != nil {
-                observer.onNext((self.cachedPlayerItem, nil))
-                observer.onCompleted()
-                return dispose
-            }
-
-            
-            ClipUrlService.shared.getClipInfo(redditPost: self.redditPost) { (videoUrl, thumbnailUrl) in
-                // if we get video url
-                if let videoUrl = videoUrl {
-                    if videoUrl.absoluteString.hasSuffix("mp4") {
-                        self.cachedPlayerItem = CachingPlayerItem(url: videoUrl)
-                    } else {
-                        self.cachedPlayerItem = CachingPlayerItem(url: videoUrl, customFileExtension: "mp4")
+            DispatchQueue.global().async {
+                let dispatchGroup = DispatchGroup()
+    
+                if self.cachedPlayerItem == nil {
+                    var item: CachingPlayerItem?
+                    
+                    // first try to grab from cached disk storage
+                    dispatchGroup.enter()
+                    StorageService.shared.getCachedVideo(id: self.redditPost.id) { res in
+                        if let storedItemData = res {
+                            item = CachingPlayerItem(data: storedItemData, mimeType: "video/mp4", fileExtension: "mp4")
+                        }
+                        dispatchGroup.leave()
                     }
-
+                    
+                    dispatchGroup.wait()
+                    
+                    // if still nil try to fetch item
+                    if item == nil {
+                        dispatchGroup.enter()
+                        self.getClipUrlInfo().subscribe(onNext: { (videoUrl, thumbnailUrl) in
+                            if let videoUrl = videoUrl {
+                                if videoUrl.absoluteString.hasSuffix("mp4") == true {
+                                    item = CachingPlayerItem(url: videoUrl)
+                                } else {
+                                    item = CachingPlayerItem(url: videoUrl, customFileExtension: "mp4")
+                                }
+                            }
+                            dispatchGroup.leave()
+                        })
+                    }
+                    
+                    dispatchGroup.wait()
+                    self.cachedPlayerItem = item
                     self.cachedPlayerItem?.delegate = self
                 }
-
-                // if we get image url
-                // TODO: this will be changed
-                if let thumbnailUrl = thumbnailUrl {
-                    // set thumbnail if we get it back
-                    DispatchQueue.main.async {
-                        self.thumbnail.kf.setImage(with: thumbnailUrl)
-                    }
-                }
+    
+                dispatchGroup.wait()
                 
-                observer.onNext((self.cachedPlayerItem, thumbnailUrl))
-                observer.onCompleted()
+                DispatchQueue.main.async {
+                    observer.onNext((self.cachedPlayerItem, nil))
+                    observer.onCompleted()
+                }
             }
 
             return dispose
@@ -115,6 +141,60 @@ class RedditViewItem {
                 GlobalPlayer.shared.replaceItem(item, self)
             }
         })
+    }
+    
+    func getThumbnailImage(closure: @escaping (_ image: UIImage?) -> Void) {
+        
+        DispatchQueue.global().async {
+            
+            let dispatchGroup = DispatchGroup()
+            var data: Data?
+
+            dispatchGroup.enter()
+            // check storage for image first
+            StorageService.shared.getCachedImage(id: self.redditPost.id) { res in
+                data = res
+                dispatchGroup.leave()
+            }
+            
+            if let d = data {
+                DispatchQueue.main.async {
+                    closure(UIImage(data: d))
+                }
+                return
+            }
+            
+            dispatchGroup.wait()
+            
+            if data == nil {
+                if let youtubeID = self.redditPost.url?.youtubeID {
+                    data = try? Data(contentsOf: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")!)
+                }
+            }
+                
+            if data == nil {
+                dispatchGroup.enter()
+                self.getClipUrlInfo().subscribe(onNext: { (_, thumbnailUrl) in
+                    if let thumbnailUrl = thumbnailUrl {
+                        // TODO: change this and use alamofire - this causes table view lag I think
+                        data = try? Data(contentsOf: thumbnailUrl)
+                    }
+                    dispatchGroup.leave()
+                })
+            }
+            
+            dispatchGroup.wait()
+
+            if let data = data {
+                StorageService.shared.cacheImage(data: data, id: self.redditPost.id)
+            }
+            
+            let image: UIImage? = data != nil ? UIImage(data: data!) : nil
+            
+            DispatchQueue.main.async {
+                closure(image)
+            }
+        }
     }
     
     func toggleFavorite() {
@@ -145,7 +225,7 @@ class RedditViewItem {
 extension RedditViewItem: CachingPlayerItemDelegate {
     
     func playerItem(_ playerItem: CachingPlayerItem, didFinishDownloadingData data: Data) {
-        StorageService.shared.cacheVideoData(data: data, id: self.redditPost.id)
+        StorageService.shared.cacheVideo(data: data, id: self.redditPost.id)
     }
     
     // func playerItemReadyToPlay(_ playerItem: CachingPlayerItem) {

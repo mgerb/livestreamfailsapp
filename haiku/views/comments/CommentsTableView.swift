@@ -13,6 +13,7 @@ import SnapKit
 class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
 
     var didLoad = false
+    var didFinishInitialAnimation = false
     var data: [Any] = ["loading"]
     private let footerHeight: CGFloat = 600
     let redditViewItem: RedditViewItem
@@ -66,6 +67,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
                     self.contentOffset.y = -(self.frame.height / 2)
                 }, completion: {_ in
                     DispatchQueue.main.async {
+                        self.didFinishInitialAnimation = true
                         self.setWhiteBackgroundLayout()
                         self.contentInset.bottom = -(self.footerHeight - 100)
                     }
@@ -163,11 +165,12 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if self.didLoad {
+        if self.didFinishInitialAnimation {
             self.setWhiteBackgroundLayout()
-            if self.contentOffset.y < -(self.frame.height) {
-                self.removeFromSuperview()
-            }
+        }
+        if self.contentOffset.y < -(self.frame.height) {
+            self.removeFromSuperview()
+            self.whiteBackgroundLayer.removeFromSuperview()
         }
     }
     
