@@ -24,10 +24,10 @@ class PlayerCell: UICollectionViewCell {
 
     lazy private var fullScreenButtonContainer: UIView = {
         let view = UIView()
-        self.contentView.addSubview(view)
+        self.addSubview(view)
         view.snp.makeConstraints { make in
-            make.right.equalTo(self.contentView).inset(5)
-            make.bottom.equalTo(self.contentView).inset(5)
+            make.right.equalTo(self).inset(5)
+            make.bottom.equalTo(self).inset(5)
             make.height.equalTo(25)
         }
         view.backgroundColor = .black
@@ -47,16 +47,16 @@ class PlayerCell: UICollectionViewCell {
     
     lazy private var progressBar: UIView = {
         let view = UIView()
-        self.contentView.addSubview(view)
+        self.addSubview(view)
         view.backgroundColor = .red
         return view
     }()
     
     lazy private var playerView: MyPlayerView = {
         let view = MyPlayerView()
-        self.contentView.addSubview(view)
+        self.addSubview(view)
         view.snp.makeConstraints{make in
-            make.edges.equalTo(self.contentView)
+            make.edges.equalTo(self)
         }
         view.alpha = 0
         let bgView = UIView()
@@ -64,7 +64,7 @@ class PlayerCell: UICollectionViewCell {
         view.addSubview(bgView)
         view.sendSubview(toBack: bgView)
         bgView.snp.makeConstraints{make in
-            make.edges.equalTo(self.contentView)
+            make.edges.equalTo(self)
         }
         return view
     }()
@@ -72,7 +72,7 @@ class PlayerCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         let tap = UITapGestureRecognizer(target: self, action: #selector(onTap))
-        self.contentView.addGestureRecognizer(tap)
+        self.addGestureRecognizer(tap)
         self.setGlobalPlayerItemSubscription()
     }
     
@@ -90,10 +90,13 @@ class PlayerCell: UICollectionViewCell {
     }
     
     private func setThumbnail(_ view: UIImageView) {
-        self.thumbnail = view
-        self.contentView.addSubview(self.thumbnail)
-        self.thumbnail.snp.makeConstraints{make in
-            make.edges.equalTo(self.contentView)
+        DispatchQueue.main.async {
+            self.thumbnail = view
+            self.addSubview(self.thumbnail)
+            self.bringSubview(toFront: self.playerView)
+            self.thumbnail.snp.makeConstraints{make in
+                make.edges.equalTo(self)
+            }
         }
     }
 
@@ -116,18 +119,18 @@ class PlayerCell: UICollectionViewCell {
     
     func updateProgressBarConstraints(_ progress: Double?) {
         self.progressBar.snp.remakeConstraints{ make in
-            make.bottom.equalTo(self.contentView).offset(2)
-            make.left.equalTo(self.contentView)
+            make.bottom.equalTo(self).offset(2)
+            make.left.equalTo(self)
             make.height.equalTo(2)
             if progress != nil && progress! > 0 {
-                make.width.equalTo(self.contentView).multipliedBy(progress!)
+                make.width.equalTo(self).multipliedBy(progress!)
             }
         }
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        if self.contentView.contains(self.thumbnail) {
+        if self.contains(self.thumbnail) {
             self.thumbnail.removeFromSuperview()
             self.progressSubscription?.dispose()
             self.redditViewItem = nil
@@ -159,13 +162,11 @@ class PlayerCell: UICollectionViewCell {
     }
     
     func showThumbnail() {
-        self.animateView(view: self.thumbnail, alpha: 1)
         self.animateView(view: self.playerView, alpha: 0)
         self.animateView(view: self.fullScreenButtonContainer, alpha: 0)
     }
     
     func showPlayerView() {
-        self.animateView(view: self.thumbnail, alpha: 0)
         self.animateView(view: self.playerView, alpha: 1)
     }
     

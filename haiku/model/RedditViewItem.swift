@@ -11,6 +11,7 @@ import IGListKit
 import XCDYouTubeKit
 import RxSwift
 import Kingfisher
+import Alamofire
 
 enum RedditViewItemContext {
     case home
@@ -24,6 +25,11 @@ enum RedditViewItemPlayerState {
 }
 
 class RedditViewItem {
+    
+    // manage cached player items
+    // only keep 5 cached at any one time otherwise memory fills up
+    static var cacheManager: [RedditViewItem] = []
+    
     let redditPost: RedditPost
     let disposeBag = DisposeBag()
 
@@ -37,13 +43,15 @@ class RedditViewItem {
     lazy var videoStartTime: Int = self.redditPost.url?.youtubeStartTime ?? 0
     lazy var videoEndTime: Int? = self.redditPost.url?.youtubeEndTime
 
-    lazy var thumbnail: UIImageView = {
+    var thumbnail: UIImageView {
         let view = UIImageView()
+        view.alpha = 0
         self.getThumbnailImage() { image in
             view.image = image
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { view.alpha = 1 }, completion: nil)
         }
         return view
-    }()
+    }
     private var cachedPlayerItem: CachingPlayerItem? = nil
     private var cachedVideoUrl: URL?
     private var cachedThumbnailUrl: URL?
@@ -136,6 +144,7 @@ class RedditViewItem {
     func updateGlobalPlayer() {
         self.getPlayerItem().subscribe(onNext: { (item, _) in
             if let item = item {
+                self.manageVideoCache()
                 StorageService.shared.storeWatchedRedditPost(redditPost: self.redditPost)
                 self.markedAsWatched.onNext(true)
                 GlobalPlayer.shared.replaceItem(item, self)
@@ -176,8 +185,16 @@ class RedditViewItem {
                 dispatchGroup.enter()
                 self.getClipUrlInfo().subscribe(onNext: { (_, thumbnailUrl) in
                     if let thumbnailUrl = thumbnailUrl {
-                        // TODO: change this and use alamofire - this causes table view lag I think
-                        data = try? Data(contentsOf: thumbnailUrl)
+                        dispatchGroup.enter()
+                        Alamofire.request(thumbnailUrl).validate().responseData { res in
+                            switch res.result {
+                            case .success(let d):
+                                data = d
+                            case .failure(let err):
+                                print(err)
+                            }
+                            dispatchGroup.leave()
+                        }
                     }
                     dispatchGroup.leave()
                 })
@@ -195,6 +212,14 @@ class RedditViewItem {
                 closure(image)
             }
         }
+    }
+    
+    func manageVideoCache() {
+        if RedditViewItem.cacheManager.count >= 5 {
+            let item = RedditViewItem.cacheManager.removeLast()
+            item.cachedPlayerItem = nil
+        }
+        RedditViewItem.cacheManager.insert(self, at: 0)
     }
     
     func toggleFavorite() {
