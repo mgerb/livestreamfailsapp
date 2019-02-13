@@ -37,15 +37,12 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
         switch index {
         case 0:
             let cell = collectionContext!.dequeueReusableCell(of: TitleCollectionViewCell.self, for: self, at: index) as! TitleCollectionViewCell
-            cell.setRedditViewItem(item: self.redditViewItem)
             return cell
         case 1:
             let cell = collectionContext!.dequeueReusableCell(of: PlayerCell.self, for: self, at: index) as! PlayerCell
-            cell.setRedditViewItem(item: self.redditViewItem)
             return cell
         case 2:
             let cell = collectionContext!.dequeueReusableCell(of: InfoRowCell.self, for: self, at: index) as! InfoRowCell
-            cell.setRedditViewItem(item: self.redditViewItem)
             return cell
         default:
             return collectionContext!.dequeueReusableCell(of: UICollectionViewCell.self, for: self, at: index)
@@ -57,8 +54,6 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
             self.redditViewItem = item
         }
     }
-    
-    override func didSelectItem(at index: Int) {}
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {
         // TODO: maybe change this back?
@@ -78,6 +73,19 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
     }
     
     func listAdapter(_ listAdapter: ListAdapter, willDisplay sectionController: ListSectionController, cell: UICollectionViewCell, at index: Int) {
+        if index >= 0 || index <= 2 {
+            if let cell = cell as? TitleCollectionViewCell {
+                cell.setRedditViewItem(item: self.redditViewItem)
+            }
+
+            if let cell = cell as? InfoRowCell {
+                cell.setRedditViewItem(item: self.redditViewItem)
+            }
+
+            if let cell = cell as? PlayerCell {
+                cell.setRedditViewItem(item: self.redditViewItem)
+            }
+        }
     }
     
     func listAdapter(_ listAdapter: ListAdapter, didEndDisplaying sectionController: ListSectionController, cell: UICollectionViewCell, at index: Int) {

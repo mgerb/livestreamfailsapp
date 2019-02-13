@@ -29,6 +29,6 @@ class MyNavigation {
             self.rootViewController?.present(playerViewController, animated: true) {
                 playerViewController.player!.play()
             }
-        }).dispose()
+        })
     }
 }

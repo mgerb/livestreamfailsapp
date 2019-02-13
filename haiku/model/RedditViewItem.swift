@@ -141,15 +141,15 @@ class RedditViewItem {
         }.share()
     }
 
-    func updateGlobalPlayer() {
-        self.getPlayerItem().subscribe(onNext: { (item, _) in
+    func updateGlobalPlayer() -> Observable<Void> {
+        return self.getPlayerItem().map { (item, _) in
             if let item = item {
                 self.manageVideoCache()
                 StorageService.shared.storeWatchedRedditPost(redditPost: self.redditPost)
                 self.markedAsWatched.onNext(true)
                 GlobalPlayer.shared.replaceItem(item, self)
             }
-        })
+        }
     }
     
     func getThumbnailImage(closure: @escaping (_ image: UIImage?) -> Void) {

@@ -15,65 +15,79 @@ import SwiftIcons
 
 class PlayerCell: UICollectionViewCell {
     
-    private var redditViewItem: RedditViewItem?
+    public var redditViewItem: RedditViewItem?
     private var thumbnail = UIImageView()
+    
     // used to unsubscribe when component deinits
     let disposeBag = DisposeBag()
+    
     // used to unsubscribe when reddit post will change
     var progressSubscription: Disposable?
 
     lazy private var fullScreenButtonContainer: UIView = {
         let view = UIView()
-        self.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.right.equalTo(self).inset(5)
-            make.bottom.equalTo(self).inset(5)
-            make.height.equalTo(25)
-        }
         view.backgroundColor = .black
         view.layer.cornerRadius = 4
         view.alpha = 0
 
-        // button
-        let button = UIButton()
-        view.addSubview(button)
-        button.addTarget(self, action: #selector(fullScreenButtonAction), for: .touchUpInside)
-        button.snp.makeConstraints { make in
-            make.edges.equalTo(view)
-        }
-        button.setIcon(icon: .googleMaterialDesign(.fullscreen), iconSize: 25, color: Config.colors.white, forState: .normal)
         return view
+    }()
+    
+    lazy private var fullScreenButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(fullScreenButtonAction), for: .touchUpInside)
+        button.setIcon(icon: .googleMaterialDesign(.fullscreen), iconSize: 25, color: Config.colors.white, forState: .normal)
+        return button
     }()
     
     lazy private var progressBar: UIView = {
         let view = UIView()
-        self.addSubview(view)
         view.backgroundColor = .red
         return view
     }()
     
     lazy private var playerView: MyPlayerView = {
         let view = MyPlayerView()
-        self.addSubview(view)
-        view.snp.makeConstraints{make in
-            make.edges.equalTo(self)
-        }
         view.alpha = 0
-        let bgView = UIView()
-        bgView.backgroundColor = .black
-        view.addSubview(bgView)
-        view.sendSubview(toBack: bgView)
-        bgView.snp.makeConstraints{make in
-            make.edges.equalTo(self)
-        }
         return view
     }()
     
+    lazy private var bgView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        return view
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(onTap))
+        tap.cancelsTouchesInView = false
+        self.addGestureRecognizer(tap)
+        
+        // add subviews
+        self.addSubview(self.playerView)
+        self.playerView.addSubview(self.bgView)
+        self.playerView.sendSubview(toBack: self.bgView)
+        self.addSubview(self.fullScreenButtonContainer)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
-        let tap = UITapGestureRecognizer(target: self, action: #selector(onTap))
-        self.addGestureRecognizer(tap)
         self.setGlobalPlayerItemSubscription()
+
+        // player view
+        self.playerView.pin.all()
+        self.bgView.pin.all()
+
+        // full screen button
+        self.fullScreenButtonContainer.pin.right().bottom().height(25).width(30).marginRight(5).marginBottom(5)
+        self.fullScreenButtonContainer.addSubview(self.fullScreenButton)
+        self.fullScreenButton.pin.all()
     }
     
     func setRedditViewItem(item: RedditViewItem) {
@@ -82,9 +96,8 @@ class PlayerCell: UICollectionViewCell {
         self.setRedditViewItemSubscriptions()
         if GlobalPlayer.shared.isActivePlayerItem(item: self.redditViewItem!) {
             self.showPlayerView()
-            self.playerView.player = GlobalPlayer.shared.player
         } else {
-            self.showThumbnail()
+            self.showThumbnail(false)
             self.playerView.player = nil
         }
     }
@@ -93,40 +106,37 @@ class PlayerCell: UICollectionViewCell {
         DispatchQueue.main.async {
             self.thumbnail = view
             self.addSubview(self.thumbnail)
-            self.bringSubview(toFront: self.playerView)
-            self.thumbnail.snp.makeConstraints{make in
-                make.edges.equalTo(self)
-            }
+            self.thumbnail.pinFrame.all()
+            self.bringSubview(toFront: self.fullScreenButtonContainer)
         }
     }
 
      func setRedditViewItemSubscriptions() {
-         self.progressSubscription = self.redditViewItem!.playerProgress.subscribe(onNext: { p in
-            self.updateProgressBarConstraints(p)
-         })
+//         self.progressSubscription = self.redditViewItem!.playerProgress.subscribe(onNext: { p in
+//            self.updateProgressBarConstraints(p)
+//         })
      }
     
     func setGlobalPlayerItemSubscription() {
         GlobalPlayer.shared.activeRedditViewItem.subscribe(onNext: { item in
-            if self.redditViewItem! === item {
+            if self.redditViewItem === item {
                 self.showPlayerView()
-                self.playerView.playerLayer.player = GlobalPlayer.shared.player
             } else {
-                self.showThumbnail()
+                self.showThumbnail(true)
             }
         }).disposed(by: self.disposeBag)
     }
     
-    func updateProgressBarConstraints(_ progress: Double?) {
-        self.progressBar.snp.remakeConstraints{ make in
-            make.bottom.equalTo(self).offset(2)
-            make.left.equalTo(self)
-            make.height.equalTo(2)
-            if progress != nil && progress! > 0 {
-                make.width.equalTo(self).multipliedBy(progress!)
-            }
-        }
-    }
+//    func updateProgressBarConstraints(_ progress: Double?) {
+//        self.progressBar.snp.remakeConstraints{ make in
+//            make.bottom.equalTo(self).offset(2)
+//            make.left.equalTo(self)
+//            make.height.equalTo(2)
+//            if progress != nil && progress! > 0 {
+//                make.width.equalTo(self).multipliedBy(progress!)
+//            }
+//        }
+//    }
 
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -144,7 +154,7 @@ class PlayerCell: UICollectionViewCell {
     
     @objc func onTap() {
         DispatchQueue.main.async {
-            self.redditViewItem!.updateGlobalPlayer()
+            _ = self.redditViewItem!.updateGlobalPlayer().subscribe()
             self.toggleFullScreenButton()
         }
     }
@@ -161,13 +171,22 @@ class PlayerCell: UICollectionViewCell {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: self.fullScreenTimeoutTask!)
     }
     
-    func showThumbnail() {
-        self.animateView(view: self.playerView, alpha: 0)
-        self.animateView(view: self.fullScreenButtonContainer, alpha: 0)
+    func showThumbnail(_ animated: Bool) {
+        if animated {
+            self.animateView(view: self.playerView, alpha: 0)
+            self.animateView(view: self.fullScreenButtonContainer, alpha: 0)
+            self.animateView(view: self.thumbnail, alpha: 1)
+        } else {
+            self.playerView.alpha = 0
+            self.fullScreenButtonContainer.alpha = 0
+            self.thumbnail.alpha = 1
+        }
     }
     
     func showPlayerView() {
+        self.playerView.playerLayer.player = GlobalPlayer.shared.player
         self.animateView(view: self.playerView, alpha: 1)
+        self.animateView(view: self.thumbnail, alpha: 0)
     }
     
     func animateView(view: UIView, alpha: CGFloat) {
