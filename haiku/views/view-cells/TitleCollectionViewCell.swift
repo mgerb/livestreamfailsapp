@@ -21,16 +21,19 @@ class TitleCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = Config.defaultFont
         label.textColor = Config.colors.font1
+        label.numberOfLines = 0
         return label
     }()
 
     func setRedditViewItem(item: RedditViewItem) {
         self.redditViewItem = item
-        self.label.text = item.redditPost.title.replaceEncoding()
-        self.label.numberOfLines = 0
         _ = self.redditViewItem?.markedAsWatched.takeUntil(self.rxUnsubscribe).subscribe(onNext: { watched in
             self.label.textColor = watched && self.redditViewItem?.context == .home ? Config.colors.font2 : Config.colors.font1
         })
+        
+        DispatchQueue.main.async {
+            self.label.text = item.redditPost.title.replaceEncoding()
+        }
     }
 
     override func layoutSubviews() {

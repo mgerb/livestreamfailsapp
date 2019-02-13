@@ -13,11 +13,11 @@ import RealmSwift
 
 class StorageService {
     static let shared = StorageService()
-    
+
     private lazy var realm = try? Realm()
 
     private let diskConfig = DiskConfig(name: "diskData")
-    private let memoryConfig = MemoryConfig(expiry: .never, countLimit: 5, totalCostLimit: 10)
+    private let memoryConfig = MemoryConfig(expiry: .never, countLimit: 50, totalCostLimit: 10)
     lazy private var diskStorage: Storage<Data>? = try? Storage(
         diskConfig: self.diskConfig,
         memoryConfig: self.memoryConfig,
@@ -29,7 +29,7 @@ class StorageService {
 /// data storage with Cache
 extension StorageService {
     private func diskCacheData(data: Data, id: String) {
-        self.diskStorage!.async.setObject(data, forKey: id) { $0 }
+        self.diskStorage!.async.setObject(data, forKey: id) { _ in }
     }
     
     private func getDiskCacheData(id: String, closure: @escaping (_ data: Data?) -> Void) {
@@ -37,7 +37,7 @@ extension StorageService {
             switch result {
             case .value(let val):
                 closure(val)
-            case .error(let err):
+            case .error(_):
                 closure(nil)
             }
         }

@@ -46,9 +46,13 @@ class RedditViewItem {
     var thumbnail: UIImageView {
         let view = UIImageView()
         view.alpha = 0
-        self.getThumbnailImage() { image in
+        self.getThumbnailImage() { (image, animate) in
             view.image = image
-            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { view.alpha = 1 }, completion: nil)
+            if animate {
+                UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { view.alpha = 1 }, completion: nil)
+            } else {
+                view.alpha = 1
+            }
         }
         return view
     }
@@ -152,7 +156,7 @@ class RedditViewItem {
         }
     }
     
-    func getThumbnailImage(closure: @escaping (_ image: UIImage?) -> Void) {
+    func getThumbnailImage(closure: @escaping (_ image: UIImage?, _ animate: Bool) -> Void) {
         
         DispatchQueue.global().async {
             
@@ -166,9 +170,11 @@ class RedditViewItem {
                 dispatchGroup.leave()
             }
             
+            dispatchGroup.wait()
+            
             if let d = data {
                 DispatchQueue.main.async {
-                    closure(UIImage(data: d))
+                    closure(UIImage(data: d), false)
                 }
                 return
             }
@@ -209,7 +215,8 @@ class RedditViewItem {
             let image: UIImage? = data != nil ? UIImage(data: data!) : nil
             
             DispatchQueue.main.async {
-                closure(image)
+                // animate after network call because it took some time to load
+                closure(image, true)
             }
         }
     }

@@ -67,7 +67,7 @@ class PlayerCell: UICollectionViewCell {
         
         // add subviews
         self.addSubview(self.playerView)
-        self.playerView.addSubview(self.bgView)
+//        self.playerView.addSubview(self.bgView)
         self.playerView.sendSubview(toBack: self.bgView)
         self.addSubview(self.fullScreenButtonContainer)
     }
@@ -82,7 +82,7 @@ class PlayerCell: UICollectionViewCell {
 
         // player view
         self.playerView.pin.all()
-        self.bgView.pin.all()
+//        self.bgView.pin.all()
 
         // full screen button
         self.fullScreenButtonContainer.pin.right().bottom().height(25).width(30).marginRight(5).marginBottom(5)
@@ -92,13 +92,16 @@ class PlayerCell: UICollectionViewCell {
     
     func setRedditViewItem(item: RedditViewItem) {
         self.redditViewItem = item
-        self.setThumbnail(self.redditViewItem!.thumbnail)
         self.setRedditViewItemSubscriptions()
-        if GlobalPlayer.shared.isActivePlayerItem(item: self.redditViewItem!) {
-            self.showPlayerView()
-        } else {
-            self.showThumbnail(false)
-            self.playerView.player = nil
+        
+        DispatchQueue.main.async {
+            self.setThumbnail(self.redditViewItem!.thumbnail)
+            if GlobalPlayer.shared.isActivePlayerItem(item: self.redditViewItem!) {
+                self.showPlayerView()
+            } else {
+                self.showThumbnail(false)
+                self.playerView.player = nil
+            }
         }
     }
     
@@ -107,6 +110,7 @@ class PlayerCell: UICollectionViewCell {
             self.thumbnail = view
             self.addSubview(self.thumbnail)
             self.thumbnail.pinFrame.all()
+            self.bringSubview(toFront: self.playerView)
             self.bringSubview(toFront: self.fullScreenButtonContainer)
         }
     }
@@ -179,14 +183,14 @@ class PlayerCell: UICollectionViewCell {
         } else {
             self.playerView.alpha = 0
             self.fullScreenButtonContainer.alpha = 0
-            self.thumbnail.alpha = 1
+//            self.thumbnail.alpha = 1
         }
     }
     
     func showPlayerView() {
         self.playerView.playerLayer.player = GlobalPlayer.shared.player
         self.animateView(view: self.playerView, alpha: 1)
-        self.animateView(view: self.thumbnail, alpha: 0)
+//        self.animateView(view: self.thumbnail, alpha: 0)
     }
     
     func animateView(view: UIView, alpha: CGFloat) {

@@ -23,10 +23,13 @@ class MainCollectionViewController: YaikuCollectionViewController {
                 // TODO: filter out reddit posts with bad url's
                 return item
             }
-            self.data = after == nil ? redditViewItems : self.data + redditViewItems
-            self.adapter.performUpdates(animated: true, completion: { _ in
-                self.refreshControl.endRefreshing()
-            })
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.data = after == nil ? redditViewItems : self.data + redditViewItems
+                self.adapter.performUpdates(animated: true, completion: { _ in
+                    self.refreshControl.endRefreshing()
+                })
+            }
         }
     }
 }

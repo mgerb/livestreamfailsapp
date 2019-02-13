@@ -56,11 +56,10 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
     }
 
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {
-        // TODO: maybe change this back?
-    //    if let controller = sectionController as? RedditViewItemSectionController {
-    //         // pre load player item
-    //        controller.redditViewItem?.getPlayerItem().subscribe()
-    //    }
+        if let controller = sectionController as? RedditViewItemSectionController {
+             // pre thumbnails
+            controller.redditViewItem?.getThumbnailImage() { (_, _) in }
+        }
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerDidExitWorkingRange sectionController: ListSectionController) {

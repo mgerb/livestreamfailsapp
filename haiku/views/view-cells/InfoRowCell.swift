@@ -98,17 +98,20 @@ class InfoRowCell: UICollectionViewCell {
     
     func setRedditViewItem(item: RedditViewItem) {
         self.redditViewItem = item
-        self.scoreLabel.text = item.redditPost.score.commaRepresentation
-        self.scoreLabel.flex.markDirty()
-        self.commentsButton.setTitle(String(item.redditPost.num_comments), for: .normal)
-        self.commentsButton.flex.markDirty()
-        self.commentBubble.flex.markDirty()
-        self.timeStampLabel.text = item.humanTimeStampExtended
-        self.timeStampLabel.flex.markDirty()
-        self.rootViewContainer.flex.layout(mode: .adjustHeight)
         _ = self.redditViewItem?.favorited.takeUntil(self.rxUnsubscribe.asObservable()).subscribe(onNext: { favorited in
             self.setFavoriteButton(favorited)
         })
+        
+        DispatchQueue.main.async {
+            self.scoreLabel.text = item.redditPost.score.commaRepresentation
+            self.scoreLabel.flex.markDirty()
+            self.commentsButton.setTitle(String(item.redditPost.num_comments), for: .normal)
+            self.commentsButton.flex.markDirty()
+            self.commentBubble.flex.markDirty()
+            self.timeStampLabel.text = item.humanTimeStampExtended
+            self.timeStampLabel.flex.markDirty()
+            self.rootViewContainer.flex.layout(mode: .adjustHeight)
+        }
     }
 
     private func setFavoriteButton(_ favorited: Bool) {
