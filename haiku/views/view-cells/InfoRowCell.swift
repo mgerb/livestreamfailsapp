@@ -45,7 +45,8 @@ class InfoRowCell: UICollectionViewCell {
         button.setTitle("", for: .normal)
         button.setTitleColor(Config.colors.font1, for: .normal)
         button.titleLabel?.font = Config.smallFont
-        button.contentHorizontalAlignment = .left
+        // set to nearly zero for left/right as 0 makes it use default values...
+        button.contentEdgeInsets = UIEdgeInsets(top: 0.1, left: 0.1, bottom: 0.1, right: 0.1)
         button.addTarget(self, action: #selector(commentsButtonAction), for: .touchUpInside)
         return button
     }()
@@ -68,11 +69,15 @@ class InfoRowCell: UICollectionViewCell {
                     l.setIcon(icon: .googleMaterialDesign(.arrowUpward), iconSize: 20)
                     l.textColor = Config.colors.font1
                     
-                    flex.addItem(l).marginLeft(-5)
-                    flex.addItem(self.scoreLabel)
-                    flex.addItem(self.commentBubble).marginLeft(10)
-                    flex.addItem(self.commentsButton)
-                    flex.addItem(self.timeStampLabel)
+                    flex.addItem().direction(.row).define { flex in
+                        flex.addItem(l).marginLeft(-5)
+                        flex.addItem(self.scoreLabel)
+                    }
+                    flex.addItem().direction(.row).marginLeft(10).define { flex  in
+                        flex.addItem(self.commentBubble)
+                        flex.addItem(self.commentsButton)
+                    }
+                    flex.addItem(self.timeStampLabel).marginLeft(10)
                 }
                 
                 flex.addItem().direction(.row).define{ flex in
@@ -110,7 +115,7 @@ class InfoRowCell: UICollectionViewCell {
             self.commentBubble.flex.markDirty()
             self.timeStampLabel.text = item.humanTimeStampExtended
             self.timeStampLabel.flex.markDirty()
-            self.rootViewContainer.flex.layout(mode: .adjustHeight)
+            self.rootViewContainer.flex.layout()
         }
     }
 

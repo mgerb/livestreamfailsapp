@@ -222,11 +222,13 @@ class RedditViewItem {
     }
     
     func manageVideoCache() {
-        if RedditViewItem.cacheManager.count >= 5 {
-            let item = RedditViewItem.cacheManager.removeLast()
-            item.cachedPlayerItem = nil
+        if !RedditViewItem.cacheManager.contains(where: { $0.redditPost.id == self.redditPost.id }) {
+            if RedditViewItem.cacheManager.count >= 5 {
+                let item = RedditViewItem.cacheManager.removeLast()
+                item.cachedPlayerItem = nil
+            }
+            RedditViewItem.cacheManager.insert(self, at: 0)
         }
-        RedditViewItem.cacheManager.insert(self, at: 0)
     }
     
     func toggleFavorite() {

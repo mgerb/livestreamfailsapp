@@ -99,8 +99,7 @@ class PlayerCell: UICollectionViewCell {
             if GlobalPlayer.shared.isActivePlayerItem(item: self.redditViewItem!) {
                 self.showPlayerView()
             } else {
-                self.showThumbnail(false)
-                self.playerView.player = nil
+                self.showThumbnail(true)
             }
         }
     }
@@ -144,12 +143,10 @@ class PlayerCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        if self.contains(self.thumbnail) {
             self.thumbnail.removeFromSuperview()
             self.progressSubscription?.dispose()
             self.redditViewItem = nil
         }
-    }
     
     @objc func fullScreenButtonAction() {
         GlobalPlayer.shared.pause()
@@ -176,25 +173,30 @@ class PlayerCell: UICollectionViewCell {
     }
     
     func showThumbnail(_ animated: Bool) {
+        // no need to do animation if already hidden
+        if self.playerView.alpha == 0 && self.fullScreenButtonContainer.alpha == 0 {
+            return
+        }
+        
+        self.playerView.playerLayer.player = nil
+        
         if animated {
             self.animateView(view: self.playerView, alpha: 0)
             self.animateView(view: self.fullScreenButtonContainer, alpha: 0)
-            self.animateView(view: self.thumbnail, alpha: 1)
         } else {
             self.playerView.alpha = 0
             self.fullScreenButtonContainer.alpha = 0
-//            self.thumbnail.alpha = 1
         }
     }
     
     func showPlayerView() {
         self.playerView.playerLayer.player = GlobalPlayer.shared.player
+        self.playerView.playerLayer.setNeedsDisplay()
         self.animateView(view: self.playerView, alpha: 1)
-//        self.animateView(view: self.thumbnail, alpha: 0)
     }
     
     func animateView(view: UIView, alpha: CGFloat) {
-        UIView.animate(withDuration: 0.4, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             view.alpha = alpha
         })
     }
