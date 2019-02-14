@@ -192,15 +192,17 @@ class RedditViewItem {
                 self.getClipUrlInfo().subscribe(onNext: { (_, thumbnailUrl) in
                     if let thumbnailUrl = thumbnailUrl {
                         dispatchGroup.enter()
-                        Alamofire.request(thumbnailUrl).validate().responseData { res in
-                            switch res.result {
-                            case .success(let d):
-                                data = d
-                            case .failure(let err):
-                                print(err)
-                            }
-                            dispatchGroup.leave()
-                        }
+                        let queue = DispatchQueue(label: "RedditViewItem.getThumbnailImage", qos: .utility, attributes: [.concurrent])
+                        Alamofire.request(thumbnailUrl).validate()
+                            .response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { res in
+                                switch res.result {
+                                case .success(let d):
+                                    data = d
+                                case .failure(let err):
+                                    print(err)
+                                }
+                                dispatchGroup.leave()
+                        })
                     }
                     dispatchGroup.leave()
                 })

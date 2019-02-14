@@ -92,7 +92,10 @@ class ClipUrlService: NSObject {
     
     /// fetch html page and parse source URL's from video element
     private func getUrlsFromHtml(_ urlString: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
-        Alamofire.request(urlString).validate().responseString { res in
+        let queue = DispatchQueue(label: "ClipUrlService.getUrlsFromHtml", qos: .utility, attributes: [.concurrent])
+        Alamofire.request(urlString).validate().response(queue: queue, responseSerializer: DataRequest.stringResponseSerializer(), completionHandler: { res in
+            var videoUrl: URL?, thumbnailUrl: URL?
+            
             switch res.result {
             case .success(let val):
                 do {
@@ -105,19 +108,19 @@ class ClipUrlService: NSObject {
                     let thumbnail = try videoElem.first()?.attr("poster")
 
                     if let video = video, let thumbnail = thumbnail {
-                        let videoUrl = URL(string: video)
-                        let thumbnailUrl = URL(string: thumbnail)
-                        closure((videoUrl, thumbnailUrl))
-                    } else {
-                        closure((nil, nil))
+                        videoUrl = URL(string: video)
+                        thumbnailUrl = URL(string: thumbnail)
                     }
                 } catch {
-                    closure((nil, nil))
+                    // do nothing
                 }
             case .failure(let error):
                 print(error)
-                closure((nil, nil))
             }
-        }
+            
+            DispatchQueue.main.async {
+                closure((videoUrl, thumbnailUrl))
+            }
+        })
     }
 }

@@ -25,20 +25,21 @@ class TwitchService {
     
     func getTwitchClipUrl(clipID: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
         let url = self.clipsBaseUrl + clipID
-        Alamofire.request(url, headers: self.headers).responseData{ response in
-            switch response.result {
-            case .success(let res):
-                let json = JSON(res)
+        let queue = DispatchQueue(label: "TwitchService.getTwitchClipUrl", qos: .utility, attributes: [.concurrent])
+        Alamofire.request(url, headers: self.headers).validate().response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { response in
+            
+            var videoUrl: URL?, thumbnailUrl: URL?
+            
+            if let data = response.data {
+                let json = JSON(data)
                 if let urlString = self.getClipUrl(json: json), let url = URL(string: urlString) {
-                    closure((url, self.getClipThumbnailUrl(json: json)))
-                    return
+                    videoUrl = url
+                    thumbnailUrl = self.getClipThumbnailUrl(json: json)
                 }
-                break
-            case .failure(_):
-                break;
             }
-            closure((nil, nil))
-        }
+            
+            closure((videoUrl, thumbnailUrl))
+        })
     }
     
     private func getClipThumbnailUrl(json: JSON) -> URL? {

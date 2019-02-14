@@ -114,30 +114,42 @@ class RedditService: RequestAdapter, RequestRetrier {
             url = url + ("&after=" + after!)
         }
 
-        Alamofire.request(url, headers: self.headers).responseData{ response in
-            switch response.result {
-            case .success(let res):
-                if let data = try? JSONDecoder().decode(RedditPostListing.self, from: res) {
-                    let newData = data.data.children.compactMap { $0.data }
-                    closure(newData)
+        let queue = DispatchQueue(label: "RedditService.getHaikus", qos: .utility, attributes: [.concurrent])
+        Alamofire.request(url, headers: self.headers).validate()
+            .response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { response in
+                var posts: [RedditPost] = []
+
+                switch response.result {
+                case .success(let res):
+                    if let data = try? JSONDecoder().decode(RedditPostListing.self, from: res) {
+                        posts = data.data.children.compactMap { $0.data }
+                    }
+                case .failure(let err):
+                    print(err)
                 }
-            case .failure(_):
-                closure([])
-            }
-        }
+    
+                closure(posts)
+        })
     }
     
     private func getComments(permalink: String, params: Parameters = [:], closure: @escaping ((_ data: JSON?) -> Void)) {
         let url = "https://www.reddit.com\(permalink).json"
-        Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.httpBody, headers: self.headers).validate().responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                closure(JSON(value)[1])
-            case .failure(let error):
-                print(error)
-                closure(nil)
-            }
-        }
+        let queue = DispatchQueue(label: "RedditService.getComments", qos: .utility, attributes: [.concurrent])
+        Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.httpBody, headers: self.headers).validate()
+            .response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { response in
+                switch response.result {
+                case .success(let value):
+                    let val = JSON(value)[1]
+                    DispatchQueue.main.async {
+                        closure(val)
+                    }
+                case .failure(let error):
+                    print(error)
+                    DispatchQueue.main.async {
+                        closure(nil)
+                    }
+                }
+        })
     }
     
     func getFirstComment(permalink: String, closure: @escaping ((_ data: RedditComment?) -> Void)) {
