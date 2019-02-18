@@ -4,10 +4,15 @@ import RxSwift
 
 class MainCollectionViewController: YaikuCollectionViewController {
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.collectionView.contentOffset.y = SortBarCollectionViewCell.height
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.isAtBottom && !self.refreshControl.isRefreshing {
             if self.data.count > 0 {
-                if let redditViewItem = self.data[self.data.count - 1] as RedditViewItem? {
+                if let redditViewItem = self.data[self.data.count - 1] as? RedditViewItem {
                     self.refreshControl.beginRefreshing()
                     self.fetchHaikus(redditViewItem.redditPost.name)
                 }
@@ -16,6 +21,8 @@ class MainCollectionViewController: YaikuCollectionViewController {
     }
 
     override func fetchHaikus(_ after: String? = nil) {
+        super.fetchHaikus()
+        
         RedditService.shared.getHaikus(after: after){ redditPosts in
             let redditViewItems: [RedditViewItem] = redditPosts.compactMap {
                 let item = RedditViewItem($0, context: .home)
@@ -25,9 +32,18 @@ class MainCollectionViewController: YaikuCollectionViewController {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.data = after == nil ? redditViewItems : self.data + redditViewItems
+                let sortBar = ["sort bar"] as [ListDiffable]
+                if after == nil {
+                    self.data = sortBar + redditViewItems
+                } else {
+                    self.data = self.data + redditViewItems
+                }
+                
                 self.adapter.performUpdates(animated: true, completion: { _ in
                     self.refreshControl.endRefreshing()
+                    if after == nil {
+                        self.collectionView.setContentOffset(CGPoint(x: 0, y: SortBarCollectionViewCell.height), animated: true)
+                    }
                 })
             }
         }

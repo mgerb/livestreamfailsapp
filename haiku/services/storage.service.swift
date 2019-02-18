@@ -114,7 +114,7 @@ extension StorageService {
         if let posts = self.realm?.objects(RealmRedditPost.self) {
             return posts
                 .map { $0.getRedditPost() }
-                .sorted(by: {$0.dateAdded!.compare($1.dateAdded!) == .orderedDescending})
+                .sorted(by: {$0.dateAdded?.compare($1.dateAdded ?? Date()) == .orderedDescending})
         }
         return []
     }

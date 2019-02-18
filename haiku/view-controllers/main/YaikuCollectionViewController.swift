@@ -3,7 +3,7 @@ import UIKit
 import RxSwift
 
 class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UIScrollViewDelegate {
-    var data: [RedditViewItem] = []
+    var data: [ListDiffable] = []
     let refreshControl = UIRefreshControl()
     let disposeBag = DisposeBag()
     var commentsTableView: CommentsTableView?
@@ -47,19 +47,27 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        return RedditViewItemSectionController()
+        if let _ = object as? RedditViewItem {
+            return RedditViewItemSectionController()
+        } else {
+            return SortBarSectionController()
+        }
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? { return nil }
     
     @objc func fetchInitial(_ sender: Any? = nil) {
-        if !self.refreshControl.isRefreshing {
-            self.refreshControl.beginRefreshing()
-        }
         self.fetchHaikus()
     }
     
-    func fetchHaikus(_ after: String? = nil) {}
+    func fetchHaikus(_ after: String? = nil) {
+        if after == nil {
+            if !self.refreshControl.isRefreshing {
+                self.refreshControl.beginRefreshing()
+            }
+        }
+        GlobalPlayer.shared.pause()
+    }
 
     func setupSubjectSubscriptions() {
         // show comments list
@@ -69,6 +77,11 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
                 self.commentsTableView = CommentsTableView(frame: self.view.frame, redditViewItem: redditViewItem)
                 self.view.addSubview(self.commentsTableView!)
             }
+        }).disposed(by: self.disposeBag)
+        
+        Subjects.shared.sortButtonAction.subscribe(onNext: {
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl.frame.height), animated: true)
+            self.fetchHaikus()
         }).disposed(by: self.disposeBag)
     }
 }

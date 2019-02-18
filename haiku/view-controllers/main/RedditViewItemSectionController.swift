@@ -4,7 +4,6 @@ import AVKit
 
 final class RedditViewItemSectionController: ListSectionController, ListDisplayDelegate, ListWorkingRangeDelegate {
 
-
     public var redditViewItem: RedditViewItem!
 
     override init() {

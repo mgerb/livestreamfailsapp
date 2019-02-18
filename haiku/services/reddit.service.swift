@@ -20,6 +20,7 @@ class RedditService: RequestAdapter, RequestRetrier {
         "User-Agent": "ios:\(String(describing: Bundle.main.bundleIdentifier)):\(Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String ?? "1.0.0")"
     ]
     static let shared = RedditService()
+    var redditPostSortBy = "hot"
     let client_id = "Y2NoNa4zUyLbCA"
     let password = ""
     let oauthUrl = "https://www.reddit.com/api/v1/access_token"
@@ -109,13 +110,17 @@ class RedditService: RequestAdapter, RequestRetrier {
 
     // returns a list of youtube ID's from youtube haiku
     func getHaikus(after: String?, closure: @escaping (_ data: [RedditPost]) -> Void) {
-        var url = "https://reddit.com/r/livestreamfail.json?limit=25"
-        if (after != nil) {
-            url = url + ("&after=" + after!)
+        let url = "https://reddit.com/r/livestreamfail/\(self.redditPostSortBy)/.json"
+        var parameters = [
+            "limit": "25"
+        ]
+        
+        if let after = after {
+            parameters["after"] = after
         }
 
         let queue = DispatchQueue(label: "RedditService.getHaikus", qos: .utility, attributes: [.concurrent])
-        Alamofire.request(url, headers: self.headers).validate()
+        Alamofire.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: self.headers).validate()
             .response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { response in
                 var posts: [RedditPost] = []
 
@@ -135,7 +140,7 @@ class RedditService: RequestAdapter, RequestRetrier {
     private func getComments(permalink: String, params: Parameters = [:], closure: @escaping ((_ data: JSON?) -> Void)) {
         let url = "https://www.reddit.com\(permalink).json"
         let queue = DispatchQueue(label: "RedditService.getComments", qos: .utility, attributes: [.concurrent])
-        Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.httpBody, headers: self.headers).validate()
+        Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.default, headers: self.headers).validate()
             .response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { response in
                 switch response.result {
                 case .success(let value):

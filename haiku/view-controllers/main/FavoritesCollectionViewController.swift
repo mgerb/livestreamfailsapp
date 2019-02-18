@@ -18,6 +18,8 @@ class FavoritesCollectionViewController: YaikuCollectionViewController {
     }
     
     override func fetchHaikus(_ after: String? = nil) {
+        super.fetchHaikus()
+        
         let redditPosts = StorageService.shared.getRedditPostFavorites()
         // create section view items from reddit posts
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {

@@ -60,6 +60,7 @@ class InfoRowCell: UICollectionViewCell {
 
     lazy private var rootViewContainer: UIView = {
         let view = UIView()
+        self.addSubview(view)
         view.flex.define{ flex in
             flex.addItem().justifyContent(.spaceBetween).direction(.row).padding(10).paddingBottom(0).paddingTop(5).define{ flex in
                 
@@ -91,7 +92,6 @@ class InfoRowCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.contentView.addSubview(self.rootViewContainer)
         self.rootViewContainer.pin.all()
         self.rootViewContainer.flex.layout(mode: .adjustHeight)
     }

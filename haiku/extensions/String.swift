@@ -132,7 +132,10 @@ extension String {
     }
     
     func replaceEncoding() -> String {
-        return self.replacingOccurrences(of: "&amp;", with: "&")
+        return self
+            .replacingOccurrences(of: "&amp;", with: "&")
+            .replacingOccurrences(of: "&lt;", with: "<")
+            .replacingOccurrences(of: "&gt;", with: ">")
     }
     
     var htmlToAttributedString: NSMutableAttributedString? {
