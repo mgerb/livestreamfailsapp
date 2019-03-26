@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class SettingsViewController: UITableViewController {
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -19,51 +19,62 @@ class SettingsViewController: UITableViewController {
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return UserSettings.shared.info.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2 // set to value needed
+        return UserSettings.shared.info[section].count // set to value needed
     }
-    
-    override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return "test footer"
-    }
-    
+
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Test title"
+        if section == 0 {
+            return "Settings"
+        }
+        return nil
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 && indexPath.section == 0  {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath)
-            cell.textLabel?.text = "Clear Cache"
-            cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = Config.colors.blue
-            return cell
-        }
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath)
-        cell.textLabel?.text = "Cell at row \(indexPath.row)"
-        let switchView = UISwitch(frame: .zero)
-        switchView.setOn(false, animated: true)
-        switchView.tag = indexPath.row // for detect which row switch Changed
-        switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
-        cell.accessoryView = switchView
-        cell.textLabel?.textColor = Config.colors.blue
-        return cell
+        return self.getCell(setting: UserSettings.shared.info[indexPath.section][indexPath.row], indexPath: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 && indexPath.section == 0  {
-            StorageService.shared.clearDiskCache()
-            self.tableView.cellForRow(at: indexPath)?.setSelected(false, animated: false)
+        let setting = UserSettings.shared.info[indexPath.section][indexPath.row]
+        if case .button = setting.type {
+            if setting.key == "clearCache" {
+                setting.handler?(nil)
+                self.tableView.cellForRow(at: indexPath)?.setSelected(false, animated: false)
+            }
         }
     }
     
-    @objc func switchChanged(_ sender: UISwitch) {
-        print(sender.tag)
-        print(sender.isOn)
+    private func getCell(setting: SettingInfo, indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath)
+        cell.textLabel?.text = setting.label
+        
+        switch setting.type {
+        case .button:
+            cell.textLabel?.textAlignment = .center
+            cell.textLabel?.textColor = Config.colors.blue
+        case .toggle:
+            let switchView = MyUISwitch(frame: .zero)
+            switchView.indexPath = indexPath
+            let val = UserSettings.shared.getSettingValue(key: setting.key) as? Bool ?? false
+            switchView.setOn(val, animated: false)
+            switchView.tag = indexPath.row // for detect which row switch Changed
+            switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
+            cell.accessoryView = switchView
+        default:
+            break
+        }
+        
+        return cell
+    }
+    
+    @objc func switchChanged(_ sender: MyUISwitch) {
+        if let indexPath = sender.indexPath {
+            let setting = UserSettings.shared.info[indexPath.section][indexPath.row]
+            setting.handler?(sender.isOn)
+        }
     }
     
 }
