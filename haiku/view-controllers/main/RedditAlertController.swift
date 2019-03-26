@@ -15,21 +15,36 @@ class RedditAlertController: UIAlertController {
     convenience init(redditViewItem: RedditViewItem) {
         self.init(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        let action1 = UIAlertAction(title: "Copy Video URL", style: .default) { (action:UIAlertAction) in
-            UIPasteboard.general.string = redditViewItem.redditPost.url
-        }
-        
-        let action2 = UIAlertAction(title: "Open in Reddit", style: .default) { (action:UIAlertAction) in
-            guard let url = URL(string: "https://www.reddit.com\(redditViewItem.redditPost.permalink)") else { return }
+        let openClipUrl = UIAlertAction(title: "Open Clip Link", style: .default) { (action:UIAlertAction) in
+            guard let urlString = redditViewItem.redditPost.url, let url = URL(string: urlString) else { return }
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
         
-        let action3 = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
+        let copyClipUrl = UIAlertAction(title: "Copy Clip Link", style: .default) { (action:UIAlertAction) in
+            UIPasteboard.general.string = redditViewItem.redditPost.url
         }
         
-        self.addAction(action1)
-        self.addAction(action2)
-        self.addAction(action3)
+        let openInReddit = UIAlertAction(title: "Open Reddit Link", style: .default) { (action:UIAlertAction) in
+            guard let url = URL(string: self.getRedditLink(permaLink: redditViewItem.redditPost.permalink)) else { return }
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+        
+        let copyRedditLink = UIAlertAction(title: "Copy Reddit Link", style: .default) { (action:UIAlertAction) in
+            UIPasteboard.general.string = self.getRedditLink(permaLink: redditViewItem.redditPost.permalink)
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
+        }
+        
+        self.addAction(openClipUrl)
+        self.addAction(copyClipUrl)
+        self.addAction(openInReddit)
+        self.addAction(copyRedditLink)
+        self.addAction(cancel)
+    }
+    
+    private func getRedditLink(permaLink: String) -> String {
+        return "https://www.reddit.com\(permaLink)"
     }
     
     override func viewDidLoad() {
