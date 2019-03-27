@@ -15,34 +15,34 @@ class CommentsViewCellContent: CommentsViewCell {
     /// Heights
     /// - 5 top margin
     /// - 5 bottom margin
-    /// - 15 header height
+    /// - 20 header height
     /// - ? body height
     /// - 10 body top margin
     /// - 10 body bottom margin
     /// - 20 body horizontal margin
     public static func getHeight(redditComment: RedditComment) -> CGFloat {
         let width = UIScreen.main.bounds.width - CGFloat(redditComment.depth * 10) - 20
-        return 45 + (redditComment.htmlBody?.height(containerWidth: width) ?? 0)
+        return 50 + (redditComment.htmlBody?.height(containerWidth: width) ?? 0)
     }
     
     lazy var authorLabel: UILabel = {
-        let label = UILabel()
-        label.font = Config.smallBoldFont
-        label.textColor = Config.colors.font1
+        let label = Labels.new(font: .regularBold)
         return label
     }()
     
     lazy var scoreLabel: UILabel = {
-        let label = UILabel()
-        label.font = Config.smallFont
-        label.textColor = Config.colors.font2
+        let label = Labels.new(color: .secondary)
         return label
     }()
     
     lazy var timeStampLabel: UILabel = {
-        let label = UILabel()
-        label.font = Config.smallFont
-        label.textColor = Config.colors.font2
+        let label = Labels.new(color: .secondary)
+        return label
+    }()
+    
+    lazy var dotLabel: UILabel = {
+        let label = Labels.new()
+        label.text = "·"
         return label
     }()
     
@@ -51,7 +51,8 @@ class CommentsViewCellContent: CommentsViewCell {
         view.flex.paddingLeft(10).paddingRight(10).justifyContent(.spaceBetween).direction(.row).define { flex in
             flex.addItem().direction(.row).define { flex in
                 flex.addItem(self.authorLabel)
-                flex.addItem(self.scoreLabel).marginLeft(5)
+                flex.addItem(self.dotLabel).marginRight(3).marginLeft(3)
+                flex.addItem(self.scoreLabel)
             }
             flex.addItem(self.timeStampLabel)
         }
@@ -82,7 +83,7 @@ class CommentsViewCellContent: CommentsViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.header.pin.top().left().right().height(15)
+        self.header.pin.top().left().right().height(20)
         self.header.flex.layout()
         self.body.pin.below(of: self.header).left().right().bottom().margin(5, 10)
     }

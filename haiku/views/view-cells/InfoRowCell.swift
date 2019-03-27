@@ -21,29 +21,25 @@ class InfoRowCell: UICollectionViewCell {
     lazy private var moreButton: UIButton = {
         let button = UIButton()
         button.addTarget(self, action: #selector(moreButtonAction), for: .touchUpInside)
-        button.setIcon(icon: .ionicons(.more), iconSize: 20, color: Config.colors.font1, forState: .normal)
+        button.setIcon(icon: .ionicons(.more), iconSize: 20, color: Config.colors.primaryFont, forState: .normal)
         return button
     }()
     
     let scoreLabel: UILabel = {
-        let label = UILabel()
+        let label = Labels.new(font: .small)
         label.adjustsFontSizeToFitWidth = false
-        label.font = Config.smallFont
-        label.textColor = Config.colors.font1
         return label
     }()
     
     let timeStampLabel: UILabel = {
-        let label = UILabel()
-        label.font = Config.smallFont
-        label.textColor = Config.colors.font2
+        let label = Labels.new(font: .small, color: .secondary)
         return label
     }()
     
     lazy private var commentsButton: UIButton = {
         let button = UIButton()
         button.setTitle("", for: .normal)
-        button.setTitleColor(Config.colors.font1, for: .normal)
+        button.setTitleColor(Config.colors.primaryFont, for: .normal)
         button.titleLabel?.font = Config.smallFont
         // set to nearly zero for left/right as 0 makes it use default values...
         button.contentEdgeInsets = UIEdgeInsets(top: 0.1, left: 0.1, bottom: 0.1, right: 0.1)
@@ -53,7 +49,7 @@ class InfoRowCell: UICollectionViewCell {
     
     lazy private var commentBubble: UIButton = {
         let button = UIButton()
-        button.setIcon(icon: .fontAwesomeRegular(.comment), iconSize: 20, color: Config.colors.font1, backgroundColor: UIColor.black.withAlphaComponent(0), forState: .normal)
+        button.setIcon(icon: .fontAwesomeRegular(.comment), iconSize: 20, color: Config.colors.primaryFont, backgroundColor: UIColor.black.withAlphaComponent(0), forState: .normal)
         button.addTarget(self, action: #selector(commentsButtonAction), for: .touchUpInside)
         return button
     }()
@@ -68,7 +64,7 @@ class InfoRowCell: UICollectionViewCell {
                     let l = UILabel()
                     l.font = Config.smallFont
                     l.setIcon(icon: .googleMaterialDesign(.arrowUpward), iconSize: 20)
-                    l.textColor = Config.colors.font1
+                    l.textColor = Config.colors.primaryFont
                     
                     flex.addItem().direction(.row).define { flex in
                         flex.addItem(l).marginLeft(-5)
@@ -120,7 +116,7 @@ class InfoRowCell: UICollectionViewCell {
     }
 
     private func setFavoriteButton(_ favorited: Bool) {
-        let color = favorited == true ? Config.colors.red : Config.colors.font1
+        let color = favorited == true ? Config.colors.red : Config.colors.primaryFont
         let icon = favorited == true ? FontType.ionicons(.iosHeart) : FontType.ionicons(.iosHeartOutline)
         self.likeButton.setIcon(icon: icon, iconSize: 30, color: color, forState: .normal)
     }

@@ -11,11 +11,12 @@ import UIKit
 
 class Colors {
     // use lightText for dark backgrounds
-    let font1: UIColor = .darkText
-    let font2: UIColor = .gray
+    let primaryFont: UIColor = .darkText
+    let secondaryFont: UIColor = UIColor(hexString: "#687684")
+    
     let bg1: UIColor = .white
-    let bg2: UIColor = UIColor(hexString: "#f7f7f7")
-    let bg3: UIColor = UIColor(hexString: "#e0e0e0")
+    let bg2: UIColor = UIColor(hexString: "#c8c7cc")
+    let bg3: UIColor = UIColor(hexString: "#ebedef")
 
     // ios color palette
     let red = UIColor(red: 255 / 255, green: 59 / 255, blue: 48 / 255, alpha: 1)
@@ -31,10 +32,11 @@ class Colors {
 }
 
 class Config {
-    static let defaultFont = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.light)
-    static let defaultBoldFont = UIFont.boldSystemFont(ofSize: 16)
-    static let smallerFont = UIFont.systemFont(ofSize: 10, weight: UIFont.Weight.light)
-    static let smallFont = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.light)
-    static let smallBoldFont = UIFont.boldSystemFont(ofSize: 12)
     static let colors = Colors()
+    
+    static let regularFont = UIFont.systemFont(ofSize: 15, weight: .regular)
+    static let regularBoldFont = UIFont.systemFont(ofSize: 15, weight: .semibold)
+    static let tinyFont = UIFont.systemFont(ofSize: 10, weight: .light)
+    static let smallFont = UIFont.systemFont(ofSize: 12, weight: .light)
+    static let smallBoldFont = UIFont.systemFont(ofSize: 12, weight: .semibold)
 }

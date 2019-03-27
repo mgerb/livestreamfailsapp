@@ -38,7 +38,7 @@ class CommentsViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         // set light gray highlight color
         let bgColorView = UIView()
-        bgColorView.backgroundColor = Config.colors.bg2
+        bgColorView.backgroundColor = Config.colors.bg3
         self.selectedBackgroundView = bgColorView
         self.backgroundColor = Config.colors.bg1
         
@@ -76,7 +76,7 @@ class CommentsViewCell: UITableViewCell {
         // calculate margin based on depth level of comment
         let marginLeft = CGFloat((self.redditComment?.depth ?? 0) * 10)
         self.bgView.pin.all().marginLeft(marginLeft).marginTop(10).marginBottom(10)
-        self.bottomBorder.pin.left().bottom().right().height(1).marginLeft(marginLeft + 10)
+        self.bottomBorder.pin.left().bottom().right().height(0.25).marginLeft(marginLeft + 10)
         self.leftBorder.pin.left().top().bottom().width(2).marginLeft(marginLeft).marginTop(5).marginBottom(5)
     }
     

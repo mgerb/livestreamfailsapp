@@ -18,9 +18,8 @@ class TitleCollectionViewCell: UICollectionViewCell {
     let rxUnsubscribe = PublishSubject<Void>()
     
     lazy private var label: UILabel = {
-        let label = UILabel()
-        label.font = Config.defaultFont
-        label.textColor = Config.colors.font1
+        
+        let label = Labels.new(font: .regular, color: .primary)
         label.numberOfLines = 0
         return label
     }()
@@ -28,7 +27,7 @@ class TitleCollectionViewCell: UICollectionViewCell {
     func setRedditViewItem(item: RedditViewItem) {
         self.redditViewItem = item
         _ = self.redditViewItem?.markedAsWatched.takeUntil(self.rxUnsubscribe).subscribe(onNext: { watched in
-            self.label.textColor = watched && self.redditViewItem?.context == .home ? Config.colors.font2 : Config.colors.font1
+            self.label.textColor = watched && self.redditViewItem?.context == .home ? Config.colors.secondaryFont : Config.colors.primaryFont
         })
         
         DispatchQueue.main.async {

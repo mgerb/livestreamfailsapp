@@ -12,11 +12,9 @@ import UIKit
 class CommentsHeaderCell: UITableViewHeaderFooterView {
     
     lazy var label: UILabel = {
-        let l = UILabel()
-        l.textColor = Config.colors.font1
+        let l = Labels.new(font: .small)
         l.text = "Comments"
         l.textAlignment = .center
-        l.font = Config.smallFont
         return l
     }()
     

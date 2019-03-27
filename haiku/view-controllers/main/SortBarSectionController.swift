@@ -62,7 +62,7 @@ class SortBarCollectionViewCell: UICollectionViewCell {
         return self.buttonList.map {
             let button = UIButton()
             button.setTitle($0, for: .normal)
-            button.titleLabel?.font = Config.defaultBoldFont
+            button.titleLabel?.font = Config.regularBoldFont
             button.layer.cornerRadius = 5
             button.addTarget(self, action: #selector(self.buttonPress), for: .touchUpInside)
             button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
@@ -126,7 +126,7 @@ class SortBarCollectionViewCell: UICollectionViewCell {
                 $0.setTitleColor(Config.colors.white, for: .normal)
             } else {
                 $0.backgroundColor = .clear
-                $0.setTitleColor(Config.colors.font1, for: .normal)
+                $0.setTitleColor(Config.colors.primaryFont, for: .normal)
             }
         }
     }

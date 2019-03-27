@@ -12,9 +12,7 @@ import UIKit
 class CommentsViewCellMore: CommentsViewCell {
     
     lazy var label: UILabel = {
-        let l = UILabel()
-        l.font = Config.smallerFont
-        l.textColor = Config.colors.blue
+        let l = Labels.new(font: .small, color: .blue)
         self.bgView.addSubview(l)
         return l
     }()
