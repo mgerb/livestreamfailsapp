@@ -62,7 +62,7 @@ class TitleCollectionViewCell: UICollectionViewCell {
         self.label.pin.all(TitleCollectionViewCell.padding)
         self.nsfwLabel.pin.top().left()
             .height(self.nsfwLabel.intrinsicContentSize.height + 3)
-            .width(self.nsfwLabel.intrinsicContentSize.width + 3)
+            .width(self.nsfwLabel.intrinsicContentSize.width + 5)
             .marginLeft(TitleCollectionViewCell.padding).marginTop(TitleCollectionViewCell.padding)
     }
     

@@ -62,11 +62,11 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
     
     func fetchHaikus(_ after: String? = nil) {
         if after == nil {
+            GlobalPlayer.shared.pause()
             if !self.refreshControl.isRefreshing {
                 self.refreshControl.beginRefreshing()
             }
         }
-        GlobalPlayer.shared.pause()
     }
 
     func setupSubjectSubscriptions() {

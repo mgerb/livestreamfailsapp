@@ -36,7 +36,7 @@ class Config {
     
     static let regularFont = UIFont.systemFont(ofSize: 15, weight: .regular)
     static let regularBoldFont = UIFont.systemFont(ofSize: 15, weight: .semibold)
-    static let tinyFont = UIFont.systemFont(ofSize: 10, weight: .light)
-    static let smallFont = UIFont.systemFont(ofSize: 12, weight: .light)
+    static let smallFont = UIFont.systemFont(ofSize: 12, weight: .regular)
     static let smallBoldFont = UIFont.systemFont(ofSize: 12, weight: .semibold)
+    static let tinyFont = UIFont.systemFont(ofSize: 10, weight: .light)
 }
