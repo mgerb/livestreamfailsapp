@@ -116,7 +116,7 @@ class RedditViewItem {
                     // if still nil try to fetch item
                     if item == nil {
                         dispatchGroup.enter()
-                        self.getClipUrlInfo().subscribe(onNext: { (videoUrl, thumbnailUrl) in
+                        _ = self.getClipUrlInfo().subscribe(onNext: { (videoUrl, thumbnailUrl) in
                             if let videoUrl = videoUrl {
                                 if videoUrl.absoluteString.hasSuffix("mp4") == true {
                                     item = CachingPlayerItem(url: videoUrl)
@@ -189,7 +189,7 @@ class RedditViewItem {
                 
             if data == nil {
                 dispatchGroup.enter()
-                self.getClipUrlInfo().subscribe(onNext: { (_, thumbnailUrl) in
+                _ = self.getClipUrlInfo().subscribe(onNext: { (_, thumbnailUrl) in
                     if let thumbnailUrl = thumbnailUrl {
                         dispatchGroup.enter()
                         let queue = DispatchQueue(label: "RedditViewItem.getThumbnailImage", qos: .utility, attributes: [.concurrent])

@@ -52,9 +52,9 @@ class CommentsViewCellContent: CommentsViewCell {
             flex.addItem().direction(.row).define { flex in
                 flex.addItem(self.authorLabel)
                 flex.addItem(self.dotLabel).marginRight(3).marginLeft(3)
-                flex.addItem(self.scoreLabel)
+                flex.addItem(self.timeStampLabel)
             }
-            flex.addItem(self.timeStampLabel)
+            flex.addItem(self.scoreLabel)
         }
         
         self.bgView.addSubview(view)

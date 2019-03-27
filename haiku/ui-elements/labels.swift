@@ -21,6 +21,11 @@ enum MyFontColor {
     case primary
     case secondary
     case blue
+    case white
+}
+
+enum MyAccentColor {
+    case red
 }
 
 class Labels {
@@ -48,9 +53,27 @@ class Labels {
             label.textColor = Config.colors.secondaryFont
         case .blue:
             label.textColor = Config.colors.blue
+        case .white:
+            label.textColor = Config.colors.white
         }
 
         return label
     }
     
+    static func newAccent(font: MyFontType = .small, color: MyAccentColor = .red) -> UILabel {
+        let label = Labels.new(font: font)
+        
+        label.layer.cornerRadius = 5
+        
+        switch color {
+        case .red:
+            label.textColor = Config.colors.white
+            label.layer.backgroundColor = Config.colors.red.cgColor
+            label.frame.size.width = label.intrinsicContentSize.width + 20
+            label.frame.size.height = label.intrinsicContentSize.height + 20
+            label.textAlignment = .center
+        }
+        
+        return label
+    }
 }

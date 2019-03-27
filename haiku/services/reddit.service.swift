@@ -133,7 +133,7 @@ class RedditService: RequestAdapter, RequestRetrier {
                     print(err)
                 }
     
-                closure(posts)
+                closure(posts.filter { UserSettings.shared.nsfw || !$0.over_18 })
         })
     }
     
