@@ -49,11 +49,12 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
 
         self.contentInset.top = self.frame.height
 
+        self.register(UITableViewCell.self, forCellReuseIdentifier: "TableViewCell")
         self.register(CommentsViewCellContent.self, forCellReuseIdentifier: "CommentsViewCellContent")
-        self.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "FooterCell")
         self.register(CommentsViewCellMore.self, forCellReuseIdentifier: "CommentsViewCellMore")
-        self.register(CommentsHeaderCell.self, forHeaderFooterViewReuseIdentifier: "HeaderCell")
         self.register(CommentsLoadingCell.self, forCellReuseIdentifier: "CommentsLoadingCell")
+        self.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "FooterCell")
+        self.register(CommentsHeaderCell.self, forHeaderFooterViewReuseIdentifier: "HeaderCell")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -113,8 +114,10 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         case let comment as RedditComment:
             if comment.isHidden {
                 return 0
-            } else if comment.isMoreComment || comment.isDeleted || comment.isCollapsed || comment.isContinueThread {
+            } else if comment.isMoreComment || comment.isContinueThread {
                 return 30
+            } else if comment.isCollapsed || comment.isDeleted {
+                return 40
             } else {
                 return CommentsViewCellContent.getHeight(redditComment: comment)
             }
@@ -127,7 +130,11 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let comment = self.data[indexPath.row] as? RedditComment {
-            if comment.isMoreComment || comment.isContinueThread {
+            
+            // return empty cell if hidden - improves performance tremendously
+            if comment.isHidden {
+                return self.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath)
+            } else if comment.isMoreComment || comment.isContinueThread {
                 let cell = self.dequeueReusableCell(withIdentifier: "CommentsViewCellMore", for: indexPath) as! CommentsViewCellMore
                 cell.setRedditComment(c: comment)
                 return cell
