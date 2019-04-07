@@ -10,12 +10,12 @@ import Foundation
 import UIKit
 
 enum MyIconType: String {
-    case commentFill = "\u{e900}"
-    case comment = "\u{e901}"
-    case dotsFill = "\u{e902}"
-    case dots = "\u{e903}"
-    case downArrowFill = "\u{e904}"
-    case downArrow = "\u{e905}"
+    case arrowDown = "\u{e900}"
+    case arrowUp = "\u{e901}"
+    case commentFill = "\u{e902}"
+    case comment = "\u{e903}"
+    case dotsFill = "\u{e904}"
+    case dots = "\u{e905}"
     case heartFill = "\u{e906}"
     case heart = "\u{e907}"
     case search = "\u{e908}"
@@ -23,8 +23,6 @@ enum MyIconType: String {
     case settings = "\u{e90a}"
     case tvFill = "\u{e90b}"
     case tv = "\u{e90c}"
-    case upArrowFill = "\u{e90d}"
-    case upArrow = "\u{e90e}"
 }
 
 extension UILabel {

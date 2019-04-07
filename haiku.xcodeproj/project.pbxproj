@@ -28,6 +28,7 @@
 		A20A70C921E817B800BD3D0C /* IGListKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A221E8178000BD3D0C /* IGListKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70CB21E817B800BD3D0C /* FlexLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A021E8177800BD3D0C /* FlexLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A21C5D01221A4A8800129DD3 /* SortBarSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21C5D00221A4A8800129DD3 /* SortBarSectionController.swift */; };
+		A21E2E22225A482B00B212F3 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21E2E21225A482600B212F3 /* icomoon.ttf */; };
 		A2397906224B0A7E00844E83 /* labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2397905224B0A7E00844E83 /* labels.swift */; };
 		A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A240BA252159BD74004E8419 /* PlayerCell.swift */; };
 		A242E87C21E2867D004A8026 /* CommentsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A242E87B21E2867D004A8026 /* CommentsViewCell.swift */; };
@@ -66,7 +67,6 @@
 		A2B780FB2249CA5C001301DD /* MyUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B780FA2249CA5C001301DD /* MyUISwitch.swift */; };
 		A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */; };
 		A2B7C2442198C211008DB7E6 /* reddit-view-item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2432198C211008DB7E6 /* reddit-view-item.swift */; };
-		A2D38BD32259758600D53289 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2D38BD22259758100D53289 /* icomoon.ttf */; };
 		A2D38BD522597F7300D53289 /* icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D38BD422597F7300D53289 /* icons.swift */; };
 		A2D5EA4B220D3C080086A394 /* SwiftSoup.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2D5EA49220D3C020086A394 /* SwiftSoup.framework */; };
 		A2D5EA4C220D3C080086A394 /* SwiftSoup.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2D5EA49220D3C020086A394 /* SwiftSoup.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -124,6 +124,7 @@
 		A20A70B221E817A900BD3D0C /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		A20A70B421E817AC00BD3D0C /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/iOS/XCDYouTubeKit.framework; sourceTree = "<group>"; };
 		A21C5D00221A4A8800129DD3 /* SortBarSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBarSectionController.swift; sourceTree = "<group>"; };
+		A21E2E21225A482600B212F3 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
 		A2397905224B0A7E00844E83 /* labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = labels.swift; sourceTree = "<group>"; };
 		A240BA252159BD74004E8419 /* PlayerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCell.swift; sourceTree = "<group>"; };
 		A242E87B21E2867D004A8026 /* CommentsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewCell.swift; sourceTree = "<group>"; };
@@ -165,7 +166,6 @@
 		A2B780FA2249CA5C001301DD /* MyUISwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUISwitch.swift; sourceTree = "<group>"; };
 		A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		A2B7C2432198C211008DB7E6 /* reddit-view-item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "reddit-view-item.swift"; sourceTree = "<group>"; };
-		A2D38BD22259758100D53289 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
 		A2D38BD422597F7300D53289 /* icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = icons.swift; sourceTree = "<group>"; };
 		A2D5EA49220D3C020086A394 /* SwiftSoup.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftSoup.framework; path = Carthage/Build/iOS/SwiftSoup.framework; sourceTree = "<group>"; };
 		A2D5FC6E21F6CA220098A884 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
@@ -399,7 +399,7 @@
 		A2D38BD12259757900D53289 /* icons */ = {
 			isa = PBXGroup;
 			children = (
-				A2D38BD22259758100D53289 /* icomoon.ttf */,
+				A21E2E21225A482600B212F3 /* icomoon.ttf */,
 			);
 			path = icons;
 			sourceTree = "<group>";
@@ -464,7 +464,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A2D38BD32259758600D53289 /* icomoon.ttf in Resources */,
+				A21E2E22225A482B00B212F3 /* icomoon.ttf in Resources */,
 				A29CD00D2119363C00A5A6EC /* Assets.xcassets in Resources */,
 				A29CD0102119363C00A5A6EC /* LaunchScreen.storyboard in Resources */,
 			);

@@ -51,10 +51,10 @@ class InfoRowCell: UICollectionViewCell {
             flex.addItem().justifyContent(.spaceBetween).direction(.row).padding(10).paddingBottom(0).paddingTop(10).define{ flex in
                 
                 flex.addItem().direction(.row).define{ flex in
-                    let l = Icons.getLabel(icon: .upArrow)
+                    let l = Icons.getLabel(icon: .arrowUp)
                     
                     flex.addItem().direction(.row).define { flex in
-                        flex.addItem(l).marginRight(5)
+                        flex.addItem(l)
                         flex.addItem(self.scoreLabel)
                     }
                     flex.addItem().direction(.row).marginLeft(10).define { flex  in
