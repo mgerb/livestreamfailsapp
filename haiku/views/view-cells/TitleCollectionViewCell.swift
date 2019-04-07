@@ -23,9 +23,7 @@ class TitleCollectionViewCell: UICollectionViewCell {
         label.numberOfLines = 0
         return label
     }()
-    
-    private let nsfwSpace = "           "
-    
+
     lazy private var nsfwLabel: UILabel = {
         let label = Labels.newAccent(color: .red)
         label.text = "NSFW"
@@ -39,11 +37,8 @@ class TitleCollectionViewCell: UICollectionViewCell {
         })
         
         DispatchQueue.main.async {
-            self.label.text = item.redditPost.title.replaceEncoding()
+            self.label.text = item.getTitleLabelText()
             self.nsfwLabel.isHidden = !item.redditPost.over_18
-            if item.redditPost.over_18 {
-                self.label.text = self.nsfwSpace + (self.label.text ?? "")
-            }
         }
     }
     

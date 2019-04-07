@@ -256,6 +256,15 @@ class RedditViewItem {
             }
         }).disposed(by: self.disposeBag)
     }
+    
+    /// returns title with extra spaces if nsfw
+    func getTitleLabelText() -> String {
+        var title = self.redditPost.title.replaceEncoding()
+        if self.redditPost.over_18 {
+            title = "           " + title
+        }
+        return title
+    }
 }
 
 extension RedditViewItem: CachingPlayerItemDelegate {

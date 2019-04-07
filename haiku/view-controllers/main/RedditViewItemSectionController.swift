@@ -99,7 +99,7 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
     private func getTitleCellHeight(_ width: CGFloat) -> CGFloat {
         // width of everything else except the title
         let cellOffsetWidth = TitleCollectionViewCell.padding * 2
-        return self.redditViewItem.redditPost.title.heightWithConstrainedWidth(width: width - cellOffsetWidth, font: Config.regularFont) + 20
+        return self.redditViewItem.getTitleLabelText().heightWithConstrainedWidth(width: width - cellOffsetWidth, font: Config.regularFont) + 20
     }
 }
 
