@@ -154,7 +154,9 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return self.dequeueReusableHeaderFooterView(withIdentifier: "HeaderCell")
+        let cell = self.dequeueReusableHeaderFooterView(withIdentifier: "HeaderCell") as! CommentsHeaderCell
+        cell.setRedditViewItem(redditViewItem: self.redditViewItem)
+        return cell
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

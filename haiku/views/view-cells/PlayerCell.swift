@@ -67,9 +67,9 @@ class PlayerCell: UICollectionViewCell {
         
         // add subviews
         self.addSubview(self.playerView)
-//        self.playerView.addSubview(self.bgView)
         self.playerView.sendSubview(toBack: self.bgView)
         self.addSubview(self.fullScreenButtonContainer)
+        self.fullScreenButtonContainer.addSubview(self.fullScreenButton)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -82,11 +82,9 @@ class PlayerCell: UICollectionViewCell {
 
         // player view
         self.playerView.pin.all()
-//        self.bgView.pin.all()
 
         // full screen button
         self.fullScreenButtonContainer.pin.right().bottom().height(25).width(30).marginRight(5).marginBottom(5)
-        self.fullScreenButtonContainer.addSubview(self.fullScreenButton)
         self.fullScreenButton.pin.all()
     }
     
