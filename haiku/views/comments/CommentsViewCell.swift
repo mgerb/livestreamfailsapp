@@ -14,7 +14,6 @@ import FlexLayout
 class CommentsViewCell: UITableViewCell {
     
     public var redditComment: RedditComment?
-    var leftBorderColor: UIColor?
 
     lazy var bgView: UIView = {
         let view = UIView()
@@ -27,12 +26,8 @@ class CommentsViewCell: UITableViewCell {
         view.backgroundColor = Config.colors.bg2
         return view
     }()
-    
-    lazy var leftBorder: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 1
-        return view
-    }()
+
+    var leftBorders: [UIView] = []
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -43,14 +38,14 @@ class CommentsViewCell: UITableViewCell {
         self.backgroundColor = Config.colors.bg1
         
         self.addSubview(self.bgView)
-        self.addSubview(self.bottomBorder)
-        self.addSubview(self.leftBorder)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// KEEP THIS TWO METHODS in case we need them in the future
+    /// CURRENTLY UNUSED
     // These two override methods are to prevent the left border
     // from being hidden when the cell is highlighted/selected.
     // https://stackoverflow.com/questions/6745919/uitableviewcell-subview-disappears-when-cell-is-selected
@@ -58,7 +53,7 @@ class CommentsViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         
         if selected {
-            self.leftBorder.backgroundColor = self.leftBorderColor
+//            self.leftBorder.backgroundColor = self.leftBorderColor
         }
     }
     
@@ -66,31 +61,52 @@ class CommentsViewCell: UITableViewCell {
         super.setHighlighted(highlighted, animated: animated)
         
         if highlighted {
-            self.leftBorder.backgroundColor = self.leftBorderColor
+//            self.leftBorder.backgroundColor = self.leftBorderColor
         }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+
         // calculate margin based on depth level of comment
         let marginLeft = CGFloat((self.redditComment?.depth ?? 0) * 10)
         self.bgView.pin.all().marginLeft(marginLeft).marginTop(10).marginBottom(10)
-        self.bottomBorder.pin.left().bottom().right().height(0.25).marginLeft(marginLeft + 10)
-        self.leftBorder.pin.left().top().bottom().width(2).marginLeft(marginLeft).marginTop(5).marginBottom(5)
+
+        for (index, border) in self.leftBorders.enumerated() {
+            border.pin.left().top().bottom().width(0.5).marginLeft(CGFloat((index + 1) * 10))
+        }
+
+        if self.redditComment?.depth == 0 {
+            self.bottomBorder.pin.left().top().right().height(0.25)
+        }
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        self.bottomBorder.removeFromSuperview()
+        self.removeLeftBorders()
     }
     
+    func addLeftBorders(depth: Int) {
+        for _ in 0...depth - 1 {
+            let border = UIView()
+            border.backgroundColor = Config.colors.bg3
+            self.leftBorders.append(border)
+            self.addSubview(border)
+        }
+    }
+
+    func removeLeftBorders() {
+        self.leftBorders.forEach { $0.removeFromSuperview() }
+        self.leftBorders = []
+    }
+
     func setRedditComment(c: RedditComment) {
         self.redditComment = c
         self.isHidden = c.isHidden
-        
-        self.leftBorder.isHidden = c.depth == 0
-        self.leftBorderColor = c.getLeftBorderColor()
-        self.leftBorder.backgroundColor = self.leftBorderColor
+        if c.depth > 0 {
+            self.addLeftBorders(depth: c.depth)
+        }
     }
     
     static func calculateLeftMargin(depth: Int) -> CGFloat {

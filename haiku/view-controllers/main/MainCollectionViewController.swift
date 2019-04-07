@@ -27,6 +27,7 @@ class MainCollectionViewController: YaikuCollectionViewController {
         // cancel load more timeout if we reload the data completely
         if after == nil {
             self.loadMoreTimeoutWorkItem?.cancel()
+            GlobalPlayer.shared.pause()
         }
 
         RedditService.shared.getHaikus(after: after){ redditPosts in
