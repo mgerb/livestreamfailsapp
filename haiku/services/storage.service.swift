@@ -7,60 +7,87 @@
 //
 
 import Foundation
-import Cache
 import Realm
 import RealmSwift
 
 class StorageService {
     static let shared = StorageService()
-
     private lazy var realm = try? Realm()
+    private lazy var fileManager = FileManager.default
+    private var documentDirectory: URL?
+    
+    
+    init() {
+        guard let directory = try? self.fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else {
+            return
+        }
+        guard let newDir = directory.appendingPathComponent("lsfdata") else {
+            return
+        }
 
-    private let diskConfig = DiskConfig(name: "diskData")
-    private let memoryConfig = MemoryConfig(expiry: .never, countLimit: 50, totalCostLimit: 10)
-    lazy private var diskStorage: Storage<Data>? = try? Storage(
-        diskConfig: self.diskConfig,
-        memoryConfig: self.memoryConfig,
-        transformer: TransformerFactory.forCodable(ofType: Data.self)
-    )
-
-}
-
-/// data storage with Cache
-extension StorageService {
-    private func diskCacheData(data: Data, id: String) {
-        self.diskStorage!.async.setObject(data, forKey: id) { _ in }
+        self.createDirIfNotExists(dir: newDir)
+        self.documentDirectory = newDir
     }
     
-    private func getDiskCacheData(id: String, closure: @escaping (_ data: Data?) -> Void) {
-        self.diskStorage!.async.object(forKey: id) { result in
-            switch result {
-            case .value(let val):
-                closure(val)
-            case .error(_):
-                closure(nil)
+    private func createDirIfNotExists(dir: URL) {
+        var isDirectory = ObjCBool(true)
+        let exists = self.fileManager.fileExists(atPath: dir.absoluteString, isDirectory: &isDirectory)
+        
+        if !exists && !isDirectory.boolValue {
+            try? self.fileManager.createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
+        }
+    }
+}
+
+// disk cache
+extension StorageService {
+    private func diskCacheData(data: Data, id: String) {
+        DispatchQueue.global().async {
+            do {
+                let filePath = self.documentDirectory?.appendingPathComponent(id)
+                try data.write(to: filePath!)
+            } catch {
+                print(error.localizedDescription)
             }
         }
     }
     
+    private func getDiskCacheData(id: String, closure: @escaping (_ data: Data?) -> Void) {
+        let group = DispatchGroup()
+        var data: Data?
+        group.enter()
+        
+        DispatchQueue.global().async {
+            if let filePath = self.documentDirectory?.appendingPathComponent(id) {
+                data = try? Data(contentsOf: filePath)
+            }
+            group.leave()
+        }
+        
+        group.notify(queue: .main) {
+            closure(data)
+        }
+    }
+    
     func cacheVideo(data: Data, id: String) {
-        self.diskCacheData(data: data, id: "video:\(id)")
+        self.diskCacheData(data: data, id: "video:\(id)".toBase64())
     }
     
     func cacheImage(data: Data, id: String) {
-        self.diskCacheData(data: data, id: "image:\(id)")
+        self.diskCacheData(data: data, id: "image:\(id)".toBase64())
     }
     
     func getCachedVideo(id: String, closure: @escaping (_ data: Data?) -> Void) {
-        self.getDiskCacheData(id: "video:\(id)") { closure($0) }
+        self.getDiskCacheData(id: "video:\(id)".toBase64()) { closure($0) }
     }
     
     func getCachedImage(id: String, closure: @escaping (_ data: Data?) -> Void) {
-        self.getDiskCacheData(id: "image:\(id)") { closure($0) }
+        self.getDiskCacheData(id: "image:\(id)".toBase64()) { closure($0) }
     }
 
+    // TODO:
     func clearDiskCache() {
-        try? self.diskStorage!.removeAll()
+//        try? self.diskStorage!.removeAll()
     }
 }
 

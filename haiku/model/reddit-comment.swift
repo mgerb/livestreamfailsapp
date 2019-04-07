@@ -7,7 +7,6 @@
 
 import Foundation
 import IGListKit
-import SwiftyMarkdown
 import SwiftyJSON
 
 class RedditComment {

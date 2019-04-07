@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftIcons
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -59,22 +58,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tc = MyTabBarController()
         tc.title = "Yaiku"
         tc.tabBar.isTranslucent = false
+        tc.tabBar.tintColor = Config.colors.primaryFont
         
         let navigationController = UINavigationController(rootViewController: tc)
         navigationController.navigationBar.isTranslucent = false
 
         let mainCollectionViewController = MainCollectionViewController()
-        mainCollectionViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 0)
-        mainCollectionViewController.tabBarItem.setIcon(icon: .ionicons(.home), size: nil, textColor: Config.colors.secondaryFont)
-        
+        mainCollectionViewController.tabBarItem = Icons.getTabBarItem(icon: .tv, selectedIcon: .tvFill, tag: 0)
+
         let favoritesCollectionViewController = FavoritesCollectionViewController()
-        favoritesCollectionViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
-        favoritesCollectionViewController.tabBarItem.setIcon(icon: .ionicons(.iosHeart), size: nil, textColor: Config.colors.secondaryFont)
+        favoritesCollectionViewController.tabBarItem = Icons.getTabBarItem(icon: .heart, selectedIcon: .heartFill, tag: 1)
+
         
         let settingsViewController = SettingsViewController()
-        settingsViewController.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 2)
-        settingsViewController.tabBarItem.setIcon(icon: .ionicons(.settings), size: nil, textColor: Config.colors.secondaryFont)
-        
+        settingsViewController.tabBarItem = Icons.getTabBarItem(icon: .settings, selectedIcon: .settingsFill, tag: 2)
+
         tc.viewControllers = [mainCollectionViewController, favoritesCollectionViewController, settingsViewController]
         
         self.window!.rootViewController = navigationController

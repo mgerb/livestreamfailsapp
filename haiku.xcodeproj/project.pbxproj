@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A20A709D21E8176F00BD3D0C /* Cache.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709C21E8176F00BD3D0C /* Cache.framework */; };
 		A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A221E8178000BD3D0C /* IGListKit.framework */; };
 		A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A421E8178300BD3D0C /* Kingfisher.framework */; };
 		A20A70A721E8178800BD3D0C /* PinLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A621E8178800BD3D0C /* PinLayout.framework */; };
@@ -28,7 +27,6 @@
 		A20A70C721E817B800BD3D0C /* Kingfisher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A421E8178300BD3D0C /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70C921E817B800BD3D0C /* IGListKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A221E8178000BD3D0C /* IGListKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70CB21E817B800BD3D0C /* FlexLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A021E8177800BD3D0C /* FlexLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A20A70CF21E817B800BD3D0C /* Cache.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709C21E8176F00BD3D0C /* Cache.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A21C5D01221A4A8800129DD3 /* SortBarSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21C5D00221A4A8800129DD3 /* SortBarSectionController.swift */; };
 		A2397906224B0A7E00844E83 /* labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2397905224B0A7E00844E83 /* labels.swift */; };
 		A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A240BA252159BD74004E8419 /* PlayerCell.swift */; };
@@ -68,6 +66,8 @@
 		A2B780FB2249CA5C001301DD /* MyUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B780FA2249CA5C001301DD /* MyUISwitch.swift */; };
 		A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */; };
 		A2B7C2442198C211008DB7E6 /* reddit-view-item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2432198C211008DB7E6 /* reddit-view-item.swift */; };
+		A2D38BD32259758600D53289 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A2D38BD22259758100D53289 /* icomoon.ttf */; };
+		A2D38BD522597F7300D53289 /* icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D38BD422597F7300D53289 /* icons.swift */; };
 		A2D5EA4B220D3C080086A394 /* SwiftSoup.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2D5EA49220D3C020086A394 /* SwiftSoup.framework */; };
 		A2D5EA4C220D3C080086A394 /* SwiftSoup.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2D5EA49220D3C020086A394 /* SwiftSoup.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2D5FC6F21F6CA220098A884 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D5FC6E21F6CA220098A884 /* Date.swift */; };
@@ -92,7 +92,6 @@
 				A20A70BF21E817B800BD3D0C /* RxSwift.framework in Embed Frameworks */,
 				A20A70B921E817B800BD3D0C /* SwiftyJSON.framework in Embed Frameworks */,
 				A20A70C121E817B800BD3D0C /* RealmSwift.framework in Embed Frameworks */,
-				A20A70CF21E817B800BD3D0C /* Cache.framework in Embed Frameworks */,
 				A20A70B721E817B800BD3D0C /* XCDYouTubeKit.framework in Embed Frameworks */,
 				A20A70C721E817B800BD3D0C /* Kingfisher.framework in Embed Frameworks */,
 				A20A70C521E817B800BD3D0C /* PinLayout.framework in Embed Frameworks */,
@@ -166,6 +165,8 @@
 		A2B780FA2249CA5C001301DD /* MyUISwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUISwitch.swift; sourceTree = "<group>"; };
 		A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		A2B7C2432198C211008DB7E6 /* reddit-view-item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "reddit-view-item.swift"; sourceTree = "<group>"; };
+		A2D38BD22259758100D53289 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
+		A2D38BD422597F7300D53289 /* icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = icons.swift; sourceTree = "<group>"; };
 		A2D5EA49220D3C020086A394 /* SwiftSoup.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftSoup.framework; path = Carthage/Build/iOS/SwiftSoup.framework; sourceTree = "<group>"; };
 		A2D5FC6E21F6CA220098A884 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapThroughTextView.swift; sourceTree = "<group>"; };
@@ -183,7 +184,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A20A709D21E8176F00BD3D0C /* Cache.framework in Frameworks */,
 				A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */,
 				A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */,
 				A20A70A721E8178800BD3D0C /* PinLayout.framework in Frameworks */,
@@ -230,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				A2397905224B0A7E00844E83 /* labels.swift */,
+				A2D38BD422597F7300D53289 /* icons.swift */,
 			);
 			path = "ui-elements";
 			sourceTree = "<group>";
@@ -344,6 +345,7 @@
 		A29CD0042119363900A5A6EC /* haiku */ = {
 			isa = PBXGroup;
 			children = (
+				A2D38BD12259757900D53289 /* icons */,
 				A2528582215C6F5B00DCA537 /* extensions */,
 				A24818C321781811005B8819 /* global */,
 				A2D0EF6E21CEB225002F1134 /* libs */,
@@ -392,6 +394,14 @@
 				A25285A921615AC700DCA537 /* CachingPlayerItem.swift */,
 			);
 			path = libs;
+			sourceTree = "<group>";
+		};
+		A2D38BD12259757900D53289 /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				A2D38BD22259758100D53289 /* icomoon.ttf */,
+			);
+			path = icons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -454,6 +464,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2D38BD32259758600D53289 /* icomoon.ttf in Resources */,
 				A29CD00D2119363C00A5A6EC /* Assets.xcassets in Resources */,
 				A29CD0102119363C00A5A6EC /* LaunchScreen.storyboard in Resources */,
 			);
@@ -492,6 +503,7 @@
 				A2B7C2442198C211008DB7E6 /* reddit-view-item.swift in Sources */,
 				A25285752159CA2E00DCA537 /* RedditViewItemSectionController.swift in Sources */,
 				A2D70E8C21EED67C00F69F0C /* TapThroughTextView.swift in Sources */,
+				A2D38BD522597F7300D53289 /* icons.swift in Sources */,
 				A26BD839218FE53500E948A4 /* SettingsViewController.swift in Sources */,
 				A2397906224B0A7E00844E83 /* labels.swift in Sources */,
 				A25285B62165B7DB00DCA537 /* storage.service.swift in Sources */,

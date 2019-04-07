@@ -1,7 +1,6 @@
 import Foundation
 import UIKit
 import SnapKit
-import SwiftIcons
 import RxSwift
 import FlexLayout
 
@@ -12,17 +11,12 @@ class InfoRowCell: UICollectionViewCell {
     let disposeBag = DisposeBag()
     let rxUnsubscribe = PublishSubject<Void>()
 
-    lazy private var likeButton: UIButton = {
-        let button = UIButton()
-        button.addTarget(self, action: #selector(likeButtonAction), for: .touchUpInside)
-        return button
+    lazy private var likeButton: UILabel = {
+        return Icons.getLabel(icon: .heart, target: self, action: #selector(likeButtonAction))
     }()
     
-    lazy private var moreButton: UIButton = {
-        let button = UIButton()
-        button.addTarget(self, action: #selector(moreButtonAction), for: .touchUpInside)
-        button.setIcon(icon: .ionicons(.more), iconSize: 20, color: Config.colors.primaryFont, forState: .normal)
-        return button
+    lazy private var moreButton: UILabel = {
+        return Icons.getLabel(icon: .dots, target: self, action: #selector(moreButtonAction))
     }()
     
     let scoreLabel: UILabel = {
@@ -32,8 +26,7 @@ class InfoRowCell: UICollectionViewCell {
     }()
     
     let timeStampLabel: UILabel = {
-        let label = Labels.new(font: .small, color: .secondary)
-        return label
+        return Labels.new(font: .small, color: .secondary)
     }()
     
     lazy private var commentsButton: UIButton = {
@@ -47,38 +40,32 @@ class InfoRowCell: UICollectionViewCell {
         return button
     }()
     
-    lazy private var commentBubble: UIButton = {
-        let button = UIButton()
-        button.setIcon(icon: .fontAwesomeRegular(.comment), iconSize: 20, color: Config.colors.primaryFont, backgroundColor: UIColor.black.withAlphaComponent(0), forState: .normal)
-        button.addTarget(self, action: #selector(commentsButtonAction), for: .touchUpInside)
-        return button
+    lazy private var commentBubble: UILabel = {
+        return Icons.getLabel(icon: .comment, target: self, action: #selector(commentsButtonAction))
     }()
 
     lazy private var rootViewContainer: UIView = {
         let view = UIView()
         self.addSubview(view)
         view.flex.define{ flex in
-            flex.addItem().justifyContent(.spaceBetween).direction(.row).padding(10).paddingBottom(0).paddingTop(5).define{ flex in
+            flex.addItem().justifyContent(.spaceBetween).direction(.row).padding(10).paddingBottom(0).paddingTop(10).define{ flex in
                 
                 flex.addItem().direction(.row).define{ flex in
-                    let l = UILabel()
-                    l.font = Config.smallFont
-                    l.setIcon(icon: .googleMaterialDesign(.arrowUpward), iconSize: 20)
-                    l.textColor = Config.colors.primaryFont
+                    let l = Icons.getLabel(icon: .upArrow)
                     
                     flex.addItem().direction(.row).define { flex in
-                        flex.addItem(l).marginLeft(-5)
+                        flex.addItem(l).marginRight(5)
                         flex.addItem(self.scoreLabel)
                     }
                     flex.addItem().direction(.row).marginLeft(10).define { flex  in
-                        flex.addItem(self.commentBubble)
+                        flex.addItem(self.commentBubble).marginRight(5)
                         flex.addItem(self.commentsButton)
                     }
                     flex.addItem(self.timeStampLabel).marginLeft(10)
                 }
                 
                 flex.addItem().direction(.row).define{ flex in
-                    flex.addItem(self.moreButton).marginVertical(-10)
+                    flex.addItem(self.moreButton).marginVertical(-10).marginRight(5)
                     flex.addItem(self.likeButton).marginVertical(-10)
                 }
             }
@@ -117,8 +104,8 @@ class InfoRowCell: UICollectionViewCell {
 
     private func setFavoriteButton(_ favorited: Bool) {
         let color = favorited == true ? Config.colors.red : Config.colors.primaryFont
-        let icon = favorited == true ? FontType.ionicons(.iosHeart) : FontType.ionicons(.iosHeartOutline)
-        self.likeButton.setIcon(icon: icon, iconSize: 30, color: color, forState: .normal)
+        let icon = favorited == true ? MyIconType.heartFill : MyIconType.heart
+        self.likeButton.updateIcon(icon: icon, color: color)
     }
     
     private func animateFavoriteButton() {
