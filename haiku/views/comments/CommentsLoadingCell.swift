@@ -24,30 +24,43 @@ class CommentsLoadingCell: UITableViewCell {
         return ai
     }()
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.backgroundColor = Config.colors.bg1
+    lazy var bgView: UIView = {
+        let view = UIView()
+        view.backgroundColor = Config.colors.bg1
+        return view
+    }()
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = .none
+        self.addSubview(self.bgView)
+        self.bgView.addSubview(self.loadingView)
+        self.bgView.addSubview(self.noCommentsLabel)
+        
+        self.bgView.snp.makeConstraints { make in
+            make.edges.equalTo(self)
+        }
+        
+        self.loadingView.snp.makeConstraints { make in
+            make.centerY.centerX.equalTo(self.bgView)
+        }
+        
+        self.noCommentsLabel.snp.makeConstraints { make in
+            make.centerY.centerX.equalTo(self)
+        }
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.loadingView.removeFromSuperview()
-        self.noCommentsLabel.removeFromSuperview()
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func setLoading() {
-        self.addSubview(self.loadingView)
-        self.loadingView.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
-            make.centerX.equalTo(self)
-        }
+        self.noCommentsLabel.isHidden = true
+        self.loadingView.isHidden = false
     }
     
     func setNoComments() {
-        self.addSubview(self.noCommentsLabel)
-        self.noCommentsLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
-            make.centerX.equalTo(self)
-        }
+        self.loadingView.isHidden = true
+        self.noCommentsLabel.isHidden = false
     }
 }

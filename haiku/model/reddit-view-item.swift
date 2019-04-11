@@ -64,6 +64,10 @@ class RedditViewItem {
         return Date().offsetExtended(from: Date(timeIntervalSince1970: TimeInterval(Int(self.redditPost.created_utc))))
     }()
 
+    lazy var humanTimeStamp: String = {
+        return Date().offset(from: Date(timeIntervalSince1970: TimeInterval(Int(self.redditPost.created_utc))))
+    }()
+
     init(_ redditPost: RedditPost, context: RedditViewItemContext) {
         self.redditPost = redditPost
         self.context = context
@@ -261,7 +265,7 @@ class RedditViewItem {
     func getTitleLabelText() -> String {
         var title = self.redditPost.title.replaceEncoding()
         if self.redditPost.over_18 {
-            title = "           " + title
+            title = "            " + title
         }
         return title
     }

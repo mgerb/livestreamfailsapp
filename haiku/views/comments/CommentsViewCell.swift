@@ -77,7 +77,7 @@ class CommentsViewCell: UITableViewCell {
         }
 
         if self.redditComment?.depth == 0 {
-            self.bottomBorder.pin.left().top().right().height(0.25)
+            self.bottomBorder.pin.left().top().right().height(CGFloat(Config.borderWidth))
         }
     }
     

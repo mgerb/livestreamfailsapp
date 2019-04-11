@@ -39,4 +39,6 @@ class Config {
     static let smallFont = UIFont.systemFont(ofSize: 12, weight: .regular)
     static let smallBoldFont = UIFont.systemFont(ofSize: 12, weight: .semibold)
     static let tinyFont = UIFont.systemFont(ofSize: 10, weight: .light)
+    
+    static let borderWidth = 0.25
 }

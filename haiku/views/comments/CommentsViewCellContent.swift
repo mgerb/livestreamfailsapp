@@ -22,7 +22,7 @@ class CommentsViewCellContent: CommentsViewCell {
     /// - 20 body horizontal margin
     public static func getHeight(redditComment: RedditComment) -> CGFloat {
         let width = UIScreen.main.bounds.width - CGFloat(redditComment.depth * 10) - 20
-        return 50 + (redditComment.htmlBody?.height(containerWidth: width) ?? 0)
+        return 50 + (redditComment.htmlBody?.height(width: width) ?? 0)
     }
     
     lazy var authorLabel: UILabel = {
@@ -102,7 +102,7 @@ class CommentsViewCellContent: CommentsViewCell {
         self.authorLabel.text = c.author
         self.authorLabel.flex.markDirty()
         
-        self.scoreLabel.text = String(c.score ?? 0)
+        self.scoreLabel.text = c.score?.commaRepresentation ?? "0"
         self.scoreLabel.flex.markDirty()
         
         self.timeStampLabel.text = c.humanTimeStamp

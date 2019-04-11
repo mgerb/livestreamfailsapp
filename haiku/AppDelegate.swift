@@ -56,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func setupTabBarController() {
         let tc = MyTabBarController()
-        tc.title = "Yaiku"
+        tc.title = "Live Stream Fails"
         tc.tabBar.isTranslucent = false
         tc.tabBar.tintColor = Config.colors.primaryFont
         

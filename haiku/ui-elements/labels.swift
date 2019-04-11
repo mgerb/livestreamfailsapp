@@ -22,6 +22,7 @@ enum MyFontColor {
     case secondary
     case blue
     case white
+    case tealBlue
 }
 
 enum MyAccentColor {
@@ -55,6 +56,8 @@ class Labels {
             label.textColor = Config.colors.blue
         case .white:
             label.textColor = Config.colors.white
+        case .tealBlue:
+            label.textColor = Config.colors.tealBlue
         }
 
         return label
@@ -74,6 +77,12 @@ class Labels {
             label.textAlignment = .center
         }
         
+        return label
+    }
+    
+    static func nsfwLabel() -> UILabel {
+        let label = Labels.newAccent(color: .red)
+        label.text = "NSFW"
         return label
     }
 }

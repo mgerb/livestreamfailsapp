@@ -160,7 +160,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30
+        return CommentsHeaderCell.calculateHeight(redditViewItem: self.redditViewItem)
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
