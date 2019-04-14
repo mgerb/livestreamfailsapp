@@ -184,4 +184,12 @@ extension String {
     func toBase64() -> String {
         return Data(self.utf8).base64EncodedString()
     }
+    
+    /// regex pattern
+    func replacingOccurances(pattern: String, with: String) -> String {
+        let value = NSMutableString(string: self)
+        let regex = try? NSRegularExpression(pattern: pattern)
+        regex?.replaceMatches(in: value, options: .reportProgress, range: NSRange(location: 0,length: value.length), withTemplate: with)
+        return String(value)
+    }
 }
