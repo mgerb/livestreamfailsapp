@@ -71,3 +71,4 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 
 /frameworks
+.DS_Store*

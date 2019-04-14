@@ -37,16 +37,11 @@ class SettingsViewController: UITableViewController {
         return self.getCell(setting: UserSettings.shared.info[indexPath.section][indexPath.row], indexPath: indexPath)
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let setting = UserSettings.shared.info[indexPath.section][indexPath.row]
-        if case .button = setting.type {
-            if setting.key == "clearCache" {
-                setting.handler?(nil)
-                self.tableView.cellForRow(at: indexPath)?.setSelected(false, animated: false)
-            }
-        }
+    // reload tableview data to reload cache size
+    override func viewWillAppear(_ animated: Bool) {
+        self.tableView.reloadData()
     }
-    
+
     private func getCell(setting: SettingInfo, indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath)
         cell.textLabel?.text = setting.label
@@ -55,6 +50,10 @@ class SettingsViewController: UITableViewController {
         case .button:
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.textColor = Config.colors.blue
+            
+            if setting.key == .clearCache {
+                cell.textLabel?.text = (cell.textLabel?.text ?? "") + " (\(StorageService.shared.getDocumentDirecorySize()) mb)"
+            }
         case .toggle:
             let switchView = MyUISwitch(frame: .zero)
             switchView.indexPath = indexPath
@@ -68,6 +67,17 @@ class SettingsViewController: UITableViewController {
         }
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let setting = UserSettings.shared.info[indexPath.section][indexPath.row]
+        if case .button = setting.type {
+            if setting.key == .clearCache {
+                setting.handler?(nil)
+                self.tableView.cellForRow(at: indexPath)?.setSelected(false, animated: false)
+                self.tableView.reloadRows(at: [indexPath], with: .automatic)
+            }
+        }
     }
     
     @objc func switchChanged(_ sender: MyUISwitch) {

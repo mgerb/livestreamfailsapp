@@ -46,14 +46,14 @@ class RedditViewItem {
     var thumbnail: UIImageView {
         let view = UIImageView()
         view.alpha = 0
-        self.getThumbnailImage() { (image, animate) in
+        _ = self.getThumbnailImage.subscribe(onNext: { image, animate in
             view.image = image
             if animate {
                 UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { view.alpha = 1 }, completion: nil)
             } else {
                 view.alpha = 1
             }
-        }
+        })
         return view
     }
     private var cachedPlayerItem: CachingPlayerItem? = nil
@@ -75,7 +75,7 @@ class RedditViewItem {
     }
     
     // return videoUrl and thumbnailUrl and cache them on object
-    private func getClipUrlInfo() -> Observable<(URL?, URL?)> {
+    lazy var getClipUrlInfo: Observable<(URL?, URL?)> = {
         return Observable.create { observer in
             
             // return cached url's if they exist
@@ -93,9 +93,9 @@ class RedditViewItem {
             
             return Disposables.create()
         }.share()
-    }
+    }()
     
-    func getPlayerItem() -> Observable<(CachingPlayerItem?, URL?)> {
+    lazy var getPlayerItem: Observable<(CachingPlayerItem?, URL?)> = {
         return Observable.create { observer in
 
             let dispose = Disposables.create()
@@ -120,7 +120,7 @@ class RedditViewItem {
                     // if still nil try to fetch item
                     if item == nil {
                         dispatchGroup.enter()
-                        _ = self.getClipUrlInfo().subscribe(onNext: { (videoUrl, thumbnailUrl) in
+                        _ = self.getClipUrlInfo.subscribe(onNext: { (videoUrl, thumbnailUrl) in
                             if let videoUrl = videoUrl {
                                 if videoUrl.absoluteString.hasSuffix("mp4") == true {
                                     item = CachingPlayerItem(url: videoUrl)
@@ -147,10 +147,10 @@ class RedditViewItem {
 
             return dispose
         }.share()
-    }
+    }()
 
     func updateGlobalPlayer() -> Observable<Void> {
-        return self.getPlayerItem().map { (item, _) in
+        return self.getPlayerItem.map { (item, _) in
             if let item = item {
                 self.manageVideoCache()
                 StorageService.shared.storeWatchedRedditPost(redditPost: self.redditPost)
@@ -160,72 +160,78 @@ class RedditViewItem {
         }
     }
     
-    func getThumbnailImage(closure: @escaping (_ image: UIImage?, _ animate: Bool) -> Void) {
+    lazy var getThumbnailImage: Observable<(UIImage?, Bool)> = {
         
-        DispatchQueue.global().async {
-            
-            let dispatchGroup = DispatchGroup()
-            var data: Data?
-
-            dispatchGroup.enter()
-            // check storage for image first
-            StorageService.shared.getCachedImage(id: self.redditPost.id) { res in
-                data = res
-                dispatchGroup.leave()
-            }
-            
-            dispatchGroup.wait()
-            
-            if let d = data {
-                DispatchQueue.main.async {
-                    closure(UIImage(data: d), false)
-                }
-                return
-            }
-            
-            dispatchGroup.wait()
-            
-            if data == nil {
-                if let youtubeID = self.redditPost.url?.youtubeID {
-                    data = try? Data(contentsOf: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")!)
-                }
-            }
+        return Observable.create { observer in
+            DispatchQueue.global().async {
                 
-            if data == nil {
+                let dispatchGroup = DispatchGroup()
+                var data: Data?
+                
                 dispatchGroup.enter()
-                _ = self.getClipUrlInfo().subscribe(onNext: { (_, thumbnailUrl) in
-                    if let thumbnailUrl = thumbnailUrl {
-                        dispatchGroup.enter()
-                        let queue = DispatchQueue(label: "RedditViewItem.getThumbnailImage", qos: .utility, attributes: [.concurrent])
-                        Alamofire.request(thumbnailUrl).validate()
-                            .response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { res in
-                                switch res.result {
-                                case .success(let d):
-                                    data = d
-                                case .failure(let err):
-                                    print(err)
-                                }
-                                dispatchGroup.leave()
-                        })
-                    }
+                // check storage for image first
+                StorageService.shared.getCachedImage(id: self.redditPost.id) { res in
+                    data = res
                     dispatchGroup.leave()
-                })
+                }
+                
+                dispatchGroup.wait()
+                
+                if let d = data {
+                    DispatchQueue.main.async {
+                        observer.onNext((UIImage(data: d), false))
+                        observer.onCompleted()
+                    }
+                    return
+                }
+                
+                dispatchGroup.wait()
+                
+                if data == nil {
+                    if let youtubeID = self.redditPost.url?.youtubeID {
+                        data = try? Data(contentsOf: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")!)
+                    }
+                }
+                
+                if data == nil {
+                    dispatchGroup.enter()
+                    _ = self.getClipUrlInfo.subscribe(onNext: { (_, thumbnailUrl) in
+                        if let thumbnailUrl = thumbnailUrl {
+                            dispatchGroup.enter()
+                            let queue = DispatchQueue(label: "RedditViewItem.getThumbnailImage", qos: .utility, attributes: [.concurrent])
+                            Alamofire.request(thumbnailUrl).validate()
+                                .response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { res in
+                                    switch res.result {
+                                    case .success(let d):
+                                        data = d
+                                    case .failure(let err):
+                                        print(err)
+                                    }
+                                    dispatchGroup.leave()
+                                })
+                        }
+                        dispatchGroup.leave()
+                    })
+                }
+                
+                dispatchGroup.wait()
+                
+                if let data = data {
+                    StorageService.shared.cacheImage(data: data, id: self.redditPost.id)
+                }
+                
+                let image: UIImage? = data != nil ? UIImage(data: data!) : nil
+                
+                DispatchQueue.main.async {
+                    // animate after network call because it took some time to load
+                    observer.onNext((image, true))
+                    observer.onCompleted()
+                }
             }
             
-            dispatchGroup.wait()
-
-            if let data = data {
-                StorageService.shared.cacheImage(data: data, id: self.redditPost.id)
-            }
-            
-            let image: UIImage? = data != nil ? UIImage(data: data!) : nil
-            
-            DispatchQueue.main.async {
-                // animate after network call because it took some time to load
-                closure(image, true)
-            }
-        }
-    }
+            return Disposables.create()
+        }.share()
+    }()
     
     func manageVideoCache() {
         if !RedditViewItem.cacheManager.contains(where: { $0.redditPost.id == self.redditPost.id }) {

@@ -80,6 +80,8 @@
 		A2DE2DB821FABFA8003F66D1 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709A21E8176C00BD3D0C /* Alamofire.framework */; };
 		A2DE2DB921FABFA8003F66D1 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709A21E8176C00BD3D0C /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2E7018221F823BD00029C75 /* twitch.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E7018121F823BD00029C75 /* twitch.service.swift */; };
+		A2F6EA78226392AE0038D425 /* Disk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2F6EA77226392AE0038D425 /* Disk.framework */; };
+		A2F6EA7A226392B40038D425 /* Disk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2F6EA77226392AE0038D425 /* Disk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -102,6 +104,7 @@
 				A20A70BD21E817B800BD3D0C /* SnapKit.framework in Embed Frameworks */,
 				A2DE2DB921FABFA8003F66D1 /* Alamofire.framework in Embed Frameworks */,
 				A20A70C921E817B800BD3D0C /* IGListKit.framework in Embed Frameworks */,
+				A2F6EA7A226392B40038D425 /* Disk.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -177,6 +180,7 @@
 		A2DCC62221EC4A6E00E08453 /* SwiftyMarkdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyMarkdown.framework; path = Carthage/Build/iOS/SwiftyMarkdown.framework; sourceTree = "<group>"; };
 		A2DE2DB521FAA578003F66D1 /* clip-url.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "clip-url.service.swift"; sourceTree = "<group>"; };
 		A2E7018121F823BD00029C75 /* twitch.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = twitch.service.swift; sourceTree = "<group>"; };
+		A2F6EA77226392AE0038D425 /* Disk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Disk.framework; path = Carthage/Build/iOS/Disk.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +188,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2F6EA78226392AE0038D425 /* Disk.framework in Frameworks */,
 				A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */,
 				A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */,
 				A20A70A721E8178800BD3D0C /* PinLayout.framework in Frameworks */,
@@ -205,6 +210,7 @@
 		A20A709921E8176C00BD3D0C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A2F6EA77226392AE0038D425 /* Disk.framework */,
 				A2D5EA49220D3C020086A394 /* SwiftSoup.framework */,
 				A28E619321F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework */,
 				A2DCC62221EC4A6E00E08453 /* SwiftyMarkdown.framework */,
@@ -667,7 +673,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = haiku/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -694,7 +700,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = haiku/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

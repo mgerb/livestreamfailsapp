@@ -15,12 +15,25 @@ enum SettingType {
     case option
 }
 
-struct SettingInfo {
-    let key: String
-    let label: String
+enum UserSettingKey:String {
+    case nsfw = "nsfw"
+    case clearCache = "clearCache"
+}
+
+class SettingInfo {
+    let key: UserSettingKey
+    var label: String
     let description: String?
     let type: SettingType
     let handler: ((_: Any?) -> ())?
+    
+    init(key: UserSettingKey, label: String, description: String?, type: SettingType, handler: ((_: Any?) -> ())?) {
+        self.key = key
+        self.label = label
+        self.description = description
+        self.type = type
+        self.handler = handler
+    }
 }
 
 class UserSettings: Object, Codable {
@@ -48,20 +61,20 @@ class UserSettings: Object, Codable {
     
     // 2d array for sections
     var info: [[SettingInfo]] = [[
-        SettingInfo(key: "nsfw", label: "Show not safe for work content", description: nil, type: .toggle, handler: { isOn in
+        SettingInfo(key: .nsfw, label: "Show not safe for work content", description: nil, type: .toggle, handler: { isOn in
             if let isOn = isOn as? Bool {
                 UserSettings.shared.nsfw = isOn
                 UserSettings.shared.syncSettings()
             }
         }),
-        SettingInfo(key: "clearCache", label: "Clear Cache", description: nil, type: .button, handler: { _ in
-            StorageService.shared.clearDiskCache()
+        SettingInfo(key: .clearCache, label: "Clear Cache", description: nil, type: .button, handler: { _ in
+            StorageService.shared.clearDocumentDirectoryCache()
         }),
     ]]
 
-    func getSettingValue(key: String) -> Any? {
+    func getSettingValue(key: UserSettingKey) -> Any? {
         let mirror = Mirror(reflecting: self)
-        return mirror.descendant(key)
+        return mirror.descendant(key.rawValue)
     }
     
     func syncSettings() {

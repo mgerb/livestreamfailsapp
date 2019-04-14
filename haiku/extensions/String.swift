@@ -31,8 +31,12 @@ extension String {
     
     /// extract twitch id from twitch url
     var twitchID: String? {
-        let pattern = "(?<=(https:\\/\\/)?clips\\.twitch\\.tv\\/)([\\w-]++)"
-        return self.extractText(pattern: pattern)
+        let pattern = "(?<=(https:\\/\\/)?(?:clips|www)\\.twitch\\.tv\\/)([\\w-\\/]++)"
+        if let subString = self.extractText(pattern: pattern)?.split(separator: "/").last {
+            return String(subString)
+        } else {
+            return nil
+        }
     }
 
     /// TODO:

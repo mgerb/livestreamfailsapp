@@ -57,7 +57,7 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {
         if let controller = sectionController as? RedditViewItemSectionController {
              // pre thumbnails
-            controller.redditViewItem?.getThumbnailImage() { (_, _) in }
+            _ = controller.redditViewItem?.getThumbnailImage.subscribe()
         }
     }
     

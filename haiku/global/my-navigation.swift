@@ -21,7 +21,7 @@ class MyNavigation {
     }
 
     func presentVideoPlayer(redditViewItem: RedditViewItem) {
-        _ = redditViewItem.getPlayerItem().subscribe(onNext: { (item, _) in
+        _ = redditViewItem.getPlayerItem.subscribe(onNext: { (item, _) in
             if let itemCopy: AVPlayerItem = item?.copy() as? AVPlayerItem {
                 let player = AVPlayer(playerItem: itemCopy)
                 let playerViewController = AVPlayerViewController()

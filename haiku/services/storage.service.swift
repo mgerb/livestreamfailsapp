@@ -9,64 +9,22 @@
 import Foundation
 import Realm
 import RealmSwift
+import Disk
 
 class StorageService {
     static let shared = StorageService()
     private lazy var realm = try? Realm()
-    private lazy var fileManager = FileManager.default
-    private var documentDirectory: URL?
-    
-    
-    init() {
-        guard let directory = try? self.fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else {
-            return
-        }
-        guard let newDir = directory.appendingPathComponent("lsfdata") else {
-            return
-        }
-
-        self.createDirIfNotExists(dir: newDir)
-        self.documentDirectory = newDir
-    }
-    
-    private func createDirIfNotExists(dir: URL) {
-        var isDirectory = ObjCBool(true)
-        let exists = self.fileManager.fileExists(atPath: dir.absoluteString, isDirectory: &isDirectory)
-        
-        if !exists && !isDirectory.boolValue {
-            try? self.fileManager.createDirectory(at: dir, withIntermediateDirectories: true, attributes: nil)
-        }
-    }
 }
 
 // disk cache
 extension StorageService {
     private func diskCacheData(data: Data, id: String) {
-        DispatchQueue.global().async {
-            do {
-                let filePath = self.documentDirectory?.appendingPathComponent(id)
-                try data.write(to: filePath!)
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
+        try? Disk.save(data, to: .caches, as: "lsfcache/\(id)");
     }
     
     private func getDiskCacheData(id: String, closure: @escaping (_ data: Data?) -> Void) {
-        let group = DispatchGroup()
-        var data: Data?
-        group.enter()
-        
-        DispatchQueue.global().async {
-            if let filePath = self.documentDirectory?.appendingPathComponent(id) {
-                data = try? Data(contentsOf: filePath)
-            }
-            group.leave()
-        }
-        
-        group.notify(queue: .main) {
-            closure(data)
-        }
+        let data = try? Disk.retrieve("lsfcache/\(id)", from: .caches, as: Data.self)
+        closure(data)
     }
     
     func cacheVideo(data: Data, id: String) {
@@ -85,9 +43,34 @@ extension StorageService {
         self.getDiskCacheData(id: "image:\(id)".toBase64()) { closure($0) }
     }
 
-    // TODO:
-    func clearDiskCache() {
-//        try? self.diskStorage!.removeAll()
+    /// get string in MB
+    func getDocumentDirecorySize() -> String {
+        
+        guard let directory = try? FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else {
+            return "0"
+        }
+        
+        let cacheDir = directory.appendingPathComponent("lsfcache")
+        
+        if let documentsDirectoryURL = cacheDir  {
+            if (try? documentsDirectoryURL.resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true {
+                var folderSize = 0
+                (FileManager.default.enumerator(at: documentsDirectoryURL, includingPropertiesForKeys: nil)?.allObjects as? [URL])?.lazy.forEach {
+                    folderSize += (try? $0.resourceValues(forKeys: [.totalFileAllocatedSizeKey]))?.totalFileAllocatedSize ?? 0
+                }
+                return (folderSize / 1_000_000).commaRepresentation
+            }
+        }
+        
+        return "0"
+    }
+    
+    func clearDocumentDirectoryCache() {
+        do {
+           try Disk.remove("lsfcache", from: .caches)
+        } catch {
+            print(error)
+        }
     }
 }
 
