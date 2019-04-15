@@ -65,7 +65,7 @@ extension String {
     }
     
     var isStreamableUrl: Bool {
-        return self.contains("livestreamfails.com")
+        return self.contains("streamable.com")
     }
     
     func extractText(pattern: String) -> String? {

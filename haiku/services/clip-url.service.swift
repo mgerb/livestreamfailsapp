@@ -78,6 +78,7 @@ class ClipUrlService: NSObject {
         }
     }
     
+    // TODO:
     private func getNeatClipUrl(_ urlString: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
         closure((nil, nil))
     }
@@ -104,12 +105,17 @@ class ClipUrlService: NSObject {
                     let videoElem = try html.getElementsByTag("video")
                     let sourceElem = try html.getElementsByTag("source")
 
-                    let video = try sourceElem.first()?.attr("src")
+                    // for streamable src attribute is on "video" element - for lsf it's on the "source" element
+                    let video = sourceElem.isEmpty() ? try videoElem.first()?.attr("src") : try sourceElem.first()?.attr("src")
                     let thumbnail = try videoElem.first()?.attr("poster")
 
-                    if let video = video, let thumbnail = thumbnail {
-                        videoUrl = URL(string: video)
-                        thumbnailUrl = URL(string: thumbnail)
+                    // streamable links start with "//" and without https
+                    // trim the "//" and add "https" to beginning of string if it doesn't exist
+                    if
+                        let video = video?.trimmingCharacters(in: CharacterSet.init(charactersIn: "/")),
+                        let thumbnail = thumbnail?.trimmingCharacters(in: CharacterSet.init(charactersIn: "/")) {
+                        videoUrl = URL(string: video.hasPrefix("https://") ? video : "https://\(video)")
+                        thumbnailUrl = URL(string: thumbnail.hasPrefix("https://") ? thumbnail : "https://\(thumbnail)")
                     }
                 } catch {
                     // do nothing
