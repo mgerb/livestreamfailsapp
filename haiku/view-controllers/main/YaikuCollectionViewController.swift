@@ -3,6 +3,7 @@ import UIKit
 import RxSwift
 
 class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UIScrollViewDelegate {
+
     var data: [ListDiffable] = []
     let refreshControl = UIRefreshControl()
     let disposeBag = DisposeBag()
@@ -47,11 +48,7 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        if let _ = object as? RedditViewItem {
-            return RedditViewItemSectionController()
-        } else {
-            return SortBarSectionController()
-        }
+        return RedditViewItemSectionController()
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? { return nil }
@@ -77,10 +74,6 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
                 self.view.addSubview(self.commentsTableView!)
             }
         }).disposed(by: self.disposeBag)
-        
-        Subjects.shared.sortButtonAction.subscribe(onNext: {
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl.frame.height), animated: true)
-            self.fetchHaikus()
-        }).disposed(by: self.disposeBag)
     }
+    
 }

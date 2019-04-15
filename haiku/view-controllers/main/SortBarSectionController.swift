@@ -11,8 +11,14 @@ import IGListKit
 import PinLayout
 import FlexLayout
 
+protocol SortBarDelegate {
+    func sortBarDidUpdate(sortBy: RedditPostSortBy)
+    func activeRedditPostSortBy() -> RedditPostSortBy
+}
+
 class SortBarSectionController: ListSectionController, ListDisplayDelegate, ListWorkingRangeDelegate {
-    
+
+    var delegate: SortBarDelegate?
     
     override func numberOfItems() -> Int {
         return 1
@@ -24,7 +30,9 @@ class SortBarSectionController: ListSectionController, ListDisplayDelegate, List
     }
     
     override func cellForItem(at index: Int) -> UICollectionViewCell {
-        return collectionContext!.dequeueReusableCell(of: SortBarCollectionViewCell.self, for: self, at: index)
+        let cell = collectionContext!.dequeueReusableCell(of: SortBarCollectionViewCell.self, for: self, at: index) as! SortBarCollectionViewCell
+        cell.delegate = self.delegate
+        return cell
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {
@@ -49,7 +57,8 @@ class SortBarSectionController: ListSectionController, ListDisplayDelegate, List
 class SortBarCollectionViewCell: UICollectionViewCell {
     
     static let height = CGFloat(40)
-    
+    var delegate: SortBarDelegate?
+
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.showsHorizontalScrollIndicator = false
@@ -110,18 +119,20 @@ class SortBarCollectionViewCell: UICollectionViewCell {
 
     @objc func buttonPress(sender: UIButton) {
         if let title = sender.titleLabel?.text {
-            if RedditService.shared.redditPostSortBy == title.lowercased() {
+            if self.delegate?.activeRedditPostSortBy().rawValue == title.lowercased() {
                 return
             }
-            RedditService.shared.redditPostSortBy = title.lowercased()
-            self.updateSelectedButtons()
-            Subjects.shared.sortButtonAction.onNext(())
+            
+            if let sortBy = RedditPostSortBy(rawValue: title.lowercased()) {
+                self.delegate?.sortBarDidUpdate(sortBy: sortBy)
+                self.updateSelectedButtons()
+            }
         }
     }
     
     private func updateSelectedButtons() {
         self.buttons.forEach {
-            if $0.titleLabel?.text?.lowercased() == RedditService.shared.redditPostSortBy {
+            if $0.titleLabel?.text?.lowercased() == self.delegate?.activeRedditPostSortBy().rawValue {
                 $0.backgroundColor = Config.colors.blue
                 $0.setTitleColor(Config.colors.white, for: .normal)
             } else {

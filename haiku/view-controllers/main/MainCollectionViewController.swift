@@ -2,10 +2,11 @@ import IGListKit
 import UIKit
 import RxSwift
 
-class MainCollectionViewController: YaikuCollectionViewController {
+class MainCollectionViewController: YaikuCollectionViewController, SortBarDelegate {
 
     private var readyToLoadMore = true
     private var loadMoreTimeoutWorkItem: DispatchWorkItem?
+    private var redditPostSortBy = RedditPostSortBy.hot
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +21,16 @@ class MainCollectionViewController: YaikuCollectionViewController {
             }
         }
     }
+    
+    override func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
+        if let _ = object as? RedditViewItem {
+            return RedditViewItemSectionController()
+        } else {
+            let controller = SortBarSectionController()
+            controller.delegate = self
+            return controller
+        }
+    }
 
     override func fetchHaikus(_ after: String? = nil) {
         super.fetchHaikus()
@@ -30,7 +41,7 @@ class MainCollectionViewController: YaikuCollectionViewController {
             GlobalPlayer.shared.pause()
         }
 
-        RedditService.shared.getHaikus(after: after){ redditPosts in
+        RedditService.shared.getHaikus(after: after, sortBy: self.redditPostSortBy){ redditPosts in
             let redditViewItems: [RedditViewItem] = redditPosts.compactMap {
                 let item = RedditViewItem($0, context: .home)
                 // filter out items with bad url's
@@ -69,5 +80,15 @@ class MainCollectionViewController: YaikuCollectionViewController {
                     
             }
         }
+    }
+
+    func sortBarDidUpdate(sortBy: RedditPostSortBy) {
+        self.redditPostSortBy = sortBy
+        self.collectionView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl.frame.height), animated: true)
+        self.fetchHaikus()
+    }
+    
+    func activeRedditPostSortBy() -> RedditPostSortBy {
+        return self.redditPostSortBy
     }
 }

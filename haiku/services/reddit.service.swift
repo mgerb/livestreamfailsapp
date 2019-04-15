@@ -11,6 +11,14 @@ class RedditAuthentication: Codable {
     let expires_in: Int
 }
 
+enum RedditPostSortBy: String {
+    case hot = "hot"
+    case new = "new"
+    case rising = "rising"
+    case controversial = "controversial"
+    case top = "top"
+}
+
 class RedditService: RequestAdapter, RequestRetrier {
     
     // use custom headers to allow NSFW content
@@ -20,7 +28,6 @@ class RedditService: RequestAdapter, RequestRetrier {
         "User-Agent": "ios:\(String(describing: Bundle.main.bundleIdentifier)):\(Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String ?? "1.0.0")"
     ]
     static let shared = RedditService()
-    var redditPostSortBy = "hot"
     let client_id = "Y2NoNa4zUyLbCA"
     let password = ""
     let oauthUrl = "https://www.reddit.com/api/v1/access_token"
@@ -109,8 +116,8 @@ class RedditService: RequestAdapter, RequestRetrier {
     }
 
     // returns a list of youtube ID's from youtube haiku
-    func getHaikus(after: String?, closure: @escaping (_ data: [RedditPost]) -> Void) {
-        let url = "https://reddit.com/r/livestreamfail/\(self.redditPostSortBy)/.json"
+    func getHaikus(after: String?, sortBy: RedditPostSortBy, closure: @escaping (_ data: [RedditPost]) -> Void) {
+        let url = "https://reddit.com/r/livestreamfail/\(sortBy)/.json"
         var parameters = [
             "limit": "25"
         ]
