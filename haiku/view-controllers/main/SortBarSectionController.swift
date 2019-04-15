@@ -118,12 +118,12 @@ class SortBarCollectionViewCell: UICollectionViewCell {
     }
 
     @objc func buttonPress(sender: UIButton) {
-        if let title = sender.titleLabel?.text {
-            if self.delegate?.activeRedditPostSortBy().rawValue == title.lowercased() {
+        if let title = sender.titleLabel?.text?.lowercased() {
+            if title != RedditPostSortBy.top.rawValue && self.delegate?.activeRedditPostSortBy().rawValue == title {
                 return
             }
             
-            if let sortBy = RedditPostSortBy(rawValue: title.lowercased()) {
+            if let sortBy = RedditPostSortBy(rawValue: title) {
                 self.delegate?.sortBarDidUpdate(sortBy: sortBy)
                 self.updateSelectedButtons()
             }

@@ -19,6 +19,15 @@ enum RedditPostSortBy: String {
     case top = "top"
 }
 
+enum RedditPostSortByTop: String, CaseIterable {
+    case hour = "hour"
+    case day = "day"
+    case week = "week"
+    case month = "month"
+    case year = "year"
+    case all = "all"
+}
+
 class RedditService: RequestAdapter, RequestRetrier {
     
     // use custom headers to allow NSFW content
@@ -116,7 +125,7 @@ class RedditService: RequestAdapter, RequestRetrier {
     }
 
     // returns a list of youtube ID's from youtube haiku
-    func getHaikus(after: String?, sortBy: RedditPostSortBy, closure: @escaping (_ data: [RedditPost]) -> Void) {
+    func getHaikus(after: String?, sortBy: RedditPostSortBy, sortByTop: RedditPostSortByTop?, closure: @escaping (_ data: [RedditPost]) -> Void) {
         let url = "https://reddit.com/r/livestreamfail/\(sortBy)/.json"
         var parameters = [
             "limit": "25"
@@ -124,6 +133,10 @@ class RedditService: RequestAdapter, RequestRetrier {
         
         if let after = after {
             parameters["after"] = after
+        }
+        
+        if sortBy == .top, let sortByTop = sortByTop {
+            parameters["t"] = sortByTop.rawValue
         }
 
         let queue = DispatchQueue(label: "RedditService.getHaikus", qos: .utility, attributes: [.concurrent])

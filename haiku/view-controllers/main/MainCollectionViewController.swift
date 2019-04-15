@@ -7,6 +7,7 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
     private var readyToLoadMore = true
     private var loadMoreTimeoutWorkItem: DispatchWorkItem?
     private var redditPostSortBy = RedditPostSortBy.hot
+    private var redditPostSortByTop = RedditPostSortByTop.week
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +42,7 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
             GlobalPlayer.shared.pause()
         }
 
-        RedditService.shared.getHaikus(after: after, sortBy: self.redditPostSortBy){ redditPosts in
+        RedditService.shared.getHaikus(after: after, sortBy: self.redditPostSortBy, sortByTop: self.redditPostSortByTop){ redditPosts in
             let redditViewItems: [RedditViewItem] = redditPosts.compactMap {
                 let item = RedditViewItem($0, context: .home)
                 // filter out items with bad url's
@@ -84,8 +85,27 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
 
     func sortBarDidUpdate(sortBy: RedditPostSortBy) {
         self.redditPostSortBy = sortBy
-        self.collectionView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl.frame.height), animated: true)
-        self.fetchHaikus()
+        
+        // show alert controller
+        if self.redditPostSortBy == .top {
+            let controller = UIAlertController(title: "Sort By", message: nil, preferredStyle: .actionSheet)
+            
+            RedditPostSortByTop.allCases.forEach { val in
+                let action = UIAlertAction(title: val.rawValue, style: .default, handler: { _ in
+                    self.redditPostSortByTop = val
+                    self.collectionView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl.frame.height), animated: true)
+                    self.fetchHaikus()
+                })
+                controller.addAction(action)
+            }
+            
+            controller.addAction(UIAlertAction(title: "cancel", style: .cancel, handler: nil))
+            self.present(controller, animated: true, completion: nil)
+        } else {
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl.frame.height), animated: true)
+            self.fetchHaikus()
+        }
+
     }
     
     func activeRedditPostSortBy() -> RedditPostSortBy {
