@@ -20,6 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
+        // https://realm.io/docs/swift/latest/#migrations
+        StorageService.shared.realmMigrations()
+        
         self.setupTabBarController()
         
         return true
