@@ -1,6 +1,7 @@
 github "0xced/XCDYouTubeKit" "2.7.3"
 github "Alamofire/Alamofire" "4.8.2"
 github "Instagram/IGListKit" "3.4.0"
+github "PiXeL16/RevealingSplashView" "0.7.0"
 github "ReactiveX/RxSwift" "4.5.0"
 github "SnapKit/SnapKit" "4.2.0"
 github "SwiftyJSON/SwiftyJSON" "4.3.0"

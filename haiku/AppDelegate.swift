@@ -72,13 +72,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let favoritesCollectionViewController = FavoritesCollectionViewController()
         favoritesCollectionViewController.tabBarItem = Icons.getTabBarItem(icon: .heart, selectedIcon: .heartFill, tag: 1)
 
-        
         let settingsViewController = SettingsViewController()
         settingsViewController.tabBarItem = Icons.getTabBarItem(icon: .settings, selectedIcon: .settingsFill, tag: 2)
 
         tc.viewControllers = [mainCollectionViewController, favoritesCollectionViewController, settingsViewController]
         
-        self.window!.rootViewController = navigationController
+        self.window?.rootViewController = navigationController
         self.window?.makeKeyAndVisible()
     }
     

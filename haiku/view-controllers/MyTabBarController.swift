@@ -26,6 +26,7 @@ class MyTabBarController: UITabBarController {
         GlobalPlayer.shared.pause()
     }
 
+    // TODO: move this
     func setupSubjectSubscriptions() {
         Subjects.shared.moreButtonAction.subscribe(onNext: { redditViewItem in
             let alertController = RedditAlertController(redditViewItem: redditViewItem)

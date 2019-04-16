@@ -11,5 +11,5 @@ github "layoutBox/PinLayout"
 github "SwiftyJSON/SwiftyJSON" ~> 4.0
 github "scinfu/SwiftSoup"
 github "saoudrizwan/Disk"
-
+github "PiXeL16/RevealingSplashView"
 

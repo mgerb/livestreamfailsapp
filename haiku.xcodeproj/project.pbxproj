@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A221E8178000BD3D0C /* IGListKit.framework */; };
 		A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A421E8178300BD3D0C /* Kingfisher.framework */; };
-		A20A70A721E8178800BD3D0C /* PinLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A621E8178800BD3D0C /* PinLayout.framework */; };
 		A20A70AF21E817A100BD3D0C /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70AE21E817A100BD3D0C /* SnapKit.framework */; };
 		A20A70B621E817B800BD3D0C /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70B421E817AC00BD3D0C /* XCDYouTubeKit.framework */; };
 		A20A70B721E817B800BD3D0C /* XCDYouTubeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70B421E817AC00BD3D0C /* XCDYouTubeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -79,6 +78,9 @@
 		A2DE2DB621FAA578003F66D1 /* clip-url.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DE2DB521FAA578003F66D1 /* clip-url.service.swift */; };
 		A2DE2DB821FABFA8003F66D1 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709A21E8176C00BD3D0C /* Alamofire.framework */; };
 		A2DE2DB921FABFA8003F66D1 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A709A21E8176C00BD3D0C /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A2DF60DD22657FDA00CE4D16 /* PinLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A621E8178800BD3D0C /* PinLayout.framework */; };
+		A2DF60DF2265863F00CE4D16 /* RevealingSplashView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2DF60DE2265863F00CE4D16 /* RevealingSplashView.framework */; };
+		A2DF60E12265864300CE4D16 /* RevealingSplashView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2DF60DE2265863F00CE4D16 /* RevealingSplashView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2E7018221F823BD00029C75 /* twitch.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E7018121F823BD00029C75 /* twitch.service.swift */; };
 		A2F6EA78226392AE0038D425 /* Disk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2F6EA77226392AE0038D425 /* Disk.framework */; };
 		A2F6EA7A226392B40038D425 /* Disk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2F6EA77226392AE0038D425 /* Disk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -100,6 +102,7 @@
 				A20A70C321E817B800BD3D0C /* Realm.framework in Embed Frameworks */,
 				A20A70BB21E817B800BD3D0C /* SwiftIcons.framework in Embed Frameworks */,
 				A2D5EA4C220D3C080086A394 /* SwiftSoup.framework in Embed Frameworks */,
+				A2DF60E12265864300CE4D16 /* RevealingSplashView.framework in Embed Frameworks */,
 				A20A70CB21E817B800BD3D0C /* FlexLayout.framework in Embed Frameworks */,
 				A20A70BD21E817B800BD3D0C /* SnapKit.framework in Embed Frameworks */,
 				A2DE2DB921FABFA8003F66D1 /* Alamofire.framework in Embed Frameworks */,
@@ -179,6 +182,7 @@
 		A2DCC62021EC2CAA00E08453 /* NSAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSAttributedString.swift; sourceTree = "<group>"; };
 		A2DCC62221EC4A6E00E08453 /* SwiftyMarkdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyMarkdown.framework; path = Carthage/Build/iOS/SwiftyMarkdown.framework; sourceTree = "<group>"; };
 		A2DE2DB521FAA578003F66D1 /* clip-url.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "clip-url.service.swift"; sourceTree = "<group>"; };
+		A2DF60DE2265863F00CE4D16 /* RevealingSplashView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RevealingSplashView.framework; path = Carthage/Build/iOS/RevealingSplashView.framework; sourceTree = "<group>"; };
 		A2E7018121F823BD00029C75 /* twitch.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = twitch.service.swift; sourceTree = "<group>"; };
 		A2F6EA77226392AE0038D425 /* Disk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Disk.framework; path = Carthage/Build/iOS/Disk.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -191,9 +195,9 @@
 				A2F6EA78226392AE0038D425 /* Disk.framework in Frameworks */,
 				A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */,
 				A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */,
-				A20A70A721E8178800BD3D0C /* PinLayout.framework in Frameworks */,
-				A20A70A721E8178800BD3D0C /* PinLayout.framework in Frameworks */,
+				A2DF60DD22657FDA00CE4D16 /* PinLayout.framework in Frameworks */,
 				A20A70C021E817B800BD3D0C /* RealmSwift.framework in Frameworks */,
+				A2DF60DF2265863F00CE4D16 /* RevealingSplashView.framework in Frameworks */,
 				A20A70BE21E817B800BD3D0C /* RxSwift.framework in Frameworks */,
 				A20A70AF21E817A100BD3D0C /* SnapKit.framework in Frameworks */,
 				A20A70BA21E817B800BD3D0C /* SwiftIcons.framework in Frameworks */,
@@ -210,6 +214,7 @@
 		A20A709921E8176C00BD3D0C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A2DF60DE2265863F00CE4D16 /* RevealingSplashView.framework */,
 				A2F6EA77226392AE0038D425 /* Disk.framework */,
 				A2D5EA49220D3C020086A394 /* SwiftSoup.framework */,
 				A28E619321F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework */,
@@ -438,7 +443,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0940;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Mitchell Gerber";
 				TargetAttributes = {
 					A29CD0012119363900A5A6EC = {
@@ -678,7 +683,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mgerb.yaiku;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mgerb.lsf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -705,7 +710,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mgerb.yaiku;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mgerb.lsf;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;

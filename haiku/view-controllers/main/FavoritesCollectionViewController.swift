@@ -20,13 +20,12 @@ class FavoritesCollectionViewController: YaikuCollectionViewController {
     override func fetchHaikus(_ after: String? = nil) {
         super.fetchHaikus()
         
-        let redditPosts = StorageService.shared.getRedditPostFavorites()
-        // create section view items from reddit posts
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        // delay or else images don't show up right away
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
+            let redditPosts = StorageService.shared.getRedditPostFavorites()
+            // create section view items from reddit posts
             self.data = redditPosts.map { RedditViewItem($0, context: .favorites) }
-            self.adapter.performUpdates(animated: true, completion: { _ in
-                self.refreshControl.endRefreshing()
-            })
-        }
+            self.adapter.performUpdates(animated: true, completion: nil)
+        })
     }
 }

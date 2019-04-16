@@ -5,7 +5,6 @@ import RxSwift
 class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UIScrollViewDelegate {
 
     var data: [ListDiffable] = []
-    let refreshControl = UIRefreshControl()
     let disposeBag = DisposeBag()
     var commentsTableView: CommentsTableView?
     
@@ -28,12 +27,6 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
         self.adapter.collectionView = self.collectionView
         self.adapter.scrollViewDelegate = self
         self.adapter.dataSource = self
-        if #available(iOS 10.0, *) {
-            self.collectionView.refreshControl = refreshControl
-        } else {
-            self.collectionView.addSubview(refreshControl)
-        }
-        self.refreshControl.addTarget(self, action: #selector(fetchInitial(_:)), for: .valueChanged)
         self.fetchInitial()
         self.setupSubjectSubscriptions()
     }
@@ -57,13 +50,7 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
         self.fetchHaikus()
     }
     
-    func fetchHaikus(_ after: String? = nil) {
-        if after == nil {
-            if !self.refreshControl.isRefreshing {
-                self.refreshControl.beginRefreshing()
-            }
-        }
-    }
+    func fetchHaikus(_ after: String? = nil) {}
 
     func setupSubjectSubscriptions() {
         // show comments list

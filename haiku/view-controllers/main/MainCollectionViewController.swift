@@ -1,6 +1,7 @@
 import IGListKit
 import UIKit
 import RxSwift
+import RevealingSplashView
 
 class MainCollectionViewController: YaikuCollectionViewController, SortBarDelegate {
 
@@ -8,10 +9,26 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
     private var loadMoreTimeoutWorkItem: DispatchWorkItem?
     private var redditPostSortBy = RedditPostSortBy.hot
     private var redditPostSortByTop = RedditPostSortByTop.week
+    private let revealingSplashView = RevealingSplashView(iconImage: UIImage(named: "app_icon.png")!,iconInitialSize: CGSize(width: 250, height: 250), backgroundColor: UIColor(red:1, green:1, blue:1, alpha:1.0))
+    private let refreshControl = UIRefreshControl()
+    private var didShowAnimation = false
     
     override func viewDidLoad() {
+        if #available(iOS 10.0, *) {
+            self.collectionView.refreshControl = refreshControl
+        } else {
+            self.collectionView.addSubview(refreshControl)
+        }
+        self.refreshControl.addTarget(self, action: #selector(fetchInitial(_:)), for: .valueChanged)
+        
         super.viewDidLoad()
         self.collectionView.contentOffset.y = SortBarCollectionViewCell.height
+    }
+    
+    override func viewWillLayoutSubviews() {
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.window?.addSubview(self.revealingSplashView)
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -34,8 +51,12 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
     }
 
     override func fetchHaikus(_ after: String? = nil) {
-        super.fetchHaikus()
-        
+        if after == nil {
+            if !self.refreshControl.isRefreshing {
+                self.refreshControl.beginRefreshing()
+            }
+        }
+
         // cancel load more timeout if we reload the data completely
         if after == nil {
             self.loadMoreTimeoutWorkItem?.cancel()
@@ -50,8 +71,8 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
                 return item
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                
+            DispatchQueue.main.async {
+            
                 let sortBar = ["sort bar"] as [ListDiffable]
                 if after == nil {
                     self.data = sortBar + redditViewItems
@@ -60,6 +81,13 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
                 }
 
                 self.refreshControl.endRefreshing()
+                
+                // start twitter like animation
+                if !self.didShowAnimation {
+                    self.revealingSplashView.startAnimation() {
+                        self.didShowAnimation = true
+                    }
+                }
 
                 if after == nil {
                     self.adapter.reloadData(completion: nil)
