@@ -159,6 +159,10 @@ class RedditService: RequestAdapter, RequestRetrier {
     
     private func getComments(permalink: String, params: Parameters = [:], closure: @escaping ((_ data: JSON?) -> Void)) {
         let url = "https://www.reddit.com\(permalink).json"
+        var params = params
+        if params["limit"] == nil {
+            params["limit"] = "100"
+        }
         let queue = DispatchQueue(label: "RedditService.getComments", qos: .utility, attributes: [.concurrent])
         Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.default, headers: self.headers).validate()
             .response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { response in

@@ -41,18 +41,21 @@ class SettingsViewController: UITableViewController {
     }
 
     private func getCell(setting: SettingInfo, indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath)
-        cell.textLabel?.text = setting.label
+        self.tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath)
         
         switch setting.type {
         case .button:
-            cell.textLabel?.textAlignment = .center
+            let cell = UITableViewCell.init(style: .value1, reuseIdentifier: "SettingsCell")
+            cell.textLabel?.text = setting.label
             cell.textLabel?.textColor = Config.colors.blue
-            
+
             if setting.key == .clearCache {
-                cell.textLabel?.text = (cell.textLabel?.text ?? "") + " (\(StorageService.shared.getDocumentDirecorySize()) mb)"
+                cell.detailTextLabel?.text = "\(StorageService.shared.getDocumentDirecorySize()) mb"
             }
+            return cell
         case .toggle:
+            let cell = UITableViewCell.init(style: .default, reuseIdentifier: "SettingsCell")
+            cell.textLabel?.text = setting.label
             let switchView = MyUISwitch(frame: .zero)
             switchView.indexPath = indexPath
             let val = UserSettings.shared.getSettingValue(key: setting.key) as? Bool ?? false
@@ -61,11 +64,12 @@ class SettingsViewController: UITableViewController {
             switchView.addTarget(self, action: #selector(self.switchChanged(_:)), for: .valueChanged)
             cell.accessoryView = switchView
             cell.selectionStyle = .none
+            return cell
         default:
             break
         }
         
-        return cell
+        return self.tableView.dequeueReusableCell(withIdentifier: "SettingsCell", for: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
