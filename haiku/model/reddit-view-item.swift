@@ -24,12 +24,17 @@ enum RedditViewItemPlayerState {
     case error
 }
 
+protocol RedditViewItemDelegate {
+    func failedToLoadVideo(redditViewItem: RedditViewItem)
+}
+
 class RedditViewItem {
     
     // manage cached player items
     // only keep 5 cached at any one time otherwise memory fills up
     static var cacheManager: [RedditViewItem] = []
     
+    var delegate: RedditViewItemDelegate?
     let redditPost: RedditPost
     let disposeBag = DisposeBag()
 
@@ -42,6 +47,12 @@ class RedditViewItem {
 
     lazy var videoStartTime: Int = self.redditPost.url?.youtubeStartTime ?? 0
     lazy var videoEndTime: Int? = self.redditPost.url?.youtubeEndTime
+    
+    var failedToLoadVideo = false {
+        didSet {
+            self.delegate?.failedToLoadVideo(redditViewItem: self)
+        }
+    }
 
     var thumbnail: UIImageView {
         let view = UIImageView()
@@ -56,10 +67,7 @@ class RedditViewItem {
         })
         return view
     }
-    private var cachedPlayerItem: CachingPlayerItem? = nil
-    private var cachedVideoUrl: URL?
-    private var cachedThumbnailUrl: URL?
-    
+
     lazy var humanTimeStampExtended: String = {
         return Date().offsetExtended(from: Date(timeIntervalSince1970: TimeInterval(Int(self.redditPost.created_utc))))
     }()
@@ -67,6 +75,10 @@ class RedditViewItem {
     lazy var humanTimeStamp: String = {
         return Date().offset(from: Date(timeIntervalSince1970: TimeInterval(Int(self.redditPost.created_utc))))
     }()
+    
+    private var cachedPlayerItem: CachingPlayerItem? = nil
+    private var cachedVideoUrl: URL?
+    private var cachedThumbnailUrl: URL?
 
     init(_ redditPost: RedditPost, context: RedditViewItemContext) {
         self.redditPost = redditPost
@@ -86,6 +98,7 @@ class RedditViewItem {
                 ClipUrlService.shared.getClipInfo(redditPost: self.redditPost) { (videoUrl, thumbnailUrl) in
                     self.cachedVideoUrl = videoUrl
                     self.cachedThumbnailUrl = thumbnailUrl
+                    self.failedToLoadVideo = videoUrl == nil
                     observer.onNext((videoUrl, thumbnailUrl))
                     observer.onCompleted()
                 }
@@ -95,7 +108,7 @@ class RedditViewItem {
         }.share()
     }()
     
-    lazy var getPlayerItem: Observable<(CachingPlayerItem?, URL?)> = {
+    lazy var getPlayerItem: Observable<CachingPlayerItem?> = {
         return Observable.create { observer in
 
             let dispose = Disposables.create()
@@ -140,7 +153,7 @@ class RedditViewItem {
                 dispatchGroup.wait()
                 
                 DispatchQueue.main.async {
-                    observer.onNext((self.cachedPlayerItem, nil))
+                    observer.onNext(self.cachedPlayerItem)
                     observer.onCompleted()
                 }
             }
@@ -150,7 +163,7 @@ class RedditViewItem {
     }()
 
     func updateGlobalPlayer() -> Observable<Void> {
-        return self.getPlayerItem.map { (item, _) in
+        return self.getPlayerItem.map { item in
             if let item = item {
                 self.manageVideoCache()
                 StorageService.shared.storeWatchedRedditPost(redditPost: self.redditPost)

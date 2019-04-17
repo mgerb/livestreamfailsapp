@@ -6,6 +6,8 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
 
     public var redditViewItem: RedditViewItem!
 
+    var delegate: RedditViewItemDelegate?
+    
     override init() {
         super.init()
         displayDelegate = self
@@ -23,6 +25,9 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
         case 0:
             return CGSize(width: width, height: self.getTitleCellHeight(width))
         case 1:
+            if self.redditViewItem.failedToLoadVideo {
+                return CGSize(width: 0, height: 0)
+            }
             let height = (width * 9 / 16)
             return CGSize(width: width, height: height)
         case 2:
@@ -51,6 +56,7 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
     override func didUpdate(to object: Any) {
         if let item = object as? RedditViewItem {
             self.redditViewItem = item
+            self.redditViewItem.delegate = self.delegate
         }
     }
 

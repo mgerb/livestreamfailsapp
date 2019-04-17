@@ -43,7 +43,9 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
     
     override func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
         if let _ = object as? RedditViewItem {
-            return RedditViewItemSectionController()
+            let controller = RedditViewItemSectionController()
+            controller.delegate = self
+            return controller
         } else {
             let controller = SortBarSectionController()
             controller.delegate = self

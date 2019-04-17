@@ -65,7 +65,7 @@ class InfoRowCell: UICollectionViewCell {
                 }
                 
                 flex.addItem().direction(.row).define{ flex in
-                    flex.addItem(self.moreButton).marginVertical(-10).marginRight(5)
+                    flex.addItem(self.moreButton).marginVertical(-10).marginRight(8)
                     flex.addItem(self.likeButton).marginVertical(-10)
                 }
             }

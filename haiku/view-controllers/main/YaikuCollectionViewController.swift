@@ -2,8 +2,7 @@ import IGListKit
 import UIKit
 import RxSwift
 
-class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UIScrollViewDelegate {
-
+class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UIScrollViewDelegate, RedditViewItemDelegate {
     var data: [ListDiffable] = []
     let disposeBag = DisposeBag()
     var commentsTableView: CommentsTableView?
@@ -41,7 +40,9 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
     }
     
     func listAdapter(_ listAdapter: ListAdapter, sectionControllerFor object: Any) -> ListSectionController {
-        return RedditViewItemSectionController()
+        let controller = RedditViewItemSectionController()
+        controller.delegate = self
+        return controller
     }
     
     func emptyView(for listAdapter: ListAdapter) -> UIView? { return nil }
@@ -66,4 +67,7 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
         }).disposed(by: self.disposeBag)
     }
     
+    func failedToLoadVideo(redditViewItem: RedditViewItem) {
+        self.adapter.performUpdates(animated: false, completion: nil)
+    }
 }

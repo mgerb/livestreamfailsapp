@@ -25,7 +25,7 @@ extension String {
             return nil
         }
         
-        let pattern = "((?<=(v|V)/)|(?<=be/)|(?<=(\\?|\\&)v=)|(?<=embed/))([\\w-]++)"
+        let pattern = "((?<=(v|V)/)|(?<=be/)|(?<=(\\?|\\&|;)v=)|(?<=embed/))([\\w-]++)"
         return self.extractText(pattern: pattern)
     }
     
