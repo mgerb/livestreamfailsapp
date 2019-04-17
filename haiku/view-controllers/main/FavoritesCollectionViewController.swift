@@ -12,6 +12,7 @@ class FavoritesCollectionViewController: YaikuCollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.title = "Favorites"
         Subjects.shared.favoriteButtonAction.subscribe(onNext: { _ in
             self.fetchHaikus()
         }).disposed(by: self.disposeBag)

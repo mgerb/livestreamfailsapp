@@ -13,6 +13,7 @@ class SettingsViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.title = "Settings"
         
         self.tableView = UITableView.init(frame: CGRect.zero, style: .grouped)
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "SettingsCell")
@@ -27,9 +28,6 @@ class SettingsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "Settings"
-        }
         return nil
     }
     

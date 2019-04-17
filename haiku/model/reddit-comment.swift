@@ -16,7 +16,7 @@ class RedditComment {
     let author: String?
     let body: String?
     let body_html: String?
-    var htmlBody: NSMutableAttributedString?
+    var htmlBody: NSAttributedString?
     let depth: Int
     let ups: Int?
     let score: Int?
@@ -86,7 +86,7 @@ class RedditComment {
         """
         
         let htmlContent = "<!DOCTYPE html><html>\(style)<body>\(self.body_html?.htmlToAttributedString?.string ?? "")</body></html>"
-        self.htmlBody = htmlContent.htmlToAttributedString?.trimEndingNewLine()
+        self.htmlBody = htmlContent.htmlToAttributedString?.trimWhiteSpace()
     }
     
     func getFlattenedReplies() -> [RedditComment] {

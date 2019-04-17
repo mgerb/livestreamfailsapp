@@ -57,8 +57,11 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
         Subjects.shared.showCommentsAction.subscribe(onNext: { redditViewItem in
             if self.isViewLoaded && self.view?.window != nil {
                 self.commentsTableView?.dismiss()
-                self.commentsTableView = CommentsTableView(frame: self.view.frame, redditViewItem: redditViewItem)
-                self.view.addSubview(self.commentsTableView!)
+                if let frame = MyNavigation.shared.rootViewController?.view.frame {
+                    let totalNavItemHeight = (self.navigationController?.navigationBar.frame.height ?? 0) + (self.tabBarController?.tabBar.frame.height ?? 0)
+                    self.commentsTableView = CommentsTableView(frame: frame, redditViewItem: redditViewItem, totalNavItemHeight: totalNavItemHeight)
+                    self.view.addSubview(self.commentsTableView!)
+                }
             }
         }).disposed(by: self.disposeBag)
     }

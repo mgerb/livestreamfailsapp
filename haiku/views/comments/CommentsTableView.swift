@@ -15,8 +15,9 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     var didLoad = false
     var didFinishInitialAnimation = false
     var data: [Any] = ["loading"]
-    private let footerHeight: CGFloat = 600
+    private let footerHeight: CGFloat = 800
     let redditViewItem: RedditViewItem
+    let totalNavItemHeight: CGFloat
     
     lazy var bgView: UIView = {
         let view = UIView()
@@ -32,8 +33,10 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         return view
     }()
     
-    init(frame: CGRect, redditViewItem: RedditViewItem) {
+    // offsetTop should be total height of navbars/tabbars
+    init(frame: CGRect, redditViewItem: RedditViewItem, totalNavItemHeight: CGFloat) {
         self.redditViewItem = redditViewItem
+        self.totalNavItemHeight = totalNavItemHeight
         super.init(frame: frame, style: .grouped)
 
         self.separatorStyle = .none
@@ -65,12 +68,12 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         if newSuperview != nil {
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
-                    self.contentOffset.y = -(self.frame.height / 2)
+                    self.contentOffset.y = -(self.frame.height / 2) + self.totalNavItemHeight
                 }, completion: {_ in
                     DispatchQueue.main.async {
                         self.didFinishInitialAnimation = true
                         self.setWhiteBackgroundLayout()
-                        self.contentInset.bottom = -(self.footerHeight - 100)
+                        self.contentInset.bottom = -(self.footerHeight - 400)
                     }
                     self.fetchComments()
                 })
@@ -109,7 +112,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         switch self.data[indexPath.row] {
         case let s as String:
             if s == "loading" || s == "no comments" {
-                return 300
+                return 200
             }
         case let comment as RedditComment:
             if comment.isHidden {
@@ -124,7 +127,6 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         default:
             return 50
         }
-        
         return 50
     }
     
@@ -165,7 +167,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let cell = self.dequeueReusableHeaderFooterView(withIdentifier: "FooterCell")
-        cell?.backgroundColor = Config.colors.bg1
+        cell?.contentView.backgroundColor = Config.colors.bg1
         return cell
     }
 

@@ -13,7 +13,7 @@ import SafariServices
 
 class MyNavigation {
     public static let shared = MyNavigation()
-    private let rootViewController = UIApplication.shared.keyWindow!.rootViewController
+    let rootViewController = UIApplication.shared.keyWindow!.rootViewController
     
     func presentWebView(url: URL) {
         let webview = SFSafariViewController(url: url)

@@ -46,7 +46,7 @@ class CommentsLoadingCell: UITableViewCell {
         }
         
         self.noCommentsLabel.snp.makeConstraints { make in
-            make.centerY.centerX.equalTo(self)
+            make.centerY.centerX.equalTo(self.bgView)
         }
     }
     

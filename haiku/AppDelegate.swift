@@ -59,26 +59,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func setupTabBarController() {
         let tc = MyTabBarController()
-        tc.title = "Live Stream Fails"
         tc.tabBar.isTranslucent = false
         tc.tabBar.tintColor = Config.colors.primaryFont
+
+        let mainNavController = self.getTabBarNavController(viewController: MainCollectionViewController(), icon: .tv, selectedIcon: .tvFill, tag: 0)
+        let favoritesNavController = self.getTabBarNavController(viewController: FavoritesCollectionViewController(), icon: .heart, selectedIcon: .heartFill, tag:  1)
+        let settingsNavController = self.getTabBarNavController(viewController: SettingsViewController(), icon: .settings, selectedIcon: .settingsFill, tag: 2)
+
+        tc.viewControllers = [mainNavController, favoritesNavController, settingsNavController]
         
-        let navigationController = UINavigationController(rootViewController: tc)
-        navigationController.navigationBar.isTranslucent = false
-
-        let mainCollectionViewController = MainCollectionViewController()
-        mainCollectionViewController.tabBarItem = Icons.getTabBarItem(icon: .tv, selectedIcon: .tvFill, tag: 0)
-
-        let favoritesCollectionViewController = FavoritesCollectionViewController()
-        favoritesCollectionViewController.tabBarItem = Icons.getTabBarItem(icon: .heart, selectedIcon: .heartFill, tag: 1)
-
-        let settingsViewController = SettingsViewController()
-        settingsViewController.tabBarItem = Icons.getTabBarItem(icon: .settings, selectedIcon: .settingsFill, tag: 2)
-
-        tc.viewControllers = [mainCollectionViewController, favoritesCollectionViewController, settingsViewController]
-        
-        self.window?.rootViewController = navigationController
+        self.window?.rootViewController = tc
         self.window?.makeKeyAndVisible()
+    }
+    
+    private func getTabBarNavController(viewController: UIViewController, icon: MyIconType, selectedIcon: MyIconType, tag: Int) -> UINavigationController {
+        viewController.tabBarItem = Icons.getTabBarItem(icon: icon, selectedIcon: selectedIcon, tag: tag)
+        viewController.tabBarItem.imageInsets = UIEdgeInsets(top: 5, left: 0, bottom: -5, right: 0)
+        let navController = UINavigationController(rootViewController: viewController)
+        navController.navigationBar.isTranslucent = false
+        return navController
     }
     
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask

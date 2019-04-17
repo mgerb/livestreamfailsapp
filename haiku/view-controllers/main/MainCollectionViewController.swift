@@ -22,6 +22,7 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
         self.refreshControl.addTarget(self, action: #selector(fetchInitial(_:)), for: .valueChanged)
         
         super.viewDidLoad()
+        self.navigationItem.title = "Live Stream Fails"
         self.collectionView.contentOffset.y = SortBarCollectionViewCell.height
     }
     
