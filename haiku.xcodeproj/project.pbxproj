@@ -69,7 +69,7 @@
 		A2D5EA4B220D3C080086A394 /* SwiftSoup.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2D5EA49220D3C020086A394 /* SwiftSoup.framework */; };
 		A2D5EA4C220D3C080086A394 /* SwiftSoup.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2D5EA49220D3C020086A394 /* SwiftSoup.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2D5FC6F21F6CA220098A884 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D5FC6E21F6CA220098A884 /* Date.swift */; };
-		A2D70E8C21EED67C00F69F0C /* TapThroughTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */; };
+		A2D70E8C21EED67C00F69F0C /* CommentsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D70E8B21EED67C00F69F0C /* CommentsTextView.swift */; };
 		A2DCC61321EBB20500E08453 /* CommentsViewCellMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61221EBB20500E08453 /* CommentsViewCellMore.swift */; };
 		A2DCC61521EC175700E08453 /* CommentsViewCellContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61421EC175700E08453 /* CommentsViewCellContent.swift */; };
 		A2DCC61F21EC2AE300E08453 /* my-navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCC61E21EC2AE300E08453 /* my-navigation.swift */; };
@@ -177,7 +177,7 @@
 		A2D38BD422597F7300D53289 /* icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = icons.swift; sourceTree = "<group>"; };
 		A2D5EA49220D3C020086A394 /* SwiftSoup.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftSoup.framework; path = Carthage/Build/iOS/SwiftSoup.framework; sourceTree = "<group>"; };
 		A2D5FC6E21F6CA220098A884 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
-		A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapThroughTextView.swift; sourceTree = "<group>"; };
+		A2D70E8B21EED67C00F69F0C /* CommentsTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsTextView.swift; sourceTree = "<group>"; };
 		A2DCC61221EBB20500E08453 /* CommentsViewCellMore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewCellMore.swift; sourceTree = "<group>"; };
 		A2DCC61421EC175700E08453 /* CommentsViewCellContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewCellContent.swift; sourceTree = "<group>"; };
 		A2DCC61E21EC2AE300E08453 /* my-navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "my-navigation.swift"; sourceTree = "<group>"; };
@@ -317,6 +317,7 @@
 				A2DCC61221EBB20500E08453 /* CommentsViewCellMore.swift */,
 				A247504521EACBE600C0F712 /* CommentsHeaderCell.swift */,
 				A28E619721F56368004B53A7 /* CommentsLoadingCell.swift */,
+				A2D70E8B21EED67C00F69F0C /* CommentsTextView.swift */,
 			);
 			path = comments;
 			sourceTree = "<group>";
@@ -399,7 +400,6 @@
 				A288A12B215344D000000733 /* MyPlayerView.swift */,
 				A242E87D21E294CB004A8026 /* TapThroughCollectionView.swift */,
 				A247504321EA726D00C0F712 /* TapThroughTableView.swift */,
-				A2D70E8B21EED67C00F69F0C /* TapThroughTextView.swift */,
 				A2B780FA2249CA5C001301DD /* MyUISwitch.swift */,
 			);
 			path = views;
@@ -519,7 +519,7 @@
 				A269478421CEF93000A07F69 /* RedditAlertController.swift in Sources */,
 				A2B7C2442198C211008DB7E6 /* reddit-view-item.swift in Sources */,
 				A25285752159CA2E00DCA537 /* RedditViewItemSectionController.swift in Sources */,
-				A2D70E8C21EED67C00F69F0C /* TapThroughTextView.swift in Sources */,
+				A2D70E8C21EED67C00F69F0C /* CommentsTextView.swift in Sources */,
 				A2D38BD522597F7300D53289 /* icons.swift in Sources */,
 				A2397906224B0A7E00844E83 /* labels.swift in Sources */,
 				A25285B62165B7DB00DCA537 /* storage.service.swift in Sources */,

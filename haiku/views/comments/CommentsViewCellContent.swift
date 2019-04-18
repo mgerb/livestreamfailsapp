@@ -61,8 +61,8 @@ class CommentsViewCellContent: CommentsViewCell {
         return view
     }()
     
-    lazy var body: TapThroughTextView = {
-        let view = TapThroughTextView()
+    lazy var body: CommentsTextView = {
+        let view = CommentsTextView()
         self.bgView.addSubview(view)
         view.backgroundColor = Config.colors.bg1
         view.isScrollEnabled = false

@@ -34,7 +34,7 @@ class TwitchService {
                 let primarySource = JSON(data)["quality_options"][0]["source"]
                 
                 // grab the preferred video source url based on quality
-                var preferredSource = JSON(data)["quality_options"].array?.filter { $0["quality"].string == UserSettings.shared.videoQuality.rawValue }.first
+                var preferredSource = JSON(data)["quality_options"].array?.filter { $0["quality"].string == UserSettings.shared.videoQuality.rawValue }.first?["source"]
                 
                 // set preferred source to primary source if not found
                 if preferredSource == nil {

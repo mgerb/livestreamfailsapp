@@ -11,6 +11,18 @@ import UIKit
 
 extension String {
     
+    /// check if matches regex pattern
+    func matches(pattern: String) -> Bool {
+        let range = NSRange(location: 0, length: self.count)
+        let r = try? NSRegularExpression(pattern: pattern, options: .init())
+        
+        if r?.firstMatch(in: self, options: [], range: range) == nil {
+            return false
+        }
+        
+        return true
+    }
+    
     /// extract youtube id from twitch url
     var youtubeID: String? {
 
