@@ -10,17 +10,8 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-enum VideoQuality: String {
-    case _360 = "360"
-    case _480 = "480"
-    case _720 = "720"
-    case _1080 = "1080"
-}
-
 class TwitchService {
     static let shared = TwitchService()
-    
-    private let videoQuality = VideoQuality._480
 
     /* Format example:
          {
@@ -35,16 +26,24 @@ class TwitchService {
         let urlString = "https://clips.twitch.tv/api/v2/clips/\(clipID)/status"
         Alamofire.request(urlString).response(completionHandler: { res in
             if let data = res.data {
-                // this will need to be changed when the user has the option to change video quality
-                var videoJson = JSON(data)["quality_options"].array?.filter { $0["quality"].string == self.videoQuality.rawValue }.first
                 
-                // if we can't find the quality we are looking for grab the first in the list
-                if videoJson == nil {
-                    videoJson = JSON(data)["quality_options"].array?.first
+                
+                // grab the first item in the list - this should always
+                // be the best quality and won't contain the video quality
+                // in the url
+                let primarySource = JSON(data)["quality_options"][0]["source"]
+                
+                // grab the preferred video source url based on quality
+                var preferredSource = JSON(data)["quality_options"].array?.filter { $0["quality"].string == UserSettings.shared.videoQuality.rawValue }.first
+                
+                // set preferred source to primary source if not found
+                if preferredSource == nil {
+                    preferredSource = primarySource
                 }
-                
-                if let v = videoJson {
-                    if let clipUrl = v["source"].string, let thumbnailUrl = self.grabThumnailUrl(clipUrl: clipUrl) {
+
+                if let source = preferredSource {
+                    // grab the thumbnail url from the primary source always
+                    if let clipUrl = source.string, let thumbnailUrl = self.grabThumnailUrl(clipUrl: primarySource.string) {
                         closure((URL(string: clipUrl), URL(string: thumbnailUrl)))
                         return
                     }
@@ -54,23 +53,7 @@ class TwitchService {
         })
     }
     
-    // TODO: video quality type
     func grabThumnailUrl(clipUrl: String?) -> String? {
-        
-        var newUrl = clipUrl
-        
-        if newUrl?.contains("AT-") == true {
-            if newUrl?.contains("offset") == true {
-                newUrl = clipUrl?.replacingOccurrences(of: "AT-cm%7C", with: "")
-            } else if newUrl?.contains("cm%7C") == false {
-                newUrl = clipUrl?.replacingOccurrences(of: "AT-", with: "")
-            }
-        }
-        
-        // maybe use this for smalles thumbnails, but I worry that this url link may not exist
-//        newUrl = newUrl?.replacingOccurances(pattern: "(-[\\w\\d]*)?.mp4", with: "-preview-480x272.jpg")
-        newUrl = newUrl?.replacingOccurances(pattern: "(-[\\w\\d]*)?.mp4", with: "-preview.jpg")
-        
-        return newUrl
+        return clipUrl?.replacingOccurances(pattern: ".mp4", with: "-preview.jpg")
     }
 }

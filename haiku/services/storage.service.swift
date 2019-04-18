@@ -47,7 +47,7 @@ extension StorageService {
     func getDocumentDirecorySize() -> String {
         
         guard let directory = try? FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false) as NSURL else {
-            return "0"
+            return "0 mb"
         }
         
         let cacheDir = directory.appendingPathComponent("lsfcache")
@@ -58,11 +58,11 @@ extension StorageService {
                 (FileManager.default.enumerator(at: documentsDirectoryURL, includingPropertiesForKeys: nil)?.allObjects as? [URL])?.lazy.forEach {
                     folderSize += (try? $0.resourceValues(forKeys: [.totalFileAllocatedSizeKey]))?.totalFileAllocatedSize ?? 0
                 }
-                return (folderSize / 1_000_000).commaRepresentation
+                return (folderSize / 1_000_000).commaRepresentation + " mb"
             }
         }
         
-        return "0"
+        return "0 mb"
     }
     
     func clearDocumentDirectoryCache() {

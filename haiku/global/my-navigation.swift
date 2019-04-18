@@ -23,6 +23,7 @@ class MyNavigation {
     func presentVideoPlayer(redditViewItem: RedditViewItem) {
         _ = redditViewItem.getPlayerItem.subscribe(onNext: { item in
             if let itemCopy: AVPlayerItem = item?.copy() as? AVPlayerItem {
+                GlobalPlayer.shared.pause()
                 let player = AVPlayer(playerItem: itemCopy)
                 let playerViewController = AVPlayerViewController()
                 playerViewController.player = player

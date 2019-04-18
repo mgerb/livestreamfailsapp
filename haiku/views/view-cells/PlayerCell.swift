@@ -147,7 +147,6 @@ class PlayerCell: UICollectionViewCell {
         }
     
     @objc func fullScreenButtonAction() {
-        GlobalPlayer.shared.pause()
         MyNavigation.shared.presentVideoPlayer(redditViewItem: self.redditViewItem!)
     }
     

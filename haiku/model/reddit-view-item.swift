@@ -293,7 +293,9 @@ class RedditViewItem {
 extension RedditViewItem: CachingPlayerItemDelegate {
     
     func playerItem(_ playerItem: CachingPlayerItem, didFinishDownloadingData data: Data) {
-        StorageService.shared.cacheVideo(data: data, id: self.redditPost.id)
+        if UserSettings.shared.cacheVideos {
+            StorageService.shared.cacheVideo(data: data, id: self.redditPost.id)
+        }
     }
     
     // func playerItemReadyToPlay(_ playerItem: CachingPlayerItem) {

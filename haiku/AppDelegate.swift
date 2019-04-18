@@ -64,7 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let mainNavController = self.getTabBarNavController(viewController: MainCollectionViewController(), icon: .tv, selectedIcon: .tvFill, tag: 0)
         let favoritesNavController = self.getTabBarNavController(viewController: FavoritesCollectionViewController(), icon: .heart, selectedIcon: .heartFill, tag:  1)
-        let settingsNavController = self.getTabBarNavController(viewController: SettingsViewController(), icon: .settings, selectedIcon: .settingsFill, tag: 2)
+        let settingsNavController = self.getTabBarNavController(viewController: SettingsFormViewController(), icon: .settings, selectedIcon: .settingsFill, tag: 2)
 
         tc.viewControllers = [mainNavController, favoritesNavController, settingsNavController]
         
