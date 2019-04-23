@@ -42,12 +42,9 @@ class SettingsFormViewController: FormViewController {
                 row.title = "Preferred Video Quality"
                 row.value = UserSettings.shared.videoQuality.rawValue
                 row.options = VideoQuality.allCases.map { $0.rawValue }
-                }.onPresent { from, to in
-                    to.selectableRowCellUpdate = { cell, row in
-                        if let val = row.selectableValue, let quality = VideoQuality(rawValue: val) {
-                            UserSettings.shared.videoQuality = quality
-                            row.value = val
-                        }
+                }.onChange { change in
+                    if let val = change.value, let quality = VideoQuality(rawValue: val) {
+                        UserSettings.shared.videoQuality = quality
                     }
                 }
             +++ Section("Caching")
