@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var backgroundTimestamp = Date()
     /// time interval to refresh the app views - 15 minutes
     private let refreshTime = Double(15 * 60)
+    private let myTabBarController = MyTabBarController()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -23,8 +24,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // https://realm.io/docs/swift/latest/#migrations
         StorageService.shared.realmMigrations()
         
-        self.setupTabBarController()
+        self.myTabBarController.tabBar.isTranslucent = false
+        self.myTabBarController.tabBar.tintColor = Config.colors.primaryFont
         
+        self.myTabBarController.viewControllers = self.getTabBarControllers()
+        
+        self.window?.rootViewController = self.myTabBarController
+        self.window?.makeKeyAndVisible()
+
         return true
     }
 
@@ -44,8 +51,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         // reload the tab view controller if in background for certain period of time
         let time = Date().timeIntervalSince(self.backgroundTimestamp)
+        // reset tabs on tab bar controller - this reloads all data
         if time > self.refreshTime {
-            self.setupTabBarController()
+            self.myTabBarController.viewControllers = self.getTabBarControllers()
         }
     }
 
@@ -57,19 +65,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    func setupTabBarController() {
-        let tc = MyTabBarController()
-        tc.tabBar.isTranslucent = false
-        tc.tabBar.tintColor = Config.colors.primaryFont
-
+    private func getTabBarControllers() -> [UIViewController] {
         let mainNavController = self.getTabBarNavController(viewController: MainCollectionViewController(), icon: .tv, selectedIcon: .tvFill, tag: 0)
         let favoritesNavController = self.getTabBarNavController(viewController: FavoritesCollectionViewController(), icon: .heart, selectedIcon: .heartFill, tag:  1)
         let settingsNavController = self.getTabBarNavController(viewController: SettingsFormViewController(), icon: .settings, selectedIcon: .settingsFill, tag: 2)
-
-        tc.viewControllers = [mainNavController, favoritesNavController, settingsNavController]
-        
-        self.window?.rootViewController = tc
-        self.window?.makeKeyAndVisible()
+        return [mainNavController, favoritesNavController, settingsNavController]
     }
     
     private func getTabBarNavController(viewController: UIViewController, icon: MyIconType, selectedIcon: MyIconType, tag: Int) -> UINavigationController {
