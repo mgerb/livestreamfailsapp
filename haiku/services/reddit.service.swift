@@ -2,6 +2,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import Marshal
 
 class RedditAuthentication: Codable {
     let access_token: String
@@ -146,6 +147,9 @@ class RedditService: RequestAdapter, RequestRetrier {
 
                 switch response.result {
                 case .success(let res):
+                    if let json = try? JSONParser.JSONObjectWithData(res) {
+                        let thing = try? RedditThing(object: json)
+                    }
                     if let data = try? JSONDecoder().decode(RedditPostListing.self, from: res) {
                         posts = data.data.children.compactMap { $0.data }
                     }

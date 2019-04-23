@@ -61,6 +61,9 @@
 		A29CD00D2119363C00A5A6EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A29CD00C2119363C00A5A6EC /* Assets.xcassets */; };
 		A29CD0102119363C00A5A6EC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */; };
 		A2A8143F2248720300A4E974 /* user-settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A8143E2248720300A4E974 /* user-settings.swift */; };
+		A2AD9CE2226ECDD700A19C57 /* Marshal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2AD9CE1226ECDD700A19C57 /* Marshal.framework */; };
+		A2AD9CE4226ECDDA00A19C57 /* Marshal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2AD9CE1226ECDD700A19C57 /* Marshal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A2AD9CE6226ECDEA00A19C57 /* reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AD9CE5226ECDEA00A19C57 /* reddit.swift */; };
 		A2B0098221F01E9200888476 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */; };
 		A2B780FB2249CA5C001301DD /* MyUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B780FA2249CA5C001301DD /* MyUISwitch.swift */; };
 		A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */; };
@@ -96,6 +99,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				A20A70BF21E817B800BD3D0C /* RxSwift.framework in Embed Frameworks */,
+				A2AD9CE4226ECDDA00A19C57 /* Marshal.framework in Embed Frameworks */,
 				A20A70B921E817B800BD3D0C /* SwiftyJSON.framework in Embed Frameworks */,
 				A20A70C121E817B800BD3D0C /* RealmSwift.framework in Embed Frameworks */,
 				A20A70B721E817B800BD3D0C /* XCDYouTubeKit.framework in Embed Frameworks */,
@@ -170,6 +174,8 @@
 		A29CD00F2119363C00A5A6EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A29CD0112119363C00A5A6EC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2A8143E2248720300A4E974 /* user-settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "user-settings.swift"; sourceTree = "<group>"; };
+		A2AD9CE1226ECDD700A19C57 /* Marshal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Marshal.framework; path = Carthage/Build/iOS/Marshal.framework; sourceTree = "<group>"; };
+		A2AD9CE5226ECDEA00A19C57 /* reddit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reddit.swift; sourceTree = "<group>"; };
 		A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
 		A2B780FA2249CA5C001301DD /* MyUISwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUISwitch.swift; sourceTree = "<group>"; };
 		A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
@@ -200,6 +206,7 @@
 				A2E2A1202268067800E5FA92 /* Eureka.framework in Frameworks */,
 				A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */,
 				A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */,
+				A2AD9CE2226ECDD700A19C57 /* Marshal.framework in Frameworks */,
 				A2DF60DD22657FDA00CE4D16 /* PinLayout.framework in Frameworks */,
 				A20A70C021E817B800BD3D0C /* RealmSwift.framework in Frameworks */,
 				A2DF60DF2265863F00CE4D16 /* RevealingSplashView.framework in Frameworks */,
@@ -219,6 +226,7 @@
 		A20A709921E8176C00BD3D0C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A2AD9CE1226ECDD700A19C57 /* Marshal.framework */,
 				A2E2A11F2268067800E5FA92 /* Eureka.framework */,
 				A2DF60DE2265863F00CE4D16 /* RevealingSplashView.framework */,
 				A2F6EA77226392AE0038D425 /* Disk.framework */,
@@ -279,6 +287,7 @@
 				A2B7C2432198C211008DB7E6 /* reddit-view-item.swift */,
 				A283B61921E2E9CC00AE47C6 /* reddit-comment.swift */,
 				A2A8143E2248720300A4E974 /* user-settings.swift */,
+				A2AD9CE5226ECDEA00A19C57 /* reddit.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -506,6 +515,7 @@
 				A2DCC61F21EC2AE300E08453 /* my-navigation.swift in Sources */,
 				A24818BE21780E3B005B8819 /* InfoRowCell.swift in Sources */,
 				A26BD837218FE09100E948A4 /* Int.swift in Sources */,
+				A2AD9CE6226ECDEA00A19C57 /* reddit.swift in Sources */,
 				A2DCC61321EBB20500E08453 /* CommentsViewCellMore.swift in Sources */,
 				A25285732159C9FC00DCA537 /* MainCollectionViewController.swift in Sources */,
 				A288A12C215344D000000733 /* MyPlayerView.swift in Sources */,

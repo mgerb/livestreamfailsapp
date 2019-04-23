@@ -13,5 +13,6 @@ github "scinfu/SwiftSoup"
 github "saoudrizwan/Disk"
 github "PiXeL16/RevealingSplashView"
 github "xmartlabs/Eureka" ~> 5.0
+github "utahiosmac/Marshal"
 
 
