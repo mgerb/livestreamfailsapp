@@ -16,7 +16,7 @@ enum RedditKind: String {
     case more = "more"
 }
 
-enum RedditListingType: ValueType {
+indirect enum RedditListingType {
     case redditListing(RedditListing)
     case redditLink(RedditLink)
     case redditComment(Comment)
@@ -154,12 +154,104 @@ struct RedditLink: Unmarshaling {
     }
 }
 
-struct Comment: Unmarshaling {
+final class Comment: Unmarshaling {
+    let id: String
+    let parent_id: String
+    let link_id: String
+    let author: String
+    let body: String
+    let body_html: String
+    let depth: Int
+    let ups: Int
+    let score: Int
+    let created: Float
+    let created_utc: Float
+    let permalink: String?
+    let replies: RedditThing?
+    
+    // self defined values not on reddit json
+    var htmlBody: NSAttributedString? = nil
+    var isCollapsed: Bool = false
+    var isHidden: Bool = false
+    
     init(object: MarshaledObject) throws {
+        self.id = try object.value(for: "id")
+        self.parent_id = try object.value(for: "parent_id")
+        self.link_id = try object.value(for: "link_id")
+        self.author = try object.value(for: "author")
+        self.body = try object.value(for: "body")
+        self.body_html = try object.value(for: "body_html")
+        self.depth = try object.value(for: "depth")
+        self.ups = try object.value(for: "ups")
+        self.score = try object.value(for: "score")
+        self.created = try object.value(for: "created")
+        self.created_utc = try object.value(for: "created_utc")
+        self.permalink = try object.value(for: "permalink")
+        // empty replies are returned as an empty string for whatever reason
+        self.replies = try? object.value(for: "replies")
+    }
+
+    /// check if author is "[deleted]"
+    var isDeleted: Bool {
+        return self.author == "[deleted]"
+    }
+
+    /// return how much time past since now in readable format
+    lazy var humanTimeStamp: String = {
+        let timestamp = Date(timeIntervalSince1970: Double(self.created_utc))
+        return Date().offset(from: timestamp)
+    }()
+    
+    func renderHtml() {
+        let style = """
+            <style type=\"text/css\">
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+                    font-size: 14px;
+                    color: #424242;
+                }
+                a {
+                    text-decoration: none;
+                }
+            </style>
+        """
+        
+        let htmlContent = "<!DOCTYPE html><html>\(style)<body>\(self.body_html.htmlToAttributedString?.string ?? "")</body></html>"
+        self.htmlBody = htmlContent.htmlToAttributedString?.trimWhiteSpace()
+    }
+
+    /// create flat list of either more or comment type
+    /// TODO: maybe make this return [Any] instead??
+    static func flattenComments(_ listing: RedditThing) -> [RedditListingType] {
+        var output: [RedditListingType] = []
+        
+        guard let data = listing.data else { return output }
+        
+        switch data {
+        case .redditComment(let comment):
+            output = output + [data]
+            if let replies = comment.replies {
+                output = output + Comment.flattenComments(replies)
+            }
+            
+        case .redditListing(let listing):
+            if let children = listing.children {
+                children.forEach { child in
+                    output = output + Comment.flattenComments(child)
+                }
+            }
+            
+        case .redditMore(_):
+            output = output + [data]
+        default:
+            break
+        }
+        
+        return output
     }
 }
 
-struct RedditMore: Unmarshaling {
+final class RedditMore: Unmarshaling {
     let count: Int?
     let name: String
     let id: String
@@ -174,5 +266,9 @@ struct RedditMore: Unmarshaling {
         self.parent_id = try object.value(for: "parent_id")
         self.depth = try object.value(for: "depth")
         self.children = try object.value(for: "children")
+    }
+    
+    var isContinueThread: Bool {
+        return self.id == "_"
     }
 }

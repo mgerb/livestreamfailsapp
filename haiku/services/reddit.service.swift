@@ -181,6 +181,14 @@ class RedditService: RequestAdapter, RequestRetrier {
             .response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { response in
                 switch response.result {
                 case .success(let value):
+                    do {
+                        let json = try JSONParser.JSONArrayWithData(value)
+                        let thing = try RedditThing(object: json[1])
+                        print(Comment.flattenComments(thing).count)
+                    } catch {
+                        print(error)
+                    }
+
                     let val = JSON(value)[1]
                     DispatchQueue.main.async {
                         closure(val)
@@ -258,14 +266,14 @@ class RedditService: RequestAdapter, RequestRetrier {
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
-                
+
                 // TODO: may need to implement asynchronous html render here like above
                 let newComments: [RedditComment] = json["json"]["data"]["things"].array?.compactMap {
                     let c = RedditComment(json: $0["data"])
                     c.renderHtml()
                     return c
                 } ?? []
-                
+
                 closure(newComments)
             case .failure(let error):
                 print(error)
