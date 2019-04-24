@@ -7,8 +7,8 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
 
     private var readyToLoadMore = true
     private var loadMoreTimeoutWorkItem: DispatchWorkItem?
-    private var redditPostSortBy = RedditPostSortBy.hot
-    private var redditPostSortByTop = RedditPostSortByTop.week
+    private var redditLinkSortBy = RedditLinkSortBy.hot
+    private var redditLinkSortByTop = RedditLinkSortByTop.week
     private let revealingSplashView = RevealingSplashView(iconImage: UIImage(named: "app_icon.png")!,iconInitialSize: CGSize(width: 250, height: 250), backgroundColor: UIColor(red:1, green:1, blue:1, alpha:1.0))
     private let refreshControl = UIRefreshControl()
     private var didShowAnimation = false
@@ -36,7 +36,7 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
         if scrollView.isAtBottom && !self.refreshControl.isRefreshing && self.readyToLoadMore && self.data.count > 0 {
             if let redditViewItem = self.data[self.data.count - 1] as? RedditViewItem {
                 self.readyToLoadMore = false
-                self.fetchHaikus(redditViewItem.redditPost.name)
+                self.fetchHaikus(redditViewItem.redditLink.name)
             }
         }
     }
@@ -66,11 +66,11 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
             GlobalPlayer.shared.pause()
         }
 
-        RedditService.shared.getHaikus(after: after, sortBy: self.redditPostSortBy, sortByTop: self.redditPostSortByTop){ redditPosts in
-            let redditViewItems: [RedditViewItem] = redditPosts.compactMap {
+        RedditService.shared.getHaikus(after: after, sortBy: self.redditLinkSortBy, sortByTop: self.redditLinkSortByTop){ redditLinks in
+            let redditViewItems: [RedditViewItem] = redditLinks.compactMap {
                 let item = RedditViewItem($0, context: .home)
                 // filter out items with bad url's
-                // TODO: filter out reddit posts with bad url's
+                // TODO: filter out reddit links with bad url's
                 return item
             }
             
@@ -114,16 +114,16 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
         }
     }
 
-    func sortBarDidUpdate(sortBy: RedditPostSortBy) {
-        self.redditPostSortBy = sortBy
+    func sortBarDidUpdate(sortBy: RedditLinkSortBy) {
+        self.redditLinkSortBy = sortBy
         
         // show alert controller
-        if self.redditPostSortBy == .top {
+        if self.redditLinkSortBy == .top {
             let controller = UIAlertController(title: "Sort By", message: nil, preferredStyle: .actionSheet)
             
-            RedditPostSortByTop.allCases.forEach { val in
+            RedditLinkSortByTop.allCases.forEach { val in
                 let action = UIAlertAction(title: val.rawValue, style: .default, handler: { _ in
-                    self.redditPostSortByTop = val
+                    self.redditLinkSortByTop = val
                     self.collectionView.setContentOffset(CGPoint(x: 0, y: -self.refreshControl.frame.height), animated: true)
                     self.fetchHaikus()
                 })
@@ -139,7 +139,7 @@ class MainCollectionViewController: YaikuCollectionViewController, SortBarDelega
 
     }
     
-    func activeRedditPostSortBy() -> RedditPostSortBy {
-        return self.redditPostSortBy
+    func activeRedditLinkSortBy() -> RedditLinkSortBy {
+        return self.redditLinkSortBy
     }
 }

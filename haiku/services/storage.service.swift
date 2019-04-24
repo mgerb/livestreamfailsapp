@@ -76,14 +76,14 @@ extension StorageService {
 
 // UserDefaults stuff
 extension StorageService {
-    /// store reddit post ID if user has watched it
-    func storeWatchedRedditPost(redditPost: RedditPost) {
-        UserDefaults.standard.set(true, forKey: "wrp:\(redditPost.id)")
+    /// store reddit link ID if user has watched it
+    func storeWatchedRedditLink(redditLink: RedditLink) {
+        UserDefaults.standard.set(true, forKey: "wrl:\(redditLink.id)")
     }
     
-    /// check if user has watched reddit post by ID
-    func getWatchedRedditPost(redditPost: RedditPost) -> Bool {
-        return UserDefaults.standard.bool(forKey: "wrp:\(redditPost.id)")
+    /// check if user has watched reddit link by ID
+    func getWatchedRedditLink(redditLink: RedditLink) -> Bool {
+        return UserDefaults.standard.bool(forKey: "wrl:\(redditLink.id)")
     }
     
     func storeRedditAuthentication(auth: RedditAuthentication) {
@@ -129,36 +129,36 @@ extension StorageService {
         self.realm = try? Realm()
     }
     
-    func storeRedditPostFavorite(redditPost: RedditPost) {
-        let realmRedditPost = RealmRedditPost(redditPost)
+    func storeRedditLinkFavorite(redditLink: RedditLink) {
+        let realmRedditLink = RealmRedditLink(redditLink)
         try? self.realm?.write {
-            self.realm?.add(realmRedditPost, update: true)
+            self.realm?.add(realmRedditLink, update: true)
         }
     }
     
-    func deleteRedditPostFavorite(id: String) {
-        if let post = self.getRedditPostFavorite(id: id) {
+    func deleteRedditLinkFavorite(id: String) {
+        if let link = self.getRedditLinkFavorite(id: id) {
             try? self.realm?.write {
-                self.realm?.delete(post)
+                self.realm?.delete(link)
             }
         }
     }
     
-    // get reddit post favorites from storage - order by date added
-    func getRedditPostFavorites() -> [RedditPost] {
-        if let posts = self.realm?.objects(RealmRedditPost.self) {
-            return posts
-                .map { $0.getRedditPost() }
+    // get reddit link favorites from storage - order by date added
+    func getRedditLinkFavorites() -> [RedditLink] {
+        if let links = self.realm?.objects(RealmRedditLink.self) {
+            return links
+                .map { $0.getRedditLink() }
                 .sorted(by: {$0.dateAdded?.compare($1.dateAdded ?? Date()) == .orderedDescending})
         }
         return []
     }
     
-    func getRedditPostFavorite(id: String) -> RealmRedditPost? {
-        return self.realm?.object(ofType: RealmRedditPost.self, forPrimaryKey: id)
+    func getRedditLinkFavorite(id: String) -> RealmRedditLink? {
+        return self.realm?.object(ofType: RealmRedditLink.self, forPrimaryKey: id)
     }
     
-    func redditPostFavoriteExists(id: String) -> Bool {
-        return self.realm?.object(ofType: RealmRedditPost.self, forPrimaryKey: id) != nil
+    func redditLinkFavoriteExists(id: String) -> Bool {
+        return self.realm?.object(ofType: RealmRedditLink.self, forPrimaryKey: id) != nil
     }
 }

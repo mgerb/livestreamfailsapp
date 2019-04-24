@@ -66,7 +66,6 @@ class CommentsTextView: UITextView, UITextViewDelegate {
             return url
         }
         
-        print(url.path)
         if url.path.matches(pattern: "^\\/?(r|u)\\/[\\w\\d-]+") == true {
             return URL(string: "https://www.reddit.com\(url.path)")
         }

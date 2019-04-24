@@ -12,7 +12,7 @@ class RedditAuthentication: Codable {
     let expires_in: Int
 }
 
-enum RedditPostSortBy: String {
+enum RedditLinkSortBy: String {
     case hot = "hot"
     case new = "new"
     case rising = "rising"
@@ -20,7 +20,7 @@ enum RedditPostSortBy: String {
     case top = "top"
 }
 
-enum RedditPostSortByTop: String, CaseIterable {
+enum RedditLinkSortByTop: String, CaseIterable {
     case hour = "hour"
     case day = "day"
     case week = "week"
@@ -126,7 +126,7 @@ class RedditService: RequestAdapter, RequestRetrier {
     }
 
     // returns a list of youtube ID's from youtube haiku
-    func getHaikus(after: String?, sortBy: RedditPostSortBy, sortByTop: RedditPostSortByTop?, closure: @escaping (_ data: [RedditPost]) -> Void) {
+    func getHaikus(after: String?, sortBy: RedditLinkSortBy, sortByTop: RedditLinkSortByTop?, closure: @escaping (_ data: [RedditLink]) -> Void) {
         let url = "https://reddit.com/r/livestreamfail/\(sortBy)/.json"
         var parameters = [
             "limit": "25"
@@ -143,21 +143,30 @@ class RedditService: RequestAdapter, RequestRetrier {
         let queue = DispatchQueue(label: "RedditService.getHaikus", qos: .utility, attributes: [.concurrent])
         Alamofire.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: self.headers).validate()
             .response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { response in
-                var posts: [RedditPost] = []
+                var links: [RedditLink] = []
 
                 switch response.result {
                 case .success(let res):
-                    if let json = try? JSONParser.JSONObjectWithData(res) {
-                        let thing = try? RedditThing(object: json)
-                    }
-                    if let data = try? JSONDecoder().decode(RedditPostListing.self, from: res) {
-                        posts = data.data.children.compactMap { $0.data }
+                    do {
+                        let json = try JSONParser.JSONObjectWithData(res)
+                        let thing = try RedditThing(object: json)
+                        
+                        if let data = thing.data, case .redditListing(let listing) = data, let children = listing.children {
+                            children.forEach { child in
+                                if let data = child.data, case .redditLink(let link) = data {
+                                    links.append(link)
+                                }
+                            }
+                        }
+                    } catch {
+                        print(error)
                     }
                 case .failure(let err):
                     print(err)
                 }
     
-                closure(posts.filter { UserSettings.shared.nsfw || !$0.over_18 })
+                // filter nsfw links
+                closure(links.filter { UserSettings.shared.nsfw || !$0.over_18 })
         })
     }
     
@@ -236,7 +245,7 @@ class RedditService: RequestAdapter, RequestRetrier {
     }
     
     /// load more comments from children
-    /// link_id - should be the name of the reddit post
+    /// link_id - should be the name of the reddit link
     func getMoreComments(comment: RedditComment, link_id: String, closure: @escaping (_ comments: [RedditComment]) -> Void) {
         let params: [String: Any] = [
             "api_type": "json",

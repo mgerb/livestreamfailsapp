@@ -38,7 +38,7 @@ class TitleCollectionViewCell: UICollectionViewCell {
         
         DispatchQueue.main.async {
             self.label.text = item.getTitleLabelText()
-            self.nsfwLabel.isHidden = !item.redditPost.over_18
+            self.nsfwLabel.isHidden = !item.redditLink.over_18
         }
     }
     

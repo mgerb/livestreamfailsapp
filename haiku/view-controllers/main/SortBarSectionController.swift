@@ -12,8 +12,8 @@ import PinLayout
 import FlexLayout
 
 protocol SortBarDelegate {
-    func sortBarDidUpdate(sortBy: RedditPostSortBy)
-    func activeRedditPostSortBy() -> RedditPostSortBy
+    func sortBarDidUpdate(sortBy: RedditLinkSortBy)
+    func activeRedditLinkSortBy() -> RedditLinkSortBy
 }
 
 class SortBarSectionController: ListSectionController, ListDisplayDelegate, ListWorkingRangeDelegate {
@@ -119,11 +119,11 @@ class SortBarCollectionViewCell: UICollectionViewCell {
 
     @objc func buttonPress(sender: UIButton) {
         if let title = sender.titleLabel?.text?.lowercased() {
-            if title != RedditPostSortBy.top.rawValue && self.delegate?.activeRedditPostSortBy().rawValue == title {
+            if title != RedditLinkSortBy.top.rawValue && self.delegate?.activeRedditLinkSortBy().rawValue == title {
                 return
             }
             
-            if let sortBy = RedditPostSortBy(rawValue: title) {
+            if let sortBy = RedditLinkSortBy(rawValue: title) {
                 self.delegate?.sortBarDidUpdate(sortBy: sortBy)
                 self.updateSelectedButtons()
             }
@@ -132,7 +132,7 @@ class SortBarCollectionViewCell: UICollectionViewCell {
     
     private func updateSelectedButtons() {
         self.buttons.forEach {
-            if $0.titleLabel?.text?.lowercased() == self.delegate?.activeRedditPostSortBy().rawValue {
+            if $0.titleLabel?.text?.lowercased() == self.delegate?.activeRedditLinkSortBy().rawValue {
                 $0.backgroundColor = Config.colors.blue
                 $0.setTitleColor(Config.colors.white, for: .normal)
             } else {

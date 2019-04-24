@@ -35,18 +35,18 @@ class RedditViewItem {
     static var cacheManager: [RedditViewItem] = []
     
     var delegate: RedditViewItemDelegate?
-    let redditPost: RedditPost
+    let redditLink: RedditLink
     let disposeBag = DisposeBag()
 
     /// context of where item is being used - either home or favorites page
     var context: RedditViewItemContext
     
-    lazy var favorited = BehaviorSubject<Bool>(value: StorageService.shared.redditPostFavoriteExists(id: self.redditPost.id))
-    lazy var markedAsWatched = BehaviorSubject<Bool>(value: StorageService.shared.getWatchedRedditPost(redditPost: self.redditPost))
+    lazy var favorited = BehaviorSubject<Bool>(value: StorageService.shared.redditLinkFavoriteExists(id: self.redditLink.id))
+    lazy var markedAsWatched = BehaviorSubject<Bool>(value: StorageService.shared.getWatchedRedditLink(redditLink: self.redditLink))
     lazy var playerProgress = BehaviorSubject<Double>(value: 0.0)
 
-    lazy var videoStartTime: Int = self.redditPost.url?.youtubeStartTime ?? 0
-    lazy var videoEndTime: Int? = self.redditPost.url?.youtubeEndTime
+    lazy var videoStartTime: Int = self.redditLink.url?.youtubeStartTime ?? 0
+    lazy var videoEndTime: Int? = self.redditLink.url?.youtubeEndTime
     
     var failedToLoadVideo = false {
         didSet {
@@ -69,19 +69,19 @@ class RedditViewItem {
     }
 
     lazy var humanTimeStampExtended: String = {
-        return Date().offsetExtended(from: Date(timeIntervalSince1970: TimeInterval(Int(self.redditPost.created_utc))))
+        return Date().offsetExtended(from: Date(timeIntervalSince1970: TimeInterval(Int(self.redditLink.created_utc))))
     }()
 
     lazy var humanTimeStamp: String = {
-        return Date().offset(from: Date(timeIntervalSince1970: TimeInterval(Int(self.redditPost.created_utc))))
+        return Date().offset(from: Date(timeIntervalSince1970: TimeInterval(Int(self.redditLink.created_utc))))
     }()
     
     private var cachedPlayerItem: CachingPlayerItem? = nil
     private var cachedVideoUrl: URL?
     private var cachedThumbnailUrl: URL?
 
-    init(_ redditPost: RedditPost, context: RedditViewItemContext) {
-        self.redditPost = redditPost
+    init(_ redditLink: RedditLink, context: RedditViewItemContext) {
+        self.redditLink = redditLink
         self.context = context
         self.setupSubscriptions()
     }
@@ -95,7 +95,7 @@ class RedditViewItem {
                 observer.onNext((videoUrl, thumbnailUrl))
                 observer.onCompleted()
             } else {
-                ClipUrlService.shared.getClipInfo(redditPost: self.redditPost) { (videoUrl, thumbnailUrl) in
+                ClipUrlService.shared.getClipInfo(redditLink: self.redditLink) { (videoUrl, thumbnailUrl) in
                     self.cachedVideoUrl = videoUrl
                     self.cachedThumbnailUrl = thumbnailUrl
                     self.failedToLoadVideo = videoUrl == nil
@@ -121,7 +121,7 @@ class RedditViewItem {
                     
                     // first try to grab from cached disk storage
                     dispatchGroup.enter()
-                    StorageService.shared.getCachedVideo(id: self.redditPost.id) { res in
+                    StorageService.shared.getCachedVideo(id: self.redditLink.id) { res in
                         if let storedItemData = res {
                             item = CachingPlayerItem(data: storedItemData, mimeType: "video/mp4", fileExtension: "mp4")
                         }
@@ -166,7 +166,7 @@ class RedditViewItem {
         return self.getPlayerItem.map { item in
             if let item = item {
                 self.manageVideoCache()
-                StorageService.shared.storeWatchedRedditPost(redditPost: self.redditPost)
+                StorageService.shared.storeWatchedRedditLink(redditLink: self.redditLink)
                 self.markedAsWatched.onNext(true)
                 GlobalPlayer.shared.replaceItem(item, self)
             }
@@ -183,7 +183,7 @@ class RedditViewItem {
                 
                 dispatchGroup.enter()
                 // check storage for image first
-                StorageService.shared.getCachedImage(id: self.redditPost.id) { res in
+                StorageService.shared.getCachedImage(id: self.redditLink.id) { res in
                     data = res
                     dispatchGroup.leave()
                 }
@@ -201,7 +201,7 @@ class RedditViewItem {
                 dispatchGroup.wait()
                 
                 if data == nil {
-                    if let youtubeID = self.redditPost.url?.youtubeID {
+                    if let youtubeID = self.redditLink.url?.youtubeID {
                         data = try? Data(contentsOf: URL(string: "https://img.youtube.com/vi/\(youtubeID)/hqdefault.jpg")!)
                     }
                 }
@@ -230,7 +230,7 @@ class RedditViewItem {
                 dispatchGroup.wait()
                 
                 if let data = data {
-                    StorageService.shared.cacheImage(data: data, id: self.redditPost.id)
+                    StorageService.shared.cacheImage(data: data, id: self.redditLink.id)
                 }
                 
                 let image: UIImage? = data != nil ? UIImage(data: data!) : nil
@@ -247,7 +247,7 @@ class RedditViewItem {
     }()
     
     func manageVideoCache() {
-        if !RedditViewItem.cacheManager.contains(where: { $0.redditPost.id == self.redditPost.id }) {
+        if !RedditViewItem.cacheManager.contains(where: { $0.redditLink.id == self.redditLink.id }) {
             if RedditViewItem.cacheManager.count >= 5 {
                 let item = RedditViewItem.cacheManager.removeLast()
                 item.cachedPlayerItem = nil
@@ -259,14 +259,14 @@ class RedditViewItem {
     func toggleFavorite() {
         if try! self.favorited.value() {
             self.favorited.onNext(false)
-            StorageService.shared.deleteRedditPostFavorite(id: self.redditPost.id)
+            StorageService.shared.deleteRedditLinkFavorite(id: self.redditLink.id)
             // pause player if removing playing video from favorites
             if GlobalPlayer.shared.isActivePlayerItem(item: self) && self.context == .favorites {
                 GlobalPlayer.shared.pause()
             }
         } else {
             self.favorited.onNext(true)
-            StorageService.shared.storeRedditPostFavorite(redditPost: self.redditPost)
+            StorageService.shared.storeRedditLinkFavorite(redditLink: self.redditLink)
         }
         Subjects.shared.favoriteButtonAction.onNext(self)
         Util.hapticFeedbackSuccess()
@@ -274,7 +274,7 @@ class RedditViewItem {
     
     func setupSubscriptions() {
         Subjects.shared.favoriteButtonAction.subscribe(onNext: { item in
-            if item !== self && item.redditPost.id == self.redditPost.id {
+            if item !== self && item.redditLink.id == self.redditLink.id {
                 try? self.favorited.onNext(item.favorited.value())
             }
         }).disposed(by: self.disposeBag)
@@ -282,8 +282,8 @@ class RedditViewItem {
     
     /// returns title with extra spaces if nsfw
     func getTitleLabelText() -> String {
-        var title = self.redditPost.title.replaceEncoding()
-        if self.redditPost.over_18 {
+        var title = self.redditLink.title.replaceEncoding()
+        if self.redditLink.over_18 {
             title = "            " + title
         }
         return title
@@ -294,7 +294,7 @@ extension RedditViewItem: CachingPlayerItemDelegate {
     
     func playerItem(_ playerItem: CachingPlayerItem, didFinishDownloadingData data: Data) {
         if UserSettings.shared.cacheVideos {
-            StorageService.shared.cacheVideo(data: data, id: self.redditPost.id)
+            StorageService.shared.cacheVideo(data: data, id: self.redditLink.id)
         }
     }
     
@@ -318,12 +318,12 @@ extension RedditViewItem: CachingPlayerItemDelegate {
 
 extension RedditViewItem: ListDiffable {
     func diffIdentifier() -> NSObjectProtocol {
-        return self.redditPost.id as NSString
+        return self.redditLink.id as NSString
     }
     
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
         if let object = object as? RedditViewItem {
-            return self.redditPost.id == object.redditPost.id
+            return self.redditLink.id == object.redditLink.id
         }
         return false
     }

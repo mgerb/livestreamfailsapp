@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import IGListKit
 import SwiftyJSON
 
 class RedditComment {
@@ -99,21 +98,6 @@ class RedditComment {
         }
     }
     
-    func getLeftBorderColor() -> UIColor {
-        let colors = [
-            Config.colors.yellow,
-            Config.colors.blue,
-            Config.colors.red,
-            Config.colors.green,
-            Config.colors.purple,
-            Config.colors.orange,
-            Config.colors.tealBlue,
-            Config.colors.pink,
-        ]
-        
-        return colors[self.depth % 8]
-    }
-    
     static func flattenReplies(replies: JSON) -> [JSON] {
         let list: [[JSON]] = replies["data"]["children"].array?.compactMap { val in
             let data = val["data"]
@@ -124,15 +108,3 @@ class RedditComment {
     }
 }
 
-extension RedditComment: ListDiffable {
-    func diffIdentifier() -> NSObjectProtocol {
-        return (self.id ?? "") as NSString
-    }
-    
-    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        if let object = object as? RedditComment {
-            return self.id == object.id
-        }
-        return false
-    }
-}

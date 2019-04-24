@@ -82,7 +82,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     }
 
     func fetchComments () {
-        RedditService.shared.getFlattenedComments(permalink: self.redditViewItem.redditPost.permalink) {comments in
+        RedditService.shared.getFlattenedComments(permalink: self.redditViewItem.redditLink.permalink) {comments in
             self.data = comments.count > 0 ? comments : ["no comments"]
             self.didLoad = true
             self.reloadData()
@@ -209,7 +209,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     
     /// when user taps load more comments button
     func redditCommentMorePressed(comment: RedditComment, indexPath: IndexPath) {
-        RedditService.shared.getMoreComments(comment: comment, link_id: self.redditViewItem.redditPost.name) { comments in
+        RedditService.shared.getMoreComments(comment: comment, link_id: self.redditViewItem.redditLink.name) { comments in
             
             // delete load more row if we don't get any comments back
             if comments.count < 1 {

@@ -16,21 +16,21 @@ class RedditAlertController: UIAlertController {
         self.init(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let openClipUrl = UIAlertAction(title: "Open Clip Link", style: .default) { (action:UIAlertAction) in
-            guard let urlString = redditViewItem.redditPost.url, let url = URL(string: urlString) else { return }
+            guard let urlString = redditViewItem.redditLink.url, let url = URL(string: urlString) else { return }
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
         
         let copyClipUrl = UIAlertAction(title: "Copy Clip Link", style: .default) { (action:UIAlertAction) in
-            UIPasteboard.general.string = redditViewItem.redditPost.url
+            UIPasteboard.general.string = redditViewItem.redditLink.url
         }
         
         let openInReddit = UIAlertAction(title: "Open Reddit Link", style: .default) { (action:UIAlertAction) in
-            guard let url = URL(string: self.getRedditLink(permaLink: redditViewItem.redditPost.permalink)) else { return }
+            guard let url = URL(string: self.getRedditLink(permaLink: redditViewItem.redditLink.permalink)) else { return }
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
         
         let copyRedditLink = UIAlertAction(title: "Copy Reddit Link", style: .default) { (action:UIAlertAction) in
-            UIPasteboard.general.string = self.getRedditLink(permaLink: redditViewItem.redditPost.permalink)
+            UIPasteboard.general.string = self.getRedditLink(permaLink: redditViewItem.redditLink.permalink)
         }
         
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in

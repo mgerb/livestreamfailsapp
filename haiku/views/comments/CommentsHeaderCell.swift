@@ -19,7 +19,7 @@ class CommentsHeaderCell: UITableViewHeaderFooterView {
     }
     
     static func calculateTitleScoreOffset(redditViewItem: RedditViewItem) -> CGFloat {
-        return 5 + redditViewItem.redditPost.score.commaRepresentation.widthWithConstrainedHeight(height: 10, font: Config.regularFont)
+        return 5 + redditViewItem.redditLink.score.commaRepresentation.widthWithConstrainedHeight(height: 10, font: Config.regularFont)
     }
     
     static let cellPadding = CGFloat(10)
@@ -134,11 +134,11 @@ class CommentsHeaderCell: UITableViewHeaderFooterView {
     func setRedditViewItem(redditViewItem: RedditViewItem) {
         self.redditViewItem = redditViewItem
         self.titleLabel.text = redditViewItem.getTitleLabelText()
-        self.authorLabel.text = redditViewItem.redditPost.author
+        self.authorLabel.text = redditViewItem.redditLink.author
         self.timestampLabel.text = " · " + redditViewItem.humanTimeStamp
-        self.nsfwLabel.isHidden = !redditViewItem.redditPost.over_18
-        self.scoreLabel.text = redditViewItem.redditPost.score.commaRepresentation
-        self.commentLabel.text = redditViewItem.redditPost.num_comments.commaRepresentation
+        self.nsfwLabel.isHidden = !redditViewItem.redditLink.over_18
+        self.scoreLabel.text = redditViewItem.redditLink.score.commaRepresentation
+        self.commentLabel.text = redditViewItem.redditLink.num_comments.commaRepresentation
     }
     
     func getBorder() -> UIView {

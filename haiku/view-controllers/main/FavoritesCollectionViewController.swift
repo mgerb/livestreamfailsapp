@@ -23,9 +23,9 @@ class FavoritesCollectionViewController: YaikuCollectionViewController {
         
         // delay or else images don't show up right away
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
-            let redditPosts = StorageService.shared.getRedditPostFavorites()
-            // create section view items from reddit posts
-            self.data = redditPosts.map { RedditViewItem($0, context: .favorites) }
+            let redditLinks = StorageService.shared.getRedditLinkFavorites()
+            // create section view items from reddit links
+            self.data = redditLinks.map { RedditViewItem($0, context: .favorites) }
             self.adapter.performUpdates(animated: true, completion: nil)
         })
     }

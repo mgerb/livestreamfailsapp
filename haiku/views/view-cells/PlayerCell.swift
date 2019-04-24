@@ -21,7 +21,7 @@ class PlayerCell: UICollectionViewCell {
     // used to unsubscribe when component deinits
     let disposeBag = DisposeBag()
     
-    // used to unsubscribe when reddit post will change
+    // used to unsubscribe when reddit link will change
     var progressSubscription: Disposable?
 
     lazy private var fullScreenButtonContainer: UIView = {

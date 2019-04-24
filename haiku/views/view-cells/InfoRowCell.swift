@@ -91,9 +91,9 @@ class InfoRowCell: UICollectionViewCell {
         })
         
         DispatchQueue.main.async {
-            self.scoreLabel.text = item.redditPost.score.commaRepresentation
+            self.scoreLabel.text = item.redditLink.score.commaRepresentation
             self.scoreLabel.flex.markDirty()
-            self.commentsButton.setTitle(item.redditPost.num_comments.commaRepresentation, for: .normal)
+            self.commentsButton.setTitle(item.redditLink.num_comments.commaRepresentation, for: .normal)
             self.commentsButton.flex.markDirty()
             self.commentBubble.flex.markDirty()
             self.timeStampLabel.text = item.humanTimeStampExtended
