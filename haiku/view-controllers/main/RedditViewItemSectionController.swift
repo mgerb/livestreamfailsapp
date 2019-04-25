@@ -23,7 +23,7 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
         let width = UIScreen.main.bounds.width
         switch index {
         case 0:
-            return CGSize(width: width, height: self.getTitleCellHeight(width))
+            return CGSize(width: width, height: TitleCollectionViewCell.calculateHeightForWidth(redditViewItem: self.redditViewItem, width: width))
         case 1:
             if self.redditViewItem.failedToLoadVideo {
                 return CGSize(width: 0, height: 0)
@@ -56,7 +56,9 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
     override func didUpdate(to object: Any) {
         if let item = object as? RedditViewItem {
             self.redditViewItem = item
-            self.redditViewItem.delegate = self.delegate
+            if let delegate = self.delegate {
+                self.redditViewItem.delegate.add(delegate: delegate)
+            }
         }
     }
 
@@ -102,10 +104,5 @@ final class RedditViewItemSectionController: ListSectionController, ListDisplayD
         })
     }
     
-    private func getTitleCellHeight(_ width: CGFloat) -> CGFloat {
-        // width of everything else except the title
-        let cellOffsetWidth = TitleCollectionViewCell.padding * 2
-        return self.redditViewItem.getTitleLabelText().heightWithConstrainedWidth(width: width - cellOffsetWidth, font: Config.regularFont) + 20
-    }
 }
 

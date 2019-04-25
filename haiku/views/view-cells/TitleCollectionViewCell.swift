@@ -7,17 +7,34 @@
 //
 
 import UIKit
-import FlexLayout
-import PinLayout
-import RxSwift
 import SnapKit
 
-class TitleCollectionViewCell: UICollectionViewCell {
+class TitleCollectionViewCell: UICollectionViewCell, RedditViewItemDelegate {
+
+    /// height should be at least 70 if thumbnail exists (thumbnail height + padding)
+    static func calculateHeightForWidth(redditViewItem: RedditViewItem, width: CGFloat) -> CGFloat {
+        var cellOffsetWidth = TitleCollectionViewCell.padding * 2
+        let showThumbnail = redditViewItem.failedToLoadVideo && redditViewItem.redditLink.previewUrl != nil
+        
+        if showThumbnail {
+            cellOffsetWidth = cellOffsetWidth + 60
+        }
+        
+        let height = redditViewItem.getTitleLabelText().heightWithConstrainedWidth(width: width - cellOffsetWidth, font: Config.regularFont) + 20
+        
+        let minHeight = TitleCollectionViewCell.thumbnailBounds + (TitleCollectionViewCell.padding * 2)
+        if showThumbnail && height < minHeight {
+            return minHeight
+        }
+        
+        return height
+    }
     
+    static let thumbnailBounds = CGFloat(50)
     static let padding = CGFloat(10)
-    var redditViewItem: RedditViewItem?
-    let rxUnsubscribe = PublishSubject<Void>()
     
+    var redditViewItem: RedditViewItem?
+
     lazy private var label: UILabel = {
         let label = Labels.new(font: .regular, color: .primary)
         label.numberOfLines = 0
@@ -29,39 +46,84 @@ class TitleCollectionViewCell: UICollectionViewCell {
         label.text = "NSFW"
         return label
     }()
+    
+    lazy private var thumbnail: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.layer.cornerRadius = 4
+        view.clipsToBounds = true
+        return view
+    }()
 
     func setRedditViewItem(item: RedditViewItem) {
         self.redditViewItem = item
-        _ = self.redditViewItem?.markedAsWatched.takeUntil(self.rxUnsubscribe).subscribe(onNext: { watched in
-            self.label.textColor = watched && self.redditViewItem?.context == .home ? Config.colors.secondaryFont : Config.colors.primaryFont
-        })
+        self.redditViewItem?.delegate.add(delegate: self)
         
         DispatchQueue.main.async {
+            self.setupThumbnail(item: item)
             self.label.text = item.getTitleLabelText()
             self.nsfwLabel.isHidden = !item.redditLink.over_18
         }
     }
     
+    private func setupThumbnail(item: RedditViewItem) {
+        self.thumbnail.isHidden = self.redditViewItem?.failedToLoadVideo == false
+        
+        if let urlString = self.redditViewItem?.redditLink.previewUrl {
+            self.thumbnail.kf.setImage(with: URL(string: urlString.replaceEncoding()))
+        }
+        
+        self.updateConstraints()
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubview(self.label)
-        self.addSubview(self.nsfwLabel)
+        self.contentView.addSubview(self.label)
+        self.contentView.addSubview(self.nsfwLabel)
+        self.contentView.addSubview(self.thumbnail)
+        
+        self.label.snp.makeConstraints { make in
+            make.top.left.equalTo(self.contentView).offset(TitleCollectionViewCell.padding)
+            make.right.equalTo(self.contentView).offset(-TitleCollectionViewCell.padding)
+        }
+        
+        self.nsfwLabel.snp.makeConstraints { make in
+            make.top.left.equalTo(self.contentView).offset(TitleCollectionViewCell.padding)
+            make.height.equalTo(self.nsfwLabel.intrinsicContentSize.height + 3)
+            make.width.equalTo(self.nsfwLabel.intrinsicContentSize.width + 5)
+        }
+        
+        self.thumbnail.snp.makeConstraints { make in
+            make.height.width.equalTo(TitleCollectionViewCell.thumbnailBounds)
+            make.centerY.equalTo(self.contentView)
+            make.right.equalTo(self.contentView).offset(-TitleCollectionViewCell.padding)
+        }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.label.pin.all(TitleCollectionViewCell.padding)
-        self.nsfwLabel.pin.top().left()
-            .height(self.nsfwLabel.intrinsicContentSize.height + 3)
-            .width(self.nsfwLabel.intrinsicContentSize.width + 5)
-            .marginLeft(TitleCollectionViewCell.padding).marginTop(TitleCollectionViewCell.padding)
+    override func updateConstraints() {
+        
+        if self.redditViewItem?.failedToLoadVideo == true && self.redditViewItem?.redditLink.previewUrl != nil {
+            self.label.snp.updateConstraints { make in
+                make.right.equalTo(self.contentView).offset(-((TitleCollectionViewCell.padding * 2) + TitleCollectionViewCell.thumbnailBounds))
+            }
+        } else {
+            self.label.snp.updateConstraints { make in
+                make.right.equalTo(self.contentView).offset(-TitleCollectionViewCell.padding)
+            }
+        }
+        
+        super.updateConstraints()
+    }
+
+    func didMarkAsWatched(redditViewItem: RedditViewItem) {
+        self.label.textColor = redditViewItem.markedAsWatched && self.redditViewItem?.context == .home ? Config.colors.secondaryFont : Config.colors.primaryFont
     }
     
-    override func prepareForReuse() {
-        self.rxUnsubscribe.onNext(())
+    func failedToLoadVideo(redditViewItem: RedditViewItem) {
+        self.setupThumbnail(item: redditViewItem)
     }
 }

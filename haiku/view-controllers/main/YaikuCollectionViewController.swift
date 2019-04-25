@@ -70,4 +70,7 @@ class YaikuCollectionViewController: UIViewController, ListAdapterDataSource, UI
     func failedToLoadVideo(redditViewItem: RedditViewItem) {
         self.adapter.performUpdates(animated: false, completion: nil)
     }
+    
+    func didMarkAsWatched(redditViewItem: RedditViewItem) {
+    }
 }

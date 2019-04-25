@@ -10,7 +10,6 @@ import Foundation
 import IGListKit
 import XCDYouTubeKit
 import RxSwift
-import Kingfisher
 import Alamofire
 
 enum RedditViewItemContext {
@@ -26,6 +25,7 @@ enum RedditViewItemPlayerState {
 
 protocol RedditViewItemDelegate {
     func failedToLoadVideo(redditViewItem: RedditViewItem)
+    func didMarkAsWatched(redditViewItem: RedditViewItem)
 }
 
 class RedditViewItem {
@@ -34,7 +34,7 @@ class RedditViewItem {
     // only keep 5 cached at any one time otherwise memory fills up
     static var cacheManager: [RedditViewItem] = []
     
-    var delegate: RedditViewItemDelegate?
+    let delegate = MulticastDelegate<RedditViewItemDelegate>()
     let redditLink: RedditLink
     let disposeBag = DisposeBag()
 
@@ -42,7 +42,11 @@ class RedditViewItem {
     var context: RedditViewItemContext
     
     lazy var favorited = BehaviorSubject<Bool>(value: StorageService.shared.redditLinkFavoriteExists(id: self.redditLink.id))
-    lazy var markedAsWatched = BehaviorSubject<Bool>(value: StorageService.shared.getWatchedRedditLink(redditLink: self.redditLink))
+    var markedAsWatched: Bool {
+        didSet {
+            self.delegate.invoke(invocation: { $0.didMarkAsWatched(redditViewItem: self) })
+        }
+    }
     lazy var playerProgress = BehaviorSubject<Double>(value: 0.0)
 
     lazy var videoStartTime: Int = self.redditLink.url?.youtubeStartTime ?? 0
@@ -50,7 +54,7 @@ class RedditViewItem {
     
     var failedToLoadVideo = false {
         didSet {
-            self.delegate?.failedToLoadVideo(redditViewItem: self)
+            self.delegate.invoke(invocation: { $0.failedToLoadVideo(redditViewItem: self) })
         }
     }
 
@@ -83,6 +87,7 @@ class RedditViewItem {
     init(_ redditLink: RedditLink, context: RedditViewItemContext) {
         self.redditLink = redditLink
         self.context = context
+        self.markedAsWatched = StorageService.shared.getWatchedRedditLink(redditLink: self.redditLink)
         self.setupSubscriptions()
     }
     
@@ -167,7 +172,7 @@ class RedditViewItem {
             if let item = item {
                 self.manageVideoCache()
                 StorageService.shared.storeWatchedRedditLink(redditLink: self.redditLink)
-                self.markedAsWatched.onNext(true)
+                self.markedAsWatched = true
                 GlobalPlayer.shared.replaceItem(item, self)
             }
         }

@@ -64,6 +64,7 @@
 		A2AD9CE4226ECDDA00A19C57 /* Marshal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2AD9CE1226ECDD700A19C57 /* Marshal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2AD9CE6226ECDEA00A19C57 /* reddit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AD9CE5226ECDEA00A19C57 /* reddit.swift */; };
 		A2B0098221F01E9200888476 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */; };
+		A2B63F41227171EC00296DC8 /* MulticastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B63F40227171EC00296DC8 /* MulticastDelegate.swift */; };
 		A2B780FB2249CA5C001301DD /* MyUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B780FA2249CA5C001301DD /* MyUISwitch.swift */; };
 		A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */; };
 		A2B7C2442198C211008DB7E6 /* reddit-view-item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2432198C211008DB7E6 /* reddit-view-item.swift */; };
@@ -175,6 +176,7 @@
 		A2AD9CE1226ECDD700A19C57 /* Marshal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Marshal.framework; path = Carthage/Build/iOS/Marshal.framework; sourceTree = "<group>"; };
 		A2AD9CE5226ECDEA00A19C57 /* reddit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reddit.swift; sourceTree = "<group>"; };
 		A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
+		A2B63F40227171EC00296DC8 /* MulticastDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulticastDelegate.swift; sourceTree = "<group>"; };
 		A2B780FA2249CA5C001301DD /* MyUISwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUISwitch.swift; sourceTree = "<group>"; };
 		A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		A2B7C2432198C211008DB7E6 /* reddit-view-item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "reddit-view-item.swift"; sourceTree = "<group>"; };
@@ -369,6 +371,7 @@
 		A29CD0042119363900A5A6EC /* haiku */ = {
 			isa = PBXGroup;
 			children = (
+				A2B63F3F227171D300296DC8 /* util */,
 				A2D38BD12259757900D53289 /* icons */,
 				A2528582215C6F5B00DCA537 /* extensions */,
 				A24818C321781811005B8819 /* global */,
@@ -380,12 +383,20 @@
 				A2397904224B0A4F00844E83 /* ui-elements */,
 				A29CD00C2119363C00A5A6EC /* Assets.xcassets */,
 				A29CD0052119363900A5A6EC /* AppDelegate.swift */,
-				A25285B7216ACADD00DCA537 /* Config.swift */,
 				A29CD0112119363C00A5A6EC /* Info.plist */,
 				A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */,
-				A24818BF217815C8005B8819 /* Util.swift */,
 			);
 			path = haiku;
+			sourceTree = "<group>";
+		};
+		A2B63F3F227171D300296DC8 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				A25285B7216ACADD00DCA537 /* Config.swift */,
+				A24818BF217815C8005B8819 /* Util.swift */,
+				A2B63F40227171EC00296DC8 /* MulticastDelegate.swift */,
+			);
+			path = util;
 			sourceTree = "<group>";
 		};
 		A2D0EF6C21CEB1F4002F1134 /* view-controllers */ = {
@@ -543,6 +554,7 @@
 				A24818C0217815C8005B8819 /* Util.swift in Sources */,
 				A2B780FB2249CA5C001301DD /* MyUISwitch.swift in Sources */,
 				A2D5FC6F21F6CA220098A884 /* Date.swift in Sources */,
+				A2B63F41227171EC00296DC8 /* MulticastDelegate.swift in Sources */,
 				A2889F2E217D70CF001E7061 /* YaikuCollectionViewController.swift in Sources */,
 				A2E2A124226806A500E5FA92 /* SettingsFormViewController.swift in Sources */,
 				A21C5D01221A4A8800129DD3 /* SortBarSectionController.swift in Sources */,
