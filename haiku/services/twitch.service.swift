@@ -27,7 +27,6 @@ class TwitchService {
         Alamofire.request(urlString).response(completionHandler: { res in
             if let data = res.data {
                 
-                
                 // grab the first item in the list - this should always
                 // be the best quality and won't contain the video quality
                 // in the url

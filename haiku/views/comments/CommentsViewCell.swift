@@ -13,7 +13,7 @@ import FlexLayout
 
 class CommentsViewCell: UITableViewCell {
     
-    public var redditComment: RedditComment?
+    public var redditComment: RedditCommentProtocol?
 
     lazy var bgView: UIView = {
         let view = UIView()
@@ -101,7 +101,7 @@ class CommentsViewCell: UITableViewCell {
         self.leftBorders = []
     }
 
-    func setRedditComment(c: RedditComment) {
+    func setRedditComment(c: RedditCommentProtocol) {
         self.redditComment = c
         self.isHidden = c.isHidden
         if c.depth > 0 {

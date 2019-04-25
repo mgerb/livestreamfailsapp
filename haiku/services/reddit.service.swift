@@ -1,7 +1,6 @@
 
 import Foundation
 import Alamofire
-import SwiftyJSON
 import Marshal
 
 class RedditAuthentication: Codable {
@@ -170,7 +169,7 @@ class RedditService: RequestAdapter, RequestRetrier {
         })
     }
     
-    private func getComments(permalink: String, params: Parameters = [:], closure: @escaping ((_ data: JSON?) -> Void)) {
+    func getComments(permalink: String, params: Parameters = [:], closure: @escaping ((_ data: [RedditListingType]?) -> Void)) {
         let url = "https://www.reddit.com\(permalink).json"
         var params = params
         if params["limit"] == nil {
@@ -184,14 +183,45 @@ class RedditService: RequestAdapter, RequestRetrier {
                     do {
                         let json = try JSONParser.JSONArrayWithData(value)
                         let thing = try RedditThing(object: json[1])
-                        print(Comment.flattenComments(thing).count)
+                        
+                        let flattenedComments = RedditComment.flattenComments(thing)
+                        
+                        // render html
+                        // This is a hack to load comments more quickly because it's a little
+                        // slow rendering all the html into an NSAttributedString.
+                        // All html is rendered asynchronously on the globa queue,
+                        // but we only wait for the first 10 to render before the callback.
+                        // This is so that we have them first rendered when the list shows
+                        // up. The rest of the comments will continue to render asynchronously
+                        // on the global queue, but we won't wait for them. Seems to work
+                        // okay only waiting for 10.
+                        // https://www.raywenderlich.com/5371-grand-central-dispatch-tutorial-for-swift-4-part-2-2
+                        var count = 0
+                        let dispatchGroup = DispatchGroup()
+                        flattenedComments.forEach { c in
+                            if case .redditComment(let c) = c {
+                                if count < 10 {
+                                    dispatchGroup.enter()
+                                    DispatchQueue.global().async {
+                                        c.renderHtml()
+                                        dispatchGroup.leave()
+                                    }
+                                    count += 1
+                                } else {
+                                    DispatchQueue.global().async {
+                                        c.renderHtml()
+                                    }
+                                }
+                            }
+                        }
+                        
+                        dispatchGroup.wait()
+                        
+                        DispatchQueue.main.async {
+                            closure(flattenedComments)
+                        }
                     } catch {
                         print(error)
-                    }
-
-                    let val = JSON(value)[1]
-                    DispatchQueue.main.async {
-                        closure(val)
                     }
                 case .failure(let error):
                     print(error)
@@ -204,77 +234,45 @@ class RedditService: RequestAdapter, RequestRetrier {
     
     func getFirstComment(permalink: String, closure: @escaping ((_ data: RedditComment?) -> Void)) {
         self.getComments(permalink: permalink, params: ["limit": 1]) {
-            if let data = $0?["data"]["children"][0]["data"] {
-                closure(RedditComment(json: data))
-            } else {
-                closure(nil)
+            if let listing = $0, listing.count > 0 {
+                if case .redditComment(let comment) = listing[0] {
+                    closure(comment)
+                    return
+                }
             }
+            closure(nil)
         }
     }
 
-    func getFlattenedComments(permalink: String, closure: @escaping ((_ data: [RedditComment]) -> Void)) {
-        self.getComments(permalink: permalink) {
-            if let comments = $0 {
-                
-                // This is a hack to load comments more quickly because it's a little
-                // slow rendering all the html into an NSAttributedString.
-                // All html is rendered asynchronously on the globa queue,
-                // but we only wait for the first 10 to render before the callback.
-                // This is so that we have them first rendered when the list shows
-                // up. The rest of the comments will continue to render asynchronously
-                // on the global queue, but we won't wait for them. Seems to work
-                // okay only waiting for 10.
-                // https://www.raywenderlich.com/5371-grand-central-dispatch-tutorial-for-swift-4-part-2-2
-                var count = 0
-                let dispatchGroup = DispatchGroup()
-                let output: [RedditComment] = RedditComment.flattenReplies(replies: comments).compactMap {
-                    let c = RedditComment(json: $0)
-                    if count < 10 {
-                        dispatchGroup.enter()
-                        DispatchQueue.global().async {
-                            c.renderHtml()
-                            dispatchGroup.leave()
-                        }
-                        count += 1
-                    } else {
-                        DispatchQueue.global().async {
-                            c.renderHtml()
-                        }
-                    }
-                    return c
-                }
-                dispatchGroup.notify(queue: DispatchQueue.main) {
-                    closure(output)
-                }
-            } else {
-                closure([])
-            }
-        }
-    }
-    
     /// load more comments from children
     /// link_id - should be the name of the reddit link
-    func getMoreComments(comment: RedditComment, link_id: String, closure: @escaping (_ comments: [RedditComment]) -> Void) {
+    // TODO:
+    func getMoreComments(more: RedditMore, link_id: String, closure: @escaping (_ comments: [RedditListingType]) -> Void) {
         let params: [String: Any] = [
             "api_type": "json",
-            "children": comment.children?.joined(separator: ",") ?? "",
+            "children": more.children.joined(separator: ","),
             "link_id": link_id,
             "limit_children": true
         ]
-        
+
         self.oauthClient.request("https://oauth.reddit.com/api/morechildren", parameters: params).validate().responseData { response in
             switch response.result {
             case .success(let value):
-                let json = JSON(value)
+                do {
+                    let j = try JSONParser.JSONObjectWithData(value)
+                    let things: [MarshalDictionary] = try j.value(for: "json").value(for: "data").value(for: "things")
+                    
+                    let newComments: [RedditListingType] = try things.compactMap {
+                        let c: RedditComment = try $0.value(for: "data")
+                        c.renderHtml()
+                        return RedditListingType.redditComment(c)
+                    }
 
-                // TODO: may need to implement asynchronous html render here like above
-                let newComments: [RedditComment] = json["json"]["data"]["things"].array?.compactMap {
-                    let c = RedditComment(json: $0["data"])
-                    c.renderHtml()
-                    return c
-                } ?? []
-
-                closure(newComments)
+                    closure(newComments)
+                } catch {
+                    print(error)
+                    closure([])
+                }
             case .failure(let error):
                 print(error)
                 closure([])

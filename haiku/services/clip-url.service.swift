@@ -19,7 +19,7 @@ class ClipUrlService: NSObject {
     func getClipInfo(redditLink: RedditLink, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
         // get first comment to check for stickied mirror links from live stream fails bot
         RedditService.shared.getFirstComment(permalink: redditLink.permalink) { comment in
-            let queue = [redditLink.url, comment?.body?.liveStreamFails, comment?.body?.streamableUrl]
+            let queue = [redditLink.url, comment?.body.liveStreamFails, comment?.body.streamableUrl]
             self.processUrlQueue(queue: queue.compactMap { $0 }) { res in
                 closure(res)
             }

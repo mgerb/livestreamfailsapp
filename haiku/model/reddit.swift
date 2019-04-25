@@ -19,7 +19,7 @@ enum RedditKind: String {
 indirect enum RedditListingType {
     case redditListing(RedditListing)
     case redditLink(RedditLink)
-    case redditComment(Comment)
+    case redditComment(RedditComment)
     case redditMore(RedditMore)
 }
 
@@ -154,9 +154,18 @@ struct RedditLink: Unmarshaling {
     }
 }
 
-final class Comment: Unmarshaling {
+protocol RedditCommentProtocol: class {
+    var id: String { get }
+    var depth: Int { get }
+    var name: String { get }
+    var parent_id: String { get }
+    var isHidden: Bool { get set }
+}
+
+final class RedditComment: RedditCommentProtocol, Unmarshaling {
     let id: String
     let parent_id: String
+    let name: String
     let link_id: String
     let author: String
     let body: String
@@ -177,6 +186,7 @@ final class Comment: Unmarshaling {
     init(object: MarshaledObject) throws {
         self.id = try object.value(for: "id")
         self.parent_id = try object.value(for: "parent_id")
+        self.name = try object.value(for: "name")
         self.link_id = try object.value(for: "link_id")
         self.author = try object.value(for: "author")
         self.body = try object.value(for: "body")
@@ -221,7 +231,6 @@ final class Comment: Unmarshaling {
     }
 
     /// create flat list of either more or comment type
-    /// TODO: maybe make this return [Any] instead??
     static func flattenComments(_ listing: RedditThing) -> [RedditListingType] {
         var output: [RedditListingType] = []
         
@@ -231,13 +240,13 @@ final class Comment: Unmarshaling {
         case .redditComment(let comment):
             output = output + [data]
             if let replies = comment.replies {
-                output = output + Comment.flattenComments(replies)
+                output = output + RedditComment.flattenComments(replies)
             }
             
         case .redditListing(let listing):
             if let children = listing.children {
                 children.forEach { child in
-                    output = output + Comment.flattenComments(child)
+                    output = output + RedditComment.flattenComments(child)
                 }
             }
             
@@ -251,13 +260,14 @@ final class Comment: Unmarshaling {
     }
 }
 
-final class RedditMore: Unmarshaling {
-    let count: Int?
-    let name: String
+final class RedditMore: RedditCommentProtocol, Unmarshaling {
     let id: String
-    let parent_id: String?
-    let depth: Int?
+    let parent_id: String
+    let name: String
+    let count: Int?
+    let depth: Int
     let children: [String]
+    var isHidden = false
     
     init(object: MarshaledObject) throws {
         self.count = try object.value(for: "count")

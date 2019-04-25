@@ -92,7 +92,7 @@ class CommentsViewCellContent: CommentsViewCell {
         super.prepareForReuse()
     }
     
-    override func setRedditComment(c: RedditComment) {
+    func setRedditComment(c: RedditComment) {
         super.setRedditComment(c: c)
 
         self.bgView.alpha = c.isCollapsed ? 0.3 : 1
@@ -102,7 +102,7 @@ class CommentsViewCellContent: CommentsViewCell {
         self.authorLabel.text = c.author
         self.authorLabel.flex.markDirty()
         
-        self.scoreLabel.text = c.score?.commaRepresentation ?? "0"
+        self.scoreLabel.text = c.score.commaRepresentation
         self.scoreLabel.flex.markDirty()
         
         self.timeStampLabel.text = c.humanTimeStamp

@@ -52,7 +52,6 @@
 		A2591251211BD28200B09D73 /* reddit.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2591250211BD28200B09D73 /* reddit.service.swift */; };
 		A269478421CEF93000A07F69 /* RedditAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A269478321CEF93000A07F69 /* RedditAlertController.swift */; };
 		A26BD837218FE09100E948A4 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26BD836218FE09100E948A4 /* Int.swift */; };
-		A283B61A21E2E9CC00AE47C6 /* reddit-comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A283B61921E2E9CC00AE47C6 /* reddit-comment.swift */; };
 		A2889F2C217D6FF0001E7061 /* FavoritesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2889F2B217D6FF0001E7061 /* FavoritesCollectionViewController.swift */; };
 		A2889F2E217D70CF001E7061 /* YaikuCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */; };
 		A288A12C215344D000000733 /* MyPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A288A12B215344D000000733 /* MyPlayerView.swift */; };
@@ -162,7 +161,6 @@
 		A2591250211BD28200B09D73 /* reddit.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reddit.service.swift; sourceTree = "<group>"; };
 		A269478321CEF93000A07F69 /* RedditAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditAlertController.swift; sourceTree = "<group>"; };
 		A26BD836218FE09100E948A4 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
-		A283B61921E2E9CC00AE47C6 /* reddit-comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "reddit-comment.swift"; sourceTree = "<group>"; };
 		A2889F2B217D6FF0001E7061 /* FavoritesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCollectionViewController.swift; sourceTree = "<group>"; };
 		A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YaikuCollectionViewController.swift; sourceTree = "<group>"; };
 		A288A12B215344D000000733 /* MyPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlayerView.swift; sourceTree = "<group>"; };
@@ -284,7 +282,6 @@
 			isa = PBXGroup;
 			children = (
 				A2B7C2432198C211008DB7E6 /* reddit-view-item.swift */,
-				A283B61921E2E9CC00AE47C6 /* reddit-comment.swift */,
 				A2A8143E2248720300A4E974 /* user-settings.swift */,
 				A2AD9CE5226ECDEA00A19C57 /* reddit.swift */,
 				A2043986227005D8007130AC /* reddit-realm.swift */,
@@ -539,7 +536,6 @@
 				A24818C221781807005B8819 /* subjects.swift in Sources */,
 				A247504221EA6F1A00C0F712 /* CommentsTableView.swift in Sources */,
 				A28E619821F56368004B53A7 /* CommentsLoadingCell.swift in Sources */,
-				A283B61A21E2E9CC00AE47C6 /* reddit-comment.swift in Sources */,
 				A252857E215C655600DCA537 /* TitleCollectionViewCell.swift in Sources */,
 				A2DCC62121EC2CAA00E08453 /* NSAttributedString.swift in Sources */,
 				A25285B02165955800DCA537 /* UIScrollView.swift in Sources */,
