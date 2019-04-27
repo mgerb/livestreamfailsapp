@@ -44,10 +44,9 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         self.showsVerticalScrollIndicator = false
         self.dataSource = self
         self.delegate = self
-        self.estimatedRowHeight = 0
         self.estimatedSectionFooterHeight = 0
-        self.estimatedSectionFooterHeight = 0
-        
+        self.estimatedSectionHeaderHeight = UITableViewAutomaticDimension
+
         self.backgroundView = self.bgView
 
         self.contentInset.top = self.frame.height
@@ -171,7 +170,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return CommentsHeaderCell.calculateHeight(redditViewItem: self.redditViewItem)
+        return UITableViewAutomaticDimension
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
