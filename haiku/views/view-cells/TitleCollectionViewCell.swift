@@ -62,6 +62,7 @@ class TitleCollectionViewCell: UICollectionViewCell, RedditViewItemDelegate {
         DispatchQueue.main.async {
             self.setupThumbnail(item: item)
             self.label.text = item.getTitleLabelText()
+            self.label.textColor = item.markedAsWatched && item.context == .home ? Config.colors.secondaryFont : Config.colors.primaryFont
             self.nsfwLabel.isHidden = !item.redditLink.over_18
         }
     }
