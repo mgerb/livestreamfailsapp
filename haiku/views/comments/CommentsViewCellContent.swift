@@ -8,23 +8,10 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 class CommentsViewCellContent: CommentsViewCell {
-    
-    /// Get the total height of this cell
-    /// Heights
-    /// - 5 top margin
-    /// - 5 bottom margin
-    /// - 20 header height
-    /// - ? body height
-    /// - 10 body top margin
-    /// - 10 body bottom margin
-    /// - 20 body horizontal margin
-    public static func getHeight(redditComment: RedditComment) -> CGFloat {
-        let width = UIScreen.main.bounds.width - CGFloat(redditComment.depth * 10) - 20
-        return 50 + (redditComment.htmlBody?.height(width: width) ?? 0)
-    }
-    
+
     lazy var authorLabel: UILabel = {
         let label = Labels.new(font: .regularBold)
         return label
@@ -39,31 +26,9 @@ class CommentsViewCellContent: CommentsViewCell {
         let label = Labels.new(color: .secondary)
         return label
     }()
-    
-    lazy var dotLabel: UILabel = {
-        let label = Labels.new()
-        label.text = "·"
-        return label
-    }()
-    
-    lazy var header: UIView = {
-        let view = UIView()
-        view.flex.paddingLeft(10).paddingRight(10).justifyContent(.spaceBetween).direction(.row).define { flex in
-            flex.addItem().direction(.row).define { flex in
-                flex.addItem(self.authorLabel)
-                flex.addItem(self.dotLabel).marginRight(3).marginLeft(3)
-                flex.addItem(self.timeStampLabel)
-            }
-            flex.addItem(self.scoreLabel)
-        }
-        
-        self.bgView.addSubview(view)
-        return view
-    }()
-    
+
     lazy var body: CommentsTextView = {
         let view = CommentsTextView()
-        self.bgView.addSubview(view)
         view.backgroundColor = Config.colors.bg1
         view.isScrollEnabled = false
         view.isEditable = false
@@ -74,40 +39,54 @@ class CommentsViewCellContent: CommentsViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        self.contentView.addSubview(self.authorLabel)
+        self.contentView.addSubview(self.body)
+        self.contentView.addSubview(self.timeStampLabel)
+        self.contentView.addSubview(self.scoreLabel)
+
+        self.authorLabel.snp.makeConstraints { make in
+            make.top.left.equalTo(self.contentView).offset(Config.BaseDimensions.cellPadding)
+        }
+        
+        self.body.snp.makeConstraints { make in
+            make.left.equalTo(self.authorLabel)
+            make.top.equalTo(self.authorLabel.snp.bottom).offset(5).priorityLow()
+            make.bottom.right.equalTo(self.contentView).offset(-Config.BaseDimensions.cellPadding)
+        }
+        
+        self.timeStampLabel.snp.makeConstraints { make in
+            make.left.equalTo(self.authorLabel.snp.right)
+            make.top.equalTo(self.authorLabel)
+        }
+        
+        self.scoreLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.authorLabel)
+            make.right.equalTo(self.contentView).offset(-Config.BaseDimensions.cellPadding)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.header.pin.top().left().right().height(20)
-        self.header.flex.layout()
-        self.body.pin.below(of: self.header).left().right().bottom().margin(5, 10)
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
-    
+
     func setRedditComment(c: RedditComment) {
         super.setRedditComment(c: c)
 
-        self.bgView.alpha = c.isCollapsed ? 0.3 : 1
+        self.contentView.alpha = c.isCollapsed ? 0.3 : 1
         self.body.isHidden = c.isHidden || c.isCollapsed || c.isDeleted
         self.body.attributedText = c.htmlBody
-
         self.authorLabel.text = c.author
-        self.authorLabel.flex.markDirty()
-        
+        self.timeStampLabel.text = " · " + c.humanTimeStamp
         self.scoreLabel.text = c.score.commaRepresentation
-        self.scoreLabel.flex.markDirty()
         
-        self.timeStampLabel.text = c.humanTimeStamp
-        self.timeStampLabel.flex.markDirty()
+        self.authorLabel.snp.remakeConstraints { make in
+            make.top.equalTo(self.contentView).offset(Config.BaseDimensions.cellPadding)
+            make.left.equalTo(self.contentView).offset((c.depth * 10) + Config.BaseDimensions.cellPadding)
+            if c.isCollapsed {
+                make.bottom.equalTo(self.contentView).offset(-Config.BaseDimensions.cellPadding)
+            }
+        }
 
-        self.layoutSubviews()
     }
 }

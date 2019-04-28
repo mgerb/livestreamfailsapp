@@ -15,18 +15,6 @@ class CommentsViewCell: UITableViewCell {
     
     public var redditComment: RedditCommentProtocol?
 
-    lazy var bgView: UIView = {
-        let view = UIView()
-        view.backgroundColor = Config.colors.bg1
-        return view
-    }()
-    
-    lazy var bottomBorder: UIView = {
-        let view = UIView()
-        view.backgroundColor = Config.colors.bg2
-        return view
-    }()
-
     var leftBorders: [UIView] = []
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -36,8 +24,6 @@ class CommentsViewCell: UITableViewCell {
         bgColorView.backgroundColor = Config.colors.bg3
         self.selectedBackgroundView = bgColorView
         self.backgroundColor = Config.colors.bg1
-        
-        self.addSubview(self.bgView)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -64,35 +50,24 @@ class CommentsViewCell: UITableViewCell {
 //            self.leftBorder.backgroundColor = self.leftBorderColor
         }
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
 
-        // calculate margin based on depth level of comment
-        let marginLeft = CGFloat((self.redditComment?.depth ?? 0) * 10)
-        self.bgView.pin.all().marginLeft(marginLeft).marginTop(10).marginBottom(10)
-
-        for (index, border) in self.leftBorders.enumerated() {
-            border.pin.left().top().bottom().width(0.5).marginLeft(CGFloat((index + 1) * 10))
-        }
-
-        if self.redditComment?.depth == 0 {
-            self.bottomBorder.pin.left().top().right().height(CGFloat(Config.borderWidth))
-        }
-    }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.bottomBorder.removeFromSuperview()
         self.removeLeftBorders()
     }
     
     func addLeftBorders(depth: Int) {
-        for _ in 0...depth - 1 {
+        for index in 1...depth {
             let border = UIView()
             border.backgroundColor = Config.colors.bg3
             self.leftBorders.append(border)
-            self.addSubview(border)
+            self.contentView.addSubview(border)
+
+            border.snp.makeConstraints { make in
+                make.top.bottom.equalTo(self.contentView)
+                make.left.equalTo(self.contentView).offset(index * 10)
+                make.width.equalTo(0.5)
+            }
         }
     }
 
@@ -107,13 +82,5 @@ class CommentsViewCell: UITableViewCell {
         if c.depth > 0 {
             self.addLeftBorders(depth: c.depth)
         }
-    }
-    
-    static func calculateLeftMargin(depth: Int) -> CGFloat {
-        return CGFloat((depth + 1) * 10)
-    }
-    
-    func calculateBorderLeftMargin(depth: Int) -> CGFloat {
-        return CommentsViewCell.calculateLeftMargin(depth: depth) + 5
     }
 }
