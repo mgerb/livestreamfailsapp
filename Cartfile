@@ -14,5 +14,5 @@ github "saoudrizwan/Disk"
 github "PiXeL16/RevealingSplashView"
 github "xmartlabs/Eureka" ~> 5.0
 github "utahiosmac/Marshal"
-
+github "ra1028/DifferenceKit"
 

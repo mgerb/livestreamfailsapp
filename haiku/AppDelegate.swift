@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func getTabBarControllers() -> [UIViewController] {
-        let mainNavController = self.getTabBarNavController(viewController: MainCollectionViewController(), icon: .tv, selectedIcon: .tvFill, tag: 0)
+        let mainNavController = self.getTabBarNavController(viewController: VideoTableViewController(), icon: .tv, selectedIcon: .tvFill, tag: 0)
         let favoritesNavController = self.getTabBarNavController(viewController: FavoritesCollectionViewController(), icon: .heart, selectedIcon: .heartFill, tag:  1)
         let settingsNavController = self.getTabBarNavController(viewController: SettingsFormViewController(), icon: .settings, selectedIcon: .settingsFill, tag: 2)
         return [mainNavController, favoritesNavController, settingsNavController]

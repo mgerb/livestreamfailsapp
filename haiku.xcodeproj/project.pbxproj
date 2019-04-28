@@ -87,6 +87,9 @@
 		A2E2A1222268068100E5FA92 /* Eureka.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2E2A11F2268067800E5FA92 /* Eureka.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2E2A124226806A500E5FA92 /* SettingsFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E2A123226806A500E5FA92 /* SettingsFormViewController.swift */; };
 		A2E7018221F823BD00029C75 /* twitch.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E7018121F823BD00029C75 /* twitch.service.swift */; };
+		A2ED75BE227539CF00AE9C26 /* VideoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2ED75BD227539CF00AE9C26 /* VideoTableViewController.swift */; };
+		A2ED75C022753BA200AE9C26 /* DifferenceKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2ED75BF22753BA200AE9C26 /* DifferenceKit.framework */; };
+		A2ED75C222753BA900AE9C26 /* DifferenceKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2ED75BF22753BA200AE9C26 /* DifferenceKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2F6EA78226392AE0038D425 /* Disk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2F6EA77226392AE0038D425 /* Disk.framework */; };
 		A2F6EA7A226392B40038D425 /* Disk.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2F6EA77226392AE0038D425 /* Disk.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -112,6 +115,7 @@
 				A2DF60E12265864300CE4D16 /* RevealingSplashView.framework in Embed Frameworks */,
 				A20A70CB21E817B800BD3D0C /* FlexLayout.framework in Embed Frameworks */,
 				A20A70BD21E817B800BD3D0C /* SnapKit.framework in Embed Frameworks */,
+				A2ED75C222753BA900AE9C26 /* DifferenceKit.framework in Embed Frameworks */,
 				A2DE2DB921FABFA8003F66D1 /* Alamofire.framework in Embed Frameworks */,
 				A20A70C921E817B800BD3D0C /* IGListKit.framework in Embed Frameworks */,
 				A2F6EA7A226392B40038D425 /* Disk.framework in Embed Frameworks */,
@@ -194,6 +198,8 @@
 		A2E2A11F2268067800E5FA92 /* Eureka.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Eureka.framework; path = Carthage/Build/iOS/Eureka.framework; sourceTree = "<group>"; };
 		A2E2A123226806A500E5FA92 /* SettingsFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFormViewController.swift; sourceTree = "<group>"; };
 		A2E7018121F823BD00029C75 /* twitch.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = twitch.service.swift; sourceTree = "<group>"; };
+		A2ED75BD227539CF00AE9C26 /* VideoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTableViewController.swift; sourceTree = "<group>"; };
+		A2ED75BF22753BA200AE9C26 /* DifferenceKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DifferenceKit.framework; path = Carthage/Build/iOS/DifferenceKit.framework; sourceTree = "<group>"; };
 		A2F6EA77226392AE0038D425 /* Disk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Disk.framework; path = Carthage/Build/iOS/Disk.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -202,6 +208,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2ED75C022753BA200AE9C26 /* DifferenceKit.framework in Frameworks */,
 				A2F6EA78226392AE0038D425 /* Disk.framework in Frameworks */,
 				A2E2A1202268067800E5FA92 /* Eureka.framework in Frameworks */,
 				A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */,
@@ -226,6 +233,7 @@
 		A20A709921E8176C00BD3D0C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A2ED75BF22753BA200AE9C26 /* DifferenceKit.framework */,
 				A2AD9CE1226ECDD700A19C57 /* Marshal.framework */,
 				A2E2A11F2268067800E5FA92 /* Eureka.framework */,
 				A2DF60DE2265863F00CE4D16 /* RevealingSplashView.framework */,
@@ -405,6 +413,7 @@
 				A27E877A21E10394002501F1 /* main */,
 				A27E877B21E10474002501F1 /* settings */,
 				A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */,
+				A2ED75BD227539CF00AE9C26 /* VideoTableViewController.swift */,
 			);
 			path = "view-controllers";
 			sourceTree = "<group>";
@@ -518,6 +527,7 @@
 				A2889F2C217D6FF0001E7061 /* FavoritesCollectionViewController.swift in Sources */,
 				A247504621EACBE600C0F712 /* CommentsHeaderCell.swift in Sources */,
 				A247504421EA726D00C0F712 /* TapThroughTableView.swift in Sources */,
+				A2ED75BE227539CF00AE9C26 /* VideoTableViewController.swift in Sources */,
 				A2043987227005D8007130AC /* reddit-realm.swift in Sources */,
 				A25285772159E5BE00DCA537 /* global-player.swift in Sources */,
 				A2A8143F2248720300A4E974 /* user-settings.swift in Sources */,

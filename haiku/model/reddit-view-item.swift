@@ -11,6 +11,7 @@ import IGListKit
 import XCDYouTubeKit
 import RxSwift
 import Alamofire
+import DifferenceKit
 
 enum RedditViewItemContext {
     case home
@@ -321,7 +322,11 @@ extension RedditViewItem: CachingPlayerItemDelegate {
     
 }
 
-extension RedditViewItem: ListDiffable {
+extension RedditViewItem: ListDiffable, Differentiable {
+    static func == (lhs: RedditViewItem, rhs: RedditViewItem) -> Bool {
+        return true
+    }
+    
     func diffIdentifier() -> NSObjectProtocol {
         return self.redditLink.id as NSString
     }
@@ -331,5 +336,13 @@ extension RedditViewItem: ListDiffable {
             return self.redditLink.id == object.redditLink.id
         }
         return false
+    }
+    
+    var differenceIdentifier: String {
+        return self.redditLink.id
+    }
+    
+    func isContentEqual(to source: RedditViewItem) -> Bool {
+        return self.redditLink.id == source.redditLink.id
     }
 }
