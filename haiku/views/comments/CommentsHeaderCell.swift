@@ -12,8 +12,6 @@ import SnapKit
 
 class CommentsHeaderCell: UITableViewHeaderFooterView {
 
-    static let cellPadding = CGFloat(10)
-
     var redditViewItem: RedditViewItem?
 
     lazy var titleLabel: UILabel = {
@@ -51,14 +49,15 @@ class CommentsHeaderCell: UITableViewHeaderFooterView {
         self.contentView.addSubview(self.commentBubble)
 
         self.scoreLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.contentView).offset(CommentsHeaderCell.cellPadding)
-            make.right.equalTo(self.contentView).offset(-CommentsHeaderCell.cellPadding)
+            make.top.equalTo(self.contentView).offset(Config.BaseDimensions.cellPadding)
+            make.right.equalTo(self.contentView).offset(-Config.BaseDimensions.cellPadding)
         }
         
         self.titleLabel.snp.makeConstraints { make in
-            make.top.left.equalTo(self.contentView).offset(CommentsHeaderCell.cellPadding)
-            make.bottom.equalTo(self.authorLabel.snp.top).offset(-15)
-            make.right.lessThanOrEqualTo(self.scoreLabel.snp.left).offset(-CommentsHeaderCell.cellPadding)
+            make.top.left.equalTo(self.contentView).offset(Config.BaseDimensions.cellPadding)
+            // needs low prio to not cause auto layout warning
+            make.bottom.equalTo(self.authorLabel.snp.top).offset(-15).priorityLow()
+            make.right.lessThanOrEqualTo(self.scoreLabel.snp.left).offset(-Config.BaseDimensions.cellPadding)
         }
         
         self.nsfwLabel.snp.makeConstraints { make in
@@ -68,8 +67,8 @@ class CommentsHeaderCell: UITableViewHeaderFooterView {
         }
         
         self.authorLabel.snp.makeConstraints { make in
-            make.left.equalTo(self.contentView).offset(CommentsHeaderCell.cellPadding)
-            make.bottom.equalTo(self.contentView).offset(-CommentsHeaderCell.cellPadding)
+            make.left.equalTo(self.contentView).offset(Config.BaseDimensions.cellPadding)
+            make.bottom.equalTo(self.contentView).offset(-Config.BaseDimensions.cellPadding)
         }
         
         self.topBorder.snp.makeConstraints { make in
@@ -83,7 +82,7 @@ class CommentsHeaderCell: UITableViewHeaderFooterView {
         }
         
         self.commentLabel.snp.makeConstraints { make in
-            make.bottom.right.equalTo(self.contentView).offset(-CommentsHeaderCell.cellPadding)
+            make.bottom.right.equalTo(self.contentView).offset(-Config.BaseDimensions.cellPadding)
         }
         
         self.commentBubble.snp.makeConstraints { make in

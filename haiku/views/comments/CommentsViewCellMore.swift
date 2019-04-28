@@ -13,23 +13,23 @@ class CommentsViewCellMore: CommentsViewCell {
     
     lazy var label: UILabel = {
         let l = Labels.new(font: .small, color: .blue)
-        self.bgView.addSubview(l)
         return l
     }()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.contentView.addSubview(self.label)
+        
+        self.label.snp.makeConstraints { make in
+            make.top.left.equalTo(self.contentView).offset(Config.BaseDimensions.cellPadding)
+            make.bottom.right.equalTo(self.contentView).offset(-Config.BaseDimensions.cellPadding)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.label.pin.all().marginLeft(15)
-    }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
     }
@@ -37,7 +37,7 @@ class CommentsViewCellMore: CommentsViewCell {
     func setRedditComment(c: RedditMore) {
         super.setRedditComment(c: c)
         var text = ""
-        
+
         if c.isContinueThread {
             text = "Continue thread..."
         } else {
@@ -45,6 +45,9 @@ class CommentsViewCellMore: CommentsViewCell {
         }
 
         self.label.text = text
-        self.layoutSubviews()
+        
+        self.label.snp.updateConstraints { make in
+            make.left.equalTo(self.contentView).offset((c.depth * 10) + Config.BaseDimensions.cellPadding)
+        }
     }
 }

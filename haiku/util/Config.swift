@@ -41,4 +41,8 @@ class Config {
     static let tinyFont = UIFont.systemFont(ofSize: 10, weight: .light)
     
     static let borderWidth = 0.25
+    
+    struct BaseDimensions {
+        static let cellPadding = 10
+    }
 }

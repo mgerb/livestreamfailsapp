@@ -113,7 +113,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         switch self.data[indexPath.row] {
         case let s as String:
             if s == "loading" || s == "no comments" {
-                return 200
+                return UITableViewAutomaticDimension
             }
             break
         case let listing as RedditListingType:
@@ -121,17 +121,15 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
                 if comment.isHidden {
                     return 0
                 } else if comment.isCollapsed || comment.isDeleted {
-                    return 40
-                } else {
-                    return CommentsViewCellContent.getHeight(redditComment: comment)
+                    return UITableViewAutomaticDimension
                 }
             } else if case .redditMore(let more) = listing {
-                return more.isHidden ? 0 : 30
+                return more.isHidden ? 0 : UITableViewAutomaticDimension
             }
         default:
-            return 50
+            return UITableViewAutomaticDimension
         }
-        return 50
+        return UITableViewAutomaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

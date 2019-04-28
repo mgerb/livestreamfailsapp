@@ -23,30 +23,23 @@ class CommentsLoadingCell: UITableViewCell {
         ai.startAnimating()
         return ai
     }()
-    
-    lazy var bgView: UIView = {
-        let view = UIView()
-        view.backgroundColor = Config.colors.bg1
-        return view
-    }()
-    
+
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.selectionStyle = .none
-        self.addSubview(self.bgView)
-        self.bgView.addSubview(self.loadingView)
-        self.bgView.addSubview(self.noCommentsLabel)
         
-        self.bgView.snp.makeConstraints { make in
-            make.edges.equalTo(self)
-        }
+        self.selectionStyle = .none
+        
+        self.contentView.addSubview(self.loadingView)
+        self.contentView.addSubview(self.noCommentsLabel)
         
         self.loadingView.snp.makeConstraints { make in
-            make.centerY.centerX.equalTo(self.bgView)
+            make.top.equalTo(self.contentView).offset(50)
+            make.bottom.equalTo(self.contentView).offset(-50)
+            make.centerX.equalTo(self.contentView)
         }
         
         self.noCommentsLabel.snp.makeConstraints { make in
-            make.centerY.centerX.equalTo(self.bgView)
+            make.center.equalTo(self.loadingView)
         }
     }
     
