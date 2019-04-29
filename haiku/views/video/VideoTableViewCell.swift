@@ -10,6 +10,11 @@ import Foundation
 import UIKit
 
 class VideoTableViewCell: UITableViewCell, VideoView, RedditViewItemDelegate {
+    
+    // TODO:
+    static func getEstimatedHeight() -> CGFloat {
+        return 304
+    }
 
     lazy var stackView: UIStackView = {
         let view = UIStackView()

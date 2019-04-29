@@ -37,7 +37,7 @@ class RedditService: RequestAdapter, RequestRetrier {
         "User-Agent": "ios:\(String(describing: Bundle.main.bundleIdentifier)):\(Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String ?? "1.0.0")"
     ]
     static let shared = RedditService()
-    let haikuLimit = 50
+    let haikuLimit = 25
     let client_id = "Y2NoNa4zUyLbCA"
     let password = ""
     let oauthUrl = "https://www.reddit.com/api/v1/access_token"

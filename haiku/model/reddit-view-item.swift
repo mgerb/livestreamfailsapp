@@ -53,11 +53,7 @@ class RedditViewItem {
     lazy var videoStartTime: Int = self.redditLink.url?.youtubeStartTime ?? 0
     lazy var videoEndTime: Int? = self.redditLink.url?.youtubeEndTime
     
-    var failedToLoadVideo = false {
-        didSet {
-            self.delegate.invoke(invocation: { $0.failedToLoadVideo(redditViewItem: self) })
-        }
-    }
+    var failedToLoadVideo = false
 
     var thumbnail: UIImageView {
         let view = UIImageView()
@@ -107,7 +103,10 @@ class RedditViewItem {
                 ClipUrlService.shared.getClipInfo(redditLink: self.redditLink) { (videoUrl, thumbnailUrl) in
                     self.cachedVideoUrl = videoUrl
                     self.cachedThumbnailUrl = thumbnailUrl
-                    self.failedToLoadVideo = videoUrl == nil
+                    if videoUrl == nil {
+                        self.failedToLoadVideo = true
+                        self.delegate.invoke(invocation: { $0.failedToLoadVideo(redditViewItem: self) })
+                    }
                     observer.onNext((videoUrl, thumbnailUrl))
                     observer.onCompleted()
                 }
