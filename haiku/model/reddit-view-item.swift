@@ -96,8 +96,11 @@ class RedditViewItem {
     lazy var getClipUrlInfo: Observable<(URL?, URL?)> = {
         return Observable.create { observer in
             
-            // return cached url's if they exist
-            if let videoUrl = self.cachedVideoUrl, let thumbnailUrl = self.cachedThumbnailUrl {
+            if self.failedToLoadVideo {
+                observer.onNext((nil, nil))
+                observer.onCompleted()
+            } else if let videoUrl = self.cachedVideoUrl, let thumbnailUrl = self.cachedThumbnailUrl {
+                // return cached url's if they exist
                 observer.onNext((videoUrl, thumbnailUrl))
                 observer.onCompleted()
             } else {
