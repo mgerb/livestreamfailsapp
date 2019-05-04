@@ -15,6 +15,7 @@ import RxSwift
 class VideoTableViewController: UIViewController, UITableViewDataSource {
 
     var data = [RedditViewItem]()
+    var workingRange = Set<Int>()
     let disposeBag = DisposeBag()
     var commentsTableView: CommentsTableView?
     private var readyToLoadMore = true
@@ -103,7 +104,7 @@ class VideoTableViewController: UIViewController, UITableViewDataSource {
                     self.tableView.setContentOffset(CGPoint(x: 0, y: SortBarCollectionViewCell.height), animated: true)
                     self.setReddyToLoadMore()
                 } else {
-                    self.tableView.reload(using: changeset, with: .automatic) { data in
+                    self.tableView.reload(using: changeset, with: .fade) { data in
                         self.data = data
 
                         self.loadMoreTimeoutWorkItem = DispatchWorkItem {
@@ -143,6 +144,7 @@ class VideoTableViewController: UIViewController, UITableViewDataSource {
         }).disposed(by: self.disposeBag)
     }
     
+
     // TODO: working range
 //    var willDisplayIndexPath = IndexPath(row: 0, section: 0)
 //
@@ -189,8 +191,22 @@ extension VideoTableViewController: UITableViewDelegate, UIScrollViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let item = self.data[indexPath.row]
         item.delegate.add(delegate: self)
-
-        _ = self.data[indexPath.row].getThumbnailImage.subscribe()
+        
+        let range = Set((indexPath.row-5...indexPath.row+5).compactMap {
+            self.data.indices.contains($0) ? $0 : nil
+        })
+        
+        let didEnterRange = range.subtracting(self.workingRange)
+        
+        DispatchQueue.main.async {
+            didEnterRange.forEach {
+                if self.data.indices.contains($0) {
+                    _ = self.data[$0].getThumbnailImage.subscribe()
+                }
+            }
+        }
+        
+        self.workingRange = range
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
