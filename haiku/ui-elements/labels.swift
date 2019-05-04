@@ -31,7 +31,7 @@ enum MyAccentColor {
 
 class Labels {
     
-    static func new(font: MyFontType = .regular, color: MyFontColor = .primary) -> UILabel {
+    static func new(font: MyFontType = .regular, color: MyFontColor = .primary, target: Any? = nil, action: Selector? = nil) -> UILabel {
         let label = UILabel()
         
         switch font {
@@ -58,6 +58,12 @@ class Labels {
             label.textColor = Config.colors.white
         case .tealBlue:
             label.textColor = Config.colors.tealBlue
+        }
+        
+        if let target = target, let action = action {
+            label.isUserInteractionEnabled = true
+            let g = UITapGestureRecognizer(target: target, action: action)
+            label.addGestureRecognizer(g)
         }
 
         return label

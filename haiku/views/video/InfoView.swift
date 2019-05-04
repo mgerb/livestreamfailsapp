@@ -24,27 +24,20 @@ class InfoView: UIView, VideoView {
         return Icons.getLabel(icon: .dots, target: self, action: #selector(moreButtonAction))
     }()
     
-    let scoreLabel: UILabel = {
+    lazy var scoreLabel: UILabel = {
         let label = Labels.new(font: .small)
-        label.adjustsFontSizeToFitWidth = false
         return label
     }()
     
-    let timeStampLabel: UILabel = {
+    lazy var timeStampLabel: UILabel = {
         return Labels.new(font: .small, color: .secondary)
     }()
     
-    lazy private var commentsButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("", for: .normal)
-        button.setTitleColor(Config.colors.primaryFont, for: .normal)
-        button.titleLabel?.font = Config.smallFont
-        // set to nearly zero for left/right as 0 makes it use default values...
-        button.contentEdgeInsets = UIEdgeInsets(top: 0.1, left: 0.1, bottom: 0.1, right: 0.1)
-        button.addTarget(self, action: #selector(commentsButtonAction), for: .touchUpInside)
-        return button
+    lazy var commentsButton: UILabel = {
+        let label = Labels.new(font: .small, target: self, action: #selector(commentsButtonAction))
+        return label
     }()
-    
+
     lazy private var commentBubble: UILabel = {
         return Icons.getLabel(icon: .comment, target: self, action: #selector(commentsButtonAction))
     }()
@@ -111,7 +104,7 @@ class InfoView: UIView, VideoView {
         
         DispatchQueue.main.async {
             self.scoreLabel.text = redditViewItem.redditLink.score.commaRepresentation
-            self.commentsButton.setTitle(redditViewItem.redditLink.num_comments.commaRepresentation, for: .normal)
+            self.commentsButton.text = redditViewItem.redditLink.num_comments.commaRepresentation
             self.timeStampLabel.text = redditViewItem.humanTimeStampExtended
         }
     }
