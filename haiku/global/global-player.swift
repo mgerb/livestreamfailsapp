@@ -28,7 +28,7 @@ class GlobalPlayer: NSObject {
     
     func replaceItem(_ item: AVPlayerItem, _ redditViewItem: RedditViewItem) {
         // toggle player if trying to set current active player item
-        if (try? self.activeRedditViewItem.value())??.redditLink.id == redditViewItem.redditLink.id {
+        if ((try? self.activeRedditViewItem.value()) ?? nil) === redditViewItem {
             self.togglePlaying()
             return
         }
