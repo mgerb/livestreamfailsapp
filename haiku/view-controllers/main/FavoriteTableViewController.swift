@@ -1,14 +1,16 @@
 //
-//  FavoritesViewController.swift
+//  FavoriteTableViewController.swift
 //  haiku
 //
-//  Created by Mitchell Gerber on 10/21/18.
-//  Copyright © 2018 Mitchell Gerber. All rights reserved.
+//  Created by Mitchell Gerber on 5/6/19.
+//  Copyright © 2019 Mitchell Gerber. All rights reserved.
 //
 
 import Foundation
+import UIKit
+import DifferenceKit
 
-class FavoritesCollectionViewController: YaikuCollectionViewController {
+class FavoritesTableViewController: BaseVideoTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,14 +21,16 @@ class FavoritesCollectionViewController: YaikuCollectionViewController {
     }
     
     override func fetchHaikus(_ after: String? = nil) {
-        super.fetchHaikus()
+        super.fetchHaikus(after)
         
         // delay or else images don't show up right away
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
             let redditLinks = StorageService.shared.getRedditLinkFavorites()
-            // create section view items from reddit links
-            self.data = redditLinks.map { RedditViewItem($0, context: .favorites) }
-            self.adapter.performUpdates(animated: true, completion: nil)
+            let changeset = StagedChangeset(source: self.data, target: redditLinks.map { RedditViewItem($0, context: .favorites) })
+            self.refreshControl.endRefreshing()
+            self.tableView.reload(using: changeset, with: .fade) { data in
+                self.data = data
+            }
         })
     }
 }

@@ -1,7 +1,6 @@
 github "SnapKit/SnapKit" ~> 4.0.0
 github "0xced/XCDYouTubeKit" ~> 2.7.1
 github "Alamofire/Alamofire" ~> 4.7
-github "Instagram/IGListKit" ~> 3.0
 github "onevcat/Kingfisher" ~> 4.0
 github "ReactiveX/RxSwift" ~> 4.0
 github "ranesr/SwiftIcons" ~> 2.3.2
@@ -14,5 +13,5 @@ github "saoudrizwan/Disk"
 github "PiXeL16/RevealingSplashView"
 github "xmartlabs/Eureka" ~> 5.0
 github "utahiosmac/Marshal"
-
+github "ra1028/DifferenceKit"
 

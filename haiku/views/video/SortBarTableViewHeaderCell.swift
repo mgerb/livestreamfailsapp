@@ -1,64 +1,24 @@
 //
-//  SortBarSectionController.swift
+//  SortBarTableViewHeaderCell.swift
 //  haiku
 //
-//  Created by Mitchell Gerber on 2/17/19.
+//  Created by Mitchell Gerber on 4/28/19.
 //  Copyright © 2019 Mitchell Gerber. All rights reserved.
 //
 
 import Foundation
-import IGListKit
-import PinLayout
-import FlexLayout
+import UIKit
 
-protocol SortBarDelegate {
+protocol SortBarTableViewHeaderCellDelegate {
     func sortBarDidUpdate(sortBy: RedditLinkSortBy)
     func activeRedditLinkSortBy() -> RedditLinkSortBy
 }
 
-class SortBarSectionController: ListSectionController, ListDisplayDelegate, ListWorkingRangeDelegate {
-
-    var delegate: SortBarDelegate?
-    
-    override func numberOfItems() -> Int {
-        return 1
-    }
-    
-    override func sizeForItem(at index: Int) -> CGSize {
-        let width = UIScreen.main.bounds.width
-        return CGSize(width: width, height: SortBarCollectionViewCell.height)
-    }
-    
-    override func cellForItem(at index: Int) -> UICollectionViewCell {
-        let cell = collectionContext!.dequeueReusableCell(of: SortBarCollectionViewCell.self, for: self, at: index) as! SortBarCollectionViewCell
-        cell.delegate = self.delegate
-        return cell
-    }
-    
-    func listAdapter(_ listAdapter: ListAdapter, sectionControllerWillEnterWorkingRange sectionController: ListSectionController) {
-    }
-    
-    func listAdapter(_ listAdapter: ListAdapter, sectionControllerDidExitWorkingRange sectionController: ListSectionController) {
-    }
-    
-    func listAdapter(_ listAdapter: ListAdapter, willDisplay sectionController: ListSectionController) {
-    }
-    
-    func listAdapter(_ listAdapter: ListAdapter, didEndDisplaying sectionController: ListSectionController) {
-    }
-    
-    func listAdapter(_ listAdapter: ListAdapter, willDisplay sectionController: ListSectionController, cell: UICollectionViewCell, at index: Int) {
-    }
-    
-    func listAdapter(_ listAdapter: ListAdapter, didEndDisplaying sectionController: ListSectionController, cell: UICollectionViewCell, at index: Int) {
-    }
-}
-
-class SortBarCollectionViewCell: UICollectionViewCell {
+class SortBarTableViewHeaderCell: UITableViewHeaderFooterView {
     
     static let height = CGFloat(40)
-    var delegate: SortBarDelegate?
-
+    var delegate: SortBarTableViewHeaderCellDelegate?
+    
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.showsHorizontalScrollIndicator = false
@@ -94,8 +54,8 @@ class SortBarCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
         self.addSubview(self.scrollView)
         self.scrollView.addSubview(self.flexView)
     }
@@ -106,17 +66,17 @@ class SortBarCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-
+        
         self.scrollView.pin.all()
         self.flexView.pin.all().marginLeft(10).marginRight(10)
-
+        
         self.flexView.flex.layout(mode: .adjustWidth)
-
-        self.scrollView.contentSize = CGSize(width: self.flexView.frame.width + 20, height: SortBarCollectionViewCell.height)
+        
+        self.scrollView.contentSize = CGSize(width: self.flexView.frame.width + 20, height: SortBarTableViewHeaderCell.height)
         
         self.updateSelectedButtons()
     }
-
+    
     @objc func buttonPress(sender: UIButton) {
         if let title = sender.titleLabel?.text?.lowercased() {
             if title != RedditLinkSortBy.top.rawValue && self.delegate?.activeRedditLinkSortBy().rawValue == title {

@@ -7,10 +7,10 @@
 //
 
 import Foundation
-import IGListKit
 import XCDYouTubeKit
 import RxSwift
 import Alamofire
+import DifferenceKit
 
 enum RedditViewItemContext {
     case home
@@ -52,11 +52,7 @@ class RedditViewItem {
     lazy var videoStartTime: Int = self.redditLink.url?.youtubeStartTime ?? 0
     lazy var videoEndTime: Int? = self.redditLink.url?.youtubeEndTime
     
-    var failedToLoadVideo = false {
-        didSet {
-            self.delegate.invoke(invocation: { $0.failedToLoadVideo(redditViewItem: self) })
-        }
-    }
+    var failedToLoadVideo = false
 
     var thumbnail: UIImageView {
         let view = UIImageView()
@@ -95,15 +91,21 @@ class RedditViewItem {
     lazy var getClipUrlInfo: Observable<(URL?, URL?)> = {
         return Observable.create { observer in
             
-            // return cached url's if they exist
-            if let videoUrl = self.cachedVideoUrl, let thumbnailUrl = self.cachedThumbnailUrl {
+            if self.failedToLoadVideo {
+                observer.onNext((nil, nil))
+                observer.onCompleted()
+            } else if let videoUrl = self.cachedVideoUrl, let thumbnailUrl = self.cachedThumbnailUrl {
+                // return cached url's if they exist
                 observer.onNext((videoUrl, thumbnailUrl))
                 observer.onCompleted()
             } else {
                 ClipUrlService.shared.getClipInfo(redditLink: self.redditLink) { (videoUrl, thumbnailUrl) in
                     self.cachedVideoUrl = videoUrl
                     self.cachedThumbnailUrl = thumbnailUrl
-                    self.failedToLoadVideo = videoUrl == nil
+                    if videoUrl == nil {
+                        self.failedToLoadVideo = true
+                        self.delegate.invoke(invocation: { $0.failedToLoadVideo(redditViewItem: self) })
+                    }
                     observer.onNext((videoUrl, thumbnailUrl))
                     observer.onCompleted()
                 }
@@ -321,15 +323,12 @@ extension RedditViewItem: CachingPlayerItemDelegate {
     
 }
 
-extension RedditViewItem: ListDiffable {
-    func diffIdentifier() -> NSObjectProtocol {
-        return self.redditLink.id as NSString
+extension RedditViewItem: Differentiable {
+    var differenceIdentifier: String {
+        return self.redditLink.id
     }
     
-    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        if let object = object as? RedditViewItem {
-            return self.redditLink.id == object.redditLink.id
-        }
-        return false
+    func isContentEqual(to source: RedditViewItem) -> Bool {
+        return self.redditLink.id == source.redditLink.id
     }
 }

@@ -37,6 +37,7 @@ class RedditService: RequestAdapter, RequestRetrier {
         "User-Agent": "ios:\(String(describing: Bundle.main.bundleIdentifier)):\(Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String ?? "1.0.0")"
     ]
     static let shared = RedditService()
+    let haikuLimit = 25
     let client_id = "Y2NoNa4zUyLbCA"
     let password = ""
     let oauthUrl = "https://www.reddit.com/api/v1/access_token"
@@ -128,7 +129,7 @@ class RedditService: RequestAdapter, RequestRetrier {
     func getHaikus(after: String?, sortBy: RedditLinkSortBy, sortByTop: RedditLinkSortByTop?, closure: @escaping (_ data: [RedditLink]) -> Void) {
         let url = "https://reddit.com/r/livestreamfail/\(sortBy)/.json"
         var parameters = [
-            "limit": "25"
+            "limit": String(self.haikuLimit)
         ]
         
         if let after = after {

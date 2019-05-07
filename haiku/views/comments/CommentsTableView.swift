@@ -132,6 +132,10 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         return UITableViewAutomaticDimension
     }
     
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let listing = self.data[indexPath.row] as? RedditListingType {
             
