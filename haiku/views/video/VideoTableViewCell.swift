@@ -40,7 +40,11 @@ class VideoTableViewCell: UITableViewCell, VideoView, RedditViewItemDelegate {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.selectionStyle = .none
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = Config.colors.bg3
+        self.selectedBackgroundView = bgColorView
+        self.backgroundColor = Config.colors.bg1
+        
         self.contentView.addSubview(self.stackView)
         
         self.stackView.addArrangedSubview(self.titleView)
@@ -53,7 +57,7 @@ class VideoTableViewCell: UITableViewCell, VideoView, RedditViewItemDelegate {
         
         self.playerView.snp.makeConstraints { make in
             make.width.equalToSuperview()
-            make.height.equalTo(self.stackView.snp.width).multipliedBy(Float(9) / Float(16)).priorityRequired()
+            make.height.equalTo(self.stackView.snp.width).multipliedBy(Float(9) / Float(16)).priority(999)
         }
     }
 
@@ -63,10 +67,12 @@ class VideoTableViewCell: UITableViewCell, VideoView, RedditViewItemDelegate {
         self.playerView.setRedditItem(redditViewItem: redditViewItem)
         self.playerView.isHidden = redditViewItem.failedToLoadVideo
         self.infoView.setRedditItem(redditViewItem: redditViewItem)
+        self.selectionStyle = redditViewItem.failedToLoadVideo ? .gray : .none
     }
 
     func failedToLoadVideo(redditViewItem: RedditViewItem) {
         self.playerView.isHidden = redditViewItem.failedToLoadVideo
+        self.selectionStyle = .gray
     }
     
     func didMarkAsWatched(redditViewItem: RedditViewItem) {

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import IGListKit
 import XCDYouTubeKit
 import RxSwift
 import Alamofire
@@ -324,22 +323,7 @@ extension RedditViewItem: CachingPlayerItemDelegate {
     
 }
 
-extension RedditViewItem: ListDiffable, Differentiable {
-    static func == (lhs: RedditViewItem, rhs: RedditViewItem) -> Bool {
-        return true
-    }
-    
-    func diffIdentifier() -> NSObjectProtocol {
-        return self.redditLink.id as NSString
-    }
-    
-    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        if let object = object as? RedditViewItem {
-            return self.redditLink.id == object.redditLink.id
-        }
-        return false
-    }
-    
+extension RedditViewItem: Differentiable {
     var differenceIdentifier: String {
         return self.redditLink.id
     }

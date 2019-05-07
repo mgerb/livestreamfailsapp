@@ -100,8 +100,10 @@ extension BaseVideoTableViewController: UITableViewDelegate, UIScrollViewDelegat
     }
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let item = self.data[indexPath.row]
-        self.estimatedHeightCache[item.redditLink.id] = cell.frame.height
+        if self.data.indices.contains(indexPath.row) {
+            let item = self.data[indexPath.row]
+            self.estimatedHeightCache[item.redditLink.id] = cell.frame.height
+        }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -124,6 +126,14 @@ extension BaseVideoTableViewController: UITableViewDelegate, UIScrollViewDelegat
         }
         
         self.workingRange = range
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let item = self.data[indexPath.row]
+        if item.failedToLoadVideo, let urlString = item.redditLink.url, let url = URL(string: urlString) {
+            MyNavigation.shared.presentWebView(url: url)
+        }
+        self.tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 

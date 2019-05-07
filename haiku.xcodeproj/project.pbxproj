@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A2043987227005D8007130AC /* reddit-realm.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2043986227005D8007130AC /* reddit-realm.swift */; };
-		A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A221E8178000BD3D0C /* IGListKit.framework */; };
 		A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A421E8178300BD3D0C /* Kingfisher.framework */; };
 		A20A70AF21E817A100BD3D0C /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70AE21E817A100BD3D0C /* SnapKit.framework */; };
 		A20A70B621E817B800BD3D0C /* XCDYouTubeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70B421E817AC00BD3D0C /* XCDYouTubeKit.framework */; };
@@ -25,9 +24,7 @@
 		A20A70C321E817B800BD3D0C /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A821E8178A00BD3D0C /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70C521E817B800BD3D0C /* PinLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A621E8178800BD3D0C /* PinLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70C721E817B800BD3D0C /* Kingfisher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A421E8178300BD3D0C /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A20A70C921E817B800BD3D0C /* IGListKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A221E8178000BD3D0C /* IGListKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70CB21E817B800BD3D0C /* FlexLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A021E8177800BD3D0C /* FlexLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A21C5D01221A4A8800129DD3 /* SortBarSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21C5D00221A4A8800129DD3 /* SortBarSectionController.swift */; };
 		A21E2E22225A482B00B212F3 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21E2E21225A482600B212F3 /* icomoon.ttf */; };
 		A2397906224B0A7E00844E83 /* labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2397905224B0A7E00844E83 /* labels.swift */; };
 		A23EE92B228133FD00F35F4B /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23EE92A228133FD00F35F4B /* FavoriteTableViewController.swift */; };
@@ -48,8 +45,6 @@
 		A249FC8D2275F9EC00666498 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A249FC8C2275F9EC00666498 /* InfoView.swift */; };
 		A249FC8F2275FA0300666498 /* video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A249FC8E2275FA0300666498 /* video.swift */; };
 		A249FC912275FA6D00666498 /* VideoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A249FC902275FA6D00666498 /* VideoTableViewCell.swift */; };
-		A25285732159C9FC00DCA537 /* MainCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285722159C9FC00DCA537 /* MainCollectionViewController.swift */; };
-		A25285752159CA2E00DCA537 /* RedditViewItemSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285742159CA2E00DCA537 /* RedditViewItemSectionController.swift */; };
 		A25285772159E5BE00DCA537 /* global-player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25285762159E5BE00DCA537 /* global-player.swift */; };
 		A252857E215C655600DCA537 /* TitleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A252857D215C655600DCA537 /* TitleCollectionViewCell.swift */; };
 		A2528584215C6F6B00DCA537 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2528583215C6F6B00DCA537 /* String.swift */; };
@@ -60,8 +55,6 @@
 		A2591251211BD28200B09D73 /* reddit.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2591250211BD28200B09D73 /* reddit.service.swift */; };
 		A269478421CEF93000A07F69 /* RedditAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A269478321CEF93000A07F69 /* RedditAlertController.swift */; };
 		A26BD837218FE09100E948A4 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26BD836218FE09100E948A4 /* Int.swift */; };
-		A2889F2C217D6FF0001E7061 /* FavoritesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2889F2B217D6FF0001E7061 /* FavoritesCollectionViewController.swift */; };
-		A2889F2E217D70CF001E7061 /* YaikuCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */; };
 		A288A12C215344D000000733 /* MyPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A288A12B215344D000000733 /* MyPlayerView.swift */; };
 		A28E619821F56368004B53A7 /* CommentsLoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28E619721F56368004B53A7 /* CommentsLoadingCell.swift */; };
 		A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A29CD0052119363900A5A6EC /* AppDelegate.swift */; };
@@ -124,7 +117,6 @@
 				A20A70BD21E817B800BD3D0C /* SnapKit.framework in Embed Frameworks */,
 				A2ED75C222753BA900AE9C26 /* DifferenceKit.framework in Embed Frameworks */,
 				A2DE2DB921FABFA8003F66D1 /* Alamofire.framework in Embed Frameworks */,
-				A20A70C921E817B800BD3D0C /* IGListKit.framework in Embed Frameworks */,
 				A2F6EA7A226392B40038D425 /* Disk.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -148,7 +140,6 @@
 		A20A70B021E817A300BD3D0C /* SwiftIcons.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftIcons.framework; path = Carthage/Build/iOS/SwiftIcons.framework; sourceTree = "<group>"; };
 		A20A70B221E817A900BD3D0C /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		A20A70B421E817AC00BD3D0C /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/iOS/XCDYouTubeKit.framework; sourceTree = "<group>"; };
-		A21C5D00221A4A8800129DD3 /* SortBarSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBarSectionController.swift; sourceTree = "<group>"; };
 		A21E2E21225A482600B212F3 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
 		A2397905224B0A7E00844E83 /* labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = labels.swift; sourceTree = "<group>"; };
 		A23EE92A228133FD00F35F4B /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewController.swift; sourceTree = "<group>"; };
@@ -169,8 +160,6 @@
 		A249FC8C2275F9EC00666498 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		A249FC8E2275FA0300666498 /* video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = video.swift; sourceTree = "<group>"; };
 		A249FC902275FA6D00666498 /* VideoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTableViewCell.swift; sourceTree = "<group>"; };
-		A25285722159C9FC00DCA537 /* MainCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCollectionViewController.swift; sourceTree = "<group>"; };
-		A25285742159CA2E00DCA537 /* RedditViewItemSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditViewItemSectionController.swift; sourceTree = "<group>"; };
 		A25285762159E5BE00DCA537 /* global-player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "global-player.swift"; sourceTree = "<group>"; };
 		A252857D215C655600DCA537 /* TitleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCollectionViewCell.swift; sourceTree = "<group>"; };
 		A2528583215C6F6B00DCA537 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -181,8 +170,6 @@
 		A2591250211BD28200B09D73 /* reddit.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reddit.service.swift; sourceTree = "<group>"; };
 		A269478321CEF93000A07F69 /* RedditAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditAlertController.swift; sourceTree = "<group>"; };
 		A26BD836218FE09100E948A4 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
-		A2889F2B217D6FF0001E7061 /* FavoritesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCollectionViewController.swift; sourceTree = "<group>"; };
-		A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YaikuCollectionViewController.swift; sourceTree = "<group>"; };
 		A288A12B215344D000000733 /* MyPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlayerView.swift; sourceTree = "<group>"; };
 		A28E619321F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NVActivityIndicatorView_iOS.framework; path = Carthage/Build/iOS/NVActivityIndicatorView_iOS.framework; sourceTree = "<group>"; };
 		A28E619721F56368004B53A7 /* CommentsLoadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsLoadingCell.swift; sourceTree = "<group>"; };
@@ -222,10 +209,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2DE2DB821FABFA8003F66D1 /* Alamofire.framework in Frameworks */,
 				A2ED75C022753BA200AE9C26 /* DifferenceKit.framework in Frameworks */,
 				A2F6EA78226392AE0038D425 /* Disk.framework in Frameworks */,
 				A2E2A1202268067800E5FA92 /* Eureka.framework in Frameworks */,
-				A20A70A321E8178000BD3D0C /* IGListKit.framework in Frameworks */,
 				A20A70A521E8178300BD3D0C /* Kingfisher.framework in Frameworks */,
 				A2AD9CE2226ECDD700A19C57 /* Marshal.framework in Frameworks */,
 				A2DF60DD22657FDA00CE4D16 /* PinLayout.framework in Frameworks */,
@@ -236,7 +223,6 @@
 				A20A70BA21E817B800BD3D0C /* SwiftIcons.framework in Frameworks */,
 				A2D5EA4B220D3C080086A394 /* SwiftSoup.framework in Frameworks */,
 				A20A70B821E817B800BD3D0C /* SwiftyJSON.framework in Frameworks */,
-				A2DE2DB821FABFA8003F66D1 /* Alamofire.framework in Frameworks */,
 				A20A70B621E817B800BD3D0C /* XCDYouTubeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -368,12 +354,11 @@
 		A27E877A21E10394002501F1 /* main */ = {
 			isa = PBXGroup;
 			children = (
-				A2889F2B217D6FF0001E7061 /* FavoritesCollectionViewController.swift */,
-				A25285722159C9FC00DCA537 /* MainCollectionViewController.swift */,
+				A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */,
 				A269478321CEF93000A07F69 /* RedditAlertController.swift */,
-				A25285742159CA2E00DCA537 /* RedditViewItemSectionController.swift */,
-				A2889F2D217D70CE001E7061 /* YaikuCollectionViewController.swift */,
-				A21C5D00221A4A8800129DD3 /* SortBarSectionController.swift */,
+				A2ED75BD227539CF00AE9C26 /* VideoTableViewController.swift */,
+				A23EE92A228133FD00F35F4B /* FavoriteTableViewController.swift */,
+				A23EE92C2281342A00F35F4B /* BaseVideoTableViewController.swift */,
 			);
 			path = main;
 			sourceTree = "<group>";
@@ -439,10 +424,6 @@
 			children = (
 				A27E877A21E10394002501F1 /* main */,
 				A27E877B21E10474002501F1 /* settings */,
-				A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */,
-				A2ED75BD227539CF00AE9C26 /* VideoTableViewController.swift */,
-				A23EE92A228133FD00F35F4B /* FavoriteTableViewController.swift */,
-				A23EE92C2281342A00F35F4B /* BaseVideoTableViewController.swift */,
 			);
 			path = "view-controllers";
 			sourceTree = "<group>";
@@ -554,7 +535,6 @@
 				A25285B8216ACADD00DCA537 /* Config.swift in Sources */,
 				A2DE2DB621FAA578003F66D1 /* clip-url.service.swift in Sources */,
 				A249FC8D2275F9EC00666498 /* InfoView.swift in Sources */,
-				A2889F2C217D6FF0001E7061 /* FavoritesCollectionViewController.swift in Sources */,
 				A249FC892275F99A00666498 /* PlayerView.swift in Sources */,
 				A247504621EACBE600C0F712 /* CommentsHeaderCell.swift in Sources */,
 				A247504421EA726D00C0F712 /* TapThroughTableView.swift in Sources */,
@@ -567,7 +547,6 @@
 				A26BD837218FE09100E948A4 /* Int.swift in Sources */,
 				A2AD9CE6226ECDEA00A19C57 /* reddit.swift in Sources */,
 				A2DCC61321EBB20500E08453 /* CommentsViewCellMore.swift in Sources */,
-				A25285732159C9FC00DCA537 /* MainCollectionViewController.swift in Sources */,
 				A288A12C215344D000000733 /* MyPlayerView.swift in Sources */,
 				A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */,
 				A2B0098221F01E9200888476 /* NSMutableAttributedString.swift in Sources */,
@@ -577,7 +556,6 @@
 				A2591251211BD28200B09D73 /* reddit.service.swift in Sources */,
 				A269478421CEF93000A07F69 /* RedditAlertController.swift in Sources */,
 				A2B7C2442198C211008DB7E6 /* reddit-view-item.swift in Sources */,
-				A25285752159CA2E00DCA537 /* RedditViewItemSectionController.swift in Sources */,
 				A23EE92D2281342A00F35F4B /* BaseVideoTableViewController.swift in Sources */,
 				A23EE92B228133FD00F35F4B /* FavoriteTableViewController.swift in Sources */,
 				A2D70E8C21EED67C00F69F0C /* CommentsTextView.swift in Sources */,
@@ -600,10 +578,8 @@
 				A24818C0217815C8005B8819 /* Util.swift in Sources */,
 				A2D5FC6F21F6CA220098A884 /* Date.swift in Sources */,
 				A2B63F41227171EC00296DC8 /* MulticastDelegate.swift in Sources */,
-				A2889F2E217D70CF001E7061 /* YaikuCollectionViewController.swift in Sources */,
 				A249FC8F2275FA0300666498 /* video.swift in Sources */,
 				A2E2A124226806A500E5FA92 /* SettingsFormViewController.swift in Sources */,
-				A21C5D01221A4A8800129DD3 /* SortBarSectionController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

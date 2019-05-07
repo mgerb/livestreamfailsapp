@@ -90,8 +90,6 @@ class TitleView: UIView, VideoView, RedditViewItemDelegate {
         if redditViewItem.failedToLoadVideo, let previewUrl = redditViewItem.redditLink.previewUrl {
             self.thumbnail.kf.setImage(with: URL(string: previewUrl.replaceEncoding()))
         }
-        
-        self.needsUpdateConstraints()
     }
     
     func failedToLoadVideo(redditViewItem: RedditViewItem) {

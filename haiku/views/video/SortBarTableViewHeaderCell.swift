@@ -72,7 +72,7 @@ class SortBarTableViewHeaderCell: UITableViewHeaderFooterView {
         
         self.flexView.flex.layout(mode: .adjustWidth)
         
-        self.scrollView.contentSize = CGSize(width: self.flexView.frame.width + 20, height: SortBarCollectionViewCell.height)
+        self.scrollView.contentSize = CGSize(width: self.flexView.frame.width + 20, height: SortBarTableViewHeaderCell.height)
         
         self.updateSelectedButtons()
     }

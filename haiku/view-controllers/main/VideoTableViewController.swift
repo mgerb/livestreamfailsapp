@@ -70,7 +70,7 @@ class VideoTableViewController: BaseVideoTableViewController {
                     self.tableView.reload(using: changeset, with: .fade) { data in
                         self.data = data
                     }
-                    self.tableView.setContentOffset(CGPoint(x: 0, y: SortBarCollectionViewCell.height), animated: true)
+                    self.tableView.setContentOffset(CGPoint(x: 0, y: SortBarTableViewHeaderCell.height), animated: true)
                     self.setReddyToLoadMore()
                 } else {
                     // if we don't return any reddit items wait at least 10 seconds before trying again

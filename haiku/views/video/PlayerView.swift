@@ -103,7 +103,6 @@ class PlayerView: UIView, VideoView {
     func showPlayerView(animate: Bool = false) {
         self.myPlayerView.playerLayer.player = GlobalPlayer.shared.player
         self.myPlayerView.playerLayer.setNeedsDisplay()
-        
         self.toggleView(view: self.myPlayerView, alpha: 1, animate: animate)
     }
     
