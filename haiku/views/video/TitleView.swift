@@ -87,7 +87,7 @@ class TitleView: UIView, VideoView, RedditViewItemDelegate {
         self.thumbnail.isHidden = !redditViewItem.failedToLoadVideo
         self.setTitleLabelColor(redditViewItem: redditViewItem)
 
-        if let previewUrl = redditViewItem.redditLink.previewUrl {
+        if redditViewItem.failedToLoadVideo, let previewUrl = redditViewItem.redditLink.previewUrl {
             self.thumbnail.kf.setImage(with: URL(string: previewUrl.replaceEncoding()))
         }
         
@@ -95,7 +95,10 @@ class TitleView: UIView, VideoView, RedditViewItemDelegate {
     }
     
     func failedToLoadVideo(redditViewItem: RedditViewItem) {
-//        self.thumbnail.isHidden = !redditViewItem.failedToLoadVideo
+        if let previewUrl = redditViewItem.redditLink.previewUrl {
+            self.thumbnail.kf.setImage(with: URL(string: previewUrl.replaceEncoding()))
+        }
+        self.thumbnail.isHidden = !redditViewItem.failedToLoadVideo
     }
     
     func didMarkAsWatched(redditViewItem: RedditViewItem) {

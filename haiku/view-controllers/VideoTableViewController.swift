@@ -16,6 +16,7 @@ class VideoTableViewController: UIViewController, UITableViewDataSource {
 
     var data = [RedditViewItem]()
     var workingRange = Set<Int>()
+    var estimatedHeightCache = [String: CGFloat]()
     let disposeBag = DisposeBag()
     var commentsTableView: CommentsTableView?
     private var readyToLoadMore = true
@@ -53,6 +54,12 @@ class VideoTableViewController: UIViewController, UITableViewDataSource {
         self.fetchHaikus()
     }
     
+    override func viewWillLayoutSubviews() {
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.window?.addSubview(self.revealingSplashView)
+        }
+    }
+    
     @objc func fetchInitial(_ sender: Any? = nil) {
         self.fetchHaikus()
     }
@@ -71,10 +78,7 @@ class VideoTableViewController: UIViewController, UITableViewDataSource {
         }
         
         RedditService.shared.getHaikus(after: after, sortBy: self.redditLinkSortBy, sortByTop: self.redditLinkSortByTop){ redditLinks in
-            let redditViewItems: [RedditViewItem] = redditLinks.compactMap {
-                let item = RedditViewItem($0, context: .home)
-                return item
-            }
+            let redditViewItems: [RedditViewItem] = redditLinks.compactMap { RedditViewItem($0, context: .home) }
             
             DispatchQueue.main.async {
                 
@@ -104,6 +108,12 @@ class VideoTableViewController: UIViewController, UITableViewDataSource {
                     self.tableView.setContentOffset(CGPoint(x: 0, y: SortBarCollectionViewCell.height), animated: true)
                     self.setReddyToLoadMore()
                 } else {
+                    // if we don't return any reddit items wait at least 10 seconds before trying again
+                    if redditViewItems.count == 0 {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: self.loadMoreTimeoutWorkItem!)
+                        return
+                    }
+                    
                     self.tableView.reload(using: changeset, with: .fade) { data in
                         self.data = data
 
@@ -111,12 +121,7 @@ class VideoTableViewController: UIViewController, UITableViewDataSource {
                             self.setReddyToLoadMore()
                         }
 
-                        // if we don't return any reddit items wait at least 10 seconds before trying again
-                        if redditViewItems.count == 0 {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: self.loadMoreTimeoutWorkItem!)
-                        } else {
                             self.setReddyToLoadMore()
-                        }
 
                     }
                 }
@@ -143,17 +148,6 @@ class VideoTableViewController: UIViewController, UITableViewDataSource {
             }
         }).disposed(by: self.disposeBag)
     }
-    
-
-    // TODO: working range
-//    var willDisplayIndexPath = IndexPath(row: 0, section: 0)
-//
-//    func willEnterWorkingRange(index: Int) {
-//        if self.data.indices.contains(index) {
-//            _ = self.data[index].getThumbnailImage.subscribe()
-//        }
-//    }
-
 }
 
 // table/scroll view delegates
@@ -173,9 +167,8 @@ extension VideoTableViewController: UITableViewDelegate, UIScrollViewDelegate {
         return UITableViewAutomaticDimension
     }
     
-    // TODO:
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return VideoTableViewCell.getEstimatedHeight()
+        return self.estimatedHeightCache[self.data[indexPath.row].redditLink.id] ?? VideoTableViewCell.getEstimatedHeight()
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -188,6 +181,11 @@ extension VideoTableViewController: UITableViewDelegate, UIScrollViewDelegate {
         return SortBarTableViewHeaderCell.height
     }
     
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let item = self.data[indexPath.row]
+        self.estimatedHeightCache[item.redditLink.id] = cell.frame.height
+    }
+
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let item = self.data[indexPath.row]
         item.delegate.add(delegate: self)
@@ -198,6 +196,7 @@ extension VideoTableViewController: UITableViewDelegate, UIScrollViewDelegate {
         
         let didEnterRange = range.subtracting(self.workingRange)
         
+        // preload thumbnails when entering working range
         DispatchQueue.main.async {
             didEnterRange.forEach {
                 if self.data.indices.contains($0) {
@@ -210,7 +209,7 @@ extension VideoTableViewController: UITableViewDelegate, UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.isInLoadingRange && !self.refreshControl.isRefreshing && self.readyToLoadMore && self.data.count > 0 {
+        if scrollView.isAtBottom && !self.refreshControl.isRefreshing && self.readyToLoadMore && self.data.count > 0 {
             let redditViewItem = self.data[self.data.count - 1]
             self.readyToLoadMore = false
             self.fetchHaikus(redditViewItem.redditLink.name)
@@ -224,6 +223,7 @@ extension VideoTableViewController: RedditViewItemDelegate, SortBarTableViewHead
     func failedToLoadVideo(redditViewItem: RedditViewItem) {
         let index = self.data.firstIndex { $0.redditLink.id == redditViewItem.redditLink.id }
         if let index = index {
+            self.estimatedHeightCache.removeValue(forKey: redditViewItem.redditLink.id)
             let indexPath = IndexPath(row: index, section: 0)
             self.tableView.beginUpdates()
             self.tableView.reloadRows(at: [indexPath], with: .fade)
