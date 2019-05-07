@@ -30,6 +30,8 @@
 		A21C5D01221A4A8800129DD3 /* SortBarSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21C5D00221A4A8800129DD3 /* SortBarSectionController.swift */; };
 		A21E2E22225A482B00B212F3 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21E2E21225A482600B212F3 /* icomoon.ttf */; };
 		A2397906224B0A7E00844E83 /* labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2397905224B0A7E00844E83 /* labels.swift */; };
+		A23EE92B228133FD00F35F4B /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23EE92A228133FD00F35F4B /* FavoriteTableViewController.swift */; };
+		A23EE92D2281342A00F35F4B /* BaseVideoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23EE92C2281342A00F35F4B /* BaseVideoTableViewController.swift */; };
 		A240BA262159BD74004E8419 /* PlayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A240BA252159BD74004E8419 /* PlayerCell.swift */; };
 		A242E87C21E2867D004A8026 /* CommentsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A242E87B21E2867D004A8026 /* CommentsViewCell.swift */; };
 		A242E87E21E294CB004A8026 /* TapThroughCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A242E87D21E294CB004A8026 /* TapThroughCollectionView.swift */; };
@@ -149,6 +151,8 @@
 		A21C5D00221A4A8800129DD3 /* SortBarSectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBarSectionController.swift; sourceTree = "<group>"; };
 		A21E2E21225A482600B212F3 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
 		A2397905224B0A7E00844E83 /* labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = labels.swift; sourceTree = "<group>"; };
+		A23EE92A228133FD00F35F4B /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewController.swift; sourceTree = "<group>"; };
+		A23EE92C2281342A00F35F4B /* BaseVideoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseVideoTableViewController.swift; sourceTree = "<group>"; };
 		A240BA252159BD74004E8419 /* PlayerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCell.swift; sourceTree = "<group>"; };
 		A242E87B21E2867D004A8026 /* CommentsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewCell.swift; sourceTree = "<group>"; };
 		A242E87D21E294CB004A8026 /* TapThroughCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapThroughCollectionView.swift; sourceTree = "<group>"; };
@@ -437,6 +441,8 @@
 				A27E877B21E10474002501F1 /* settings */,
 				A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */,
 				A2ED75BD227539CF00AE9C26 /* VideoTableViewController.swift */,
+				A23EE92A228133FD00F35F4B /* FavoriteTableViewController.swift */,
+				A23EE92C2281342A00F35F4B /* BaseVideoTableViewController.swift */,
 			);
 			path = "view-controllers";
 			sourceTree = "<group>";
@@ -572,6 +578,8 @@
 				A269478421CEF93000A07F69 /* RedditAlertController.swift in Sources */,
 				A2B7C2442198C211008DB7E6 /* reddit-view-item.swift in Sources */,
 				A25285752159CA2E00DCA537 /* RedditViewItemSectionController.swift in Sources */,
+				A23EE92D2281342A00F35F4B /* BaseVideoTableViewController.swift in Sources */,
+				A23EE92B228133FD00F35F4B /* FavoriteTableViewController.swift in Sources */,
 				A2D70E8C21EED67C00F69F0C /* CommentsTextView.swift in Sources */,
 				A249FC912275FA6D00666498 /* VideoTableViewCell.swift in Sources */,
 				A2D38BD522597F7300D53289 /* icons.swift in Sources */,
