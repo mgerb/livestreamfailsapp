@@ -53,7 +53,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let time = Date().timeIntervalSince(self.backgroundTimestamp)
         // reset tabs on tab bar controller - this reloads all data
         if time > self.refreshTime {
-            self.myTabBarController.viewControllers = self.getTabBarControllers()
+            let controllers = self.getTabBarControllers()
+            self.myTabBarController.viewControllers = controllers
+            self.myTabBarController.selectedViewController = controllers[0]
         }
     }
 
