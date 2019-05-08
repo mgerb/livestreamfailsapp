@@ -95,9 +95,10 @@ class InfoView: UIView, VideoView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func setRedditItem(redditViewItem: RedditViewItem) {
         self.redditViewItem = redditViewItem
+        self.rxUnsubscribe.onNext(())
         _ = self.redditViewItem?.favorited.takeUntil(self.rxUnsubscribe.asObservable()).subscribe(onNext: { favorited in
             self.setFavoriteButton(favorited)
         })

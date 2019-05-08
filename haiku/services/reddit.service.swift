@@ -280,4 +280,19 @@ class RedditService: RequestAdapter, RequestRetrier {
             }
         }
     }
+    
+    func checkRedditVideo(fallbackUrl: String, closure: @escaping (_ valid: Bool) -> Void) {
+        Alamofire.request(fallbackUrl, method: .head, parameters: nil, encoding: URLEncoding.default, headers: nil)
+            .validate()
+            .responseString(completionHandler: { resp in
+                switch resp.result {
+                case .success:
+                    let contentType = resp.response?.allHeaderFields["Content-Type"] as? String
+                    closure(contentType == "video/mp4")
+                case .failure(let error):
+                    print(error)
+                    closure(false)
+                }
+        })
+    }
 }

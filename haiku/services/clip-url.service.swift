@@ -17,6 +17,7 @@ class ClipUrlService: NSObject {
 
     /// return videoUrl, thumbnailUrl
     func getClipInfo(redditLink: RedditLink, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
+        
         // get first comment to check for stickied mirror links from live stream fails bot
         RedditService.shared.getFirstComment(permalink: redditLink.permalink) { comment in
             let queue = [redditLink.url, comment?.body.liveStreamFails, comment?.body.streamableUrl]
@@ -24,8 +25,32 @@ class ClipUrlService: NSObject {
                 closure(res)
             }
         }
+        
+        // TODO: skip for now need to find way to combine audio with video - see python script
+//        DispatchQueue.global().async {
+//
+//            let dispatchGroup = DispatchGroup()
+//            var videoUrl, thumbnailUrl: URL?
+//
+//            dispatchGroup.enter()
+//
+//            self.getRedditVideoUrl(redditLink: redditLink, closure: { (v, t) in
+//                videoUrl = v
+//                thumbnailUrl = t
+//                dispatchGroup.leave()
+//            })
+//
+//            dispatchGroup.wait()
+//
+//            if let videoUrl = videoUrl, let thumbnailUrl = thumbnailUrl {
+//                DispatchQueue.main.async {
+//                    closure((videoUrl, thumbnailUrl))
+//                }
+//                return
+//            }
+//        }
     }
-    
+
     private func processUrlQueue(queue: [String], closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
         if queue.count > 0 {
             var queue = queue
@@ -39,6 +64,20 @@ class ClipUrlService: NSObject {
                     closure((nil, nil))
                 }
             }
+        } else {
+            closure((nil, nil))
+        }
+    }
+    
+    private func getRedditVideoUrl(redditLink: RedditLink, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
+        if let fallbackUrl = redditLink.fallbackUrl {
+            RedditService.shared.checkRedditVideo(fallbackUrl: fallbackUrl, closure: { valid in
+                if valid, let videoUrl = URL(string: fallbackUrl), let previewUrl = redditLink.previewUrl, let thumbnailUrl = URL(string: previewUrl) {
+                    closure((videoUrl, thumbnailUrl))
+                } else {
+                    closure((nil, nil))
+                }
+            })
         } else {
             closure((nil, nil))
         }

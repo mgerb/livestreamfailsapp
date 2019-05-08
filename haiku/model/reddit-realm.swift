@@ -33,6 +33,7 @@ class RealmRedditLink: Object {
     @objc dynamic var previewUrl: String?
     @objc dynamic var previewWidth: Int = 0
     @objc dynamic var previewHeight: Int = 0
+    @objc dynamic var fallbackUrl: String?
     
     convenience init(_ rp: RedditLink) {
         self.init()
@@ -57,6 +58,7 @@ class RealmRedditLink: Object {
         self.previewUrl = rp.previewUrl
         self.previewHeight = rp.previewHeight ?? 0
         self.previewWidth = rp.previewWidth ?? 0
+        self.fallbackUrl = rp.fallbackUrl
     }
     
     override static func primaryKey() -> String? {

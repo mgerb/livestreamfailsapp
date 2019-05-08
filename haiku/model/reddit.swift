@@ -92,6 +92,9 @@ struct RedditLink: Unmarshaling {
     var previewWidth: Int? = nil
     var previewHeight: Int? = nil
     
+    // fallback video url - this is for v.redd.it videos - else will be nil
+    var fallbackUrl: String? = nil
+    
     // added from realm
     var dateAdded: Date? = nil
     
@@ -114,6 +117,8 @@ struct RedditLink: Unmarshaling {
         self.visited = try object.value(for: "visited")
         self.num_comments = try object.value(for: "num_comments")
         self.stickied = try object.value(for: "stickied")
+        
+        self.fallbackUrl = try? object.value(for: "media").value(for: "reddit_video").value(for: "fallback_url")
         
         do {
             let images: [JSONObject] = try object.value(for: "preview").value(for: "images")
@@ -151,6 +156,7 @@ struct RedditLink: Unmarshaling {
         self.previewHeight = rrp.previewHeight
         self.previewWidth = rrp.previewWidth
         self.dateAdded = rrp.dateAdded
+        self.fallbackUrl = rrp.fallbackUrl
     }
 }
 
