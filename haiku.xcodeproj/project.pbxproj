@@ -25,6 +25,7 @@
 		A20A70C521E817B800BD3D0C /* PinLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A621E8178800BD3D0C /* PinLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70C721E817B800BD3D0C /* Kingfisher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A421E8178300BD3D0C /* Kingfisher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A20A70CB21E817B800BD3D0C /* FlexLayout.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A20A70A021E8177800BD3D0C /* FlexLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A21D3C08228524A300E5471E /* MyIconLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21D3C07228524A300E5471E /* MyIconLabel.swift */; };
 		A21E2E22225A482B00B212F3 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21E2E21225A482600B212F3 /* icomoon.ttf */; };
 		A2397906224B0A7E00844E83 /* labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2397905224B0A7E00844E83 /* labels.swift */; };
 		A23EE92B228133FD00F35F4B /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23EE92A228133FD00F35F4B /* FavoriteTableViewController.swift */; };
@@ -140,6 +141,7 @@
 		A20A70B021E817A300BD3D0C /* SwiftIcons.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftIcons.framework; path = Carthage/Build/iOS/SwiftIcons.framework; sourceTree = "<group>"; };
 		A20A70B221E817A900BD3D0C /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		A20A70B421E817AC00BD3D0C /* XCDYouTubeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCDYouTubeKit.framework; path = Carthage/Build/iOS/XCDYouTubeKit.framework; sourceTree = "<group>"; };
+		A21D3C07228524A300E5471E /* MyIconLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyIconLabel.swift; sourceTree = "<group>"; };
 		A21E2E21225A482600B212F3 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
 		A2397905224B0A7E00844E83 /* labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = labels.swift; sourceTree = "<group>"; };
 		A23EE92A228133FD00F35F4B /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewController.swift; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 			children = (
 				A2397905224B0A7E00844E83 /* labels.swift */,
 				A2D38BD422597F7300D53289 /* icons.swift */,
+				A21D3C07228524A300E5471E /* MyIconLabel.swift */,
 			);
 			path = "ui-elements";
 			sourceTree = "<group>";
@@ -561,6 +564,7 @@
 				A2D70E8C21EED67C00F69F0C /* CommentsTextView.swift in Sources */,
 				A249FC912275FA6D00666498 /* VideoTableViewCell.swift in Sources */,
 				A2D38BD522597F7300D53289 /* icons.swift in Sources */,
+				A21D3C08228524A300E5471E /* MyIconLabel.swift in Sources */,
 				A2397906224B0A7E00844E83 /* labels.swift in Sources */,
 				A25285B62165B7DB00DCA537 /* storage.service.swift in Sources */,
 				A247504821EAF0EE00C0F712 /* UIColor.swift in Sources */,
