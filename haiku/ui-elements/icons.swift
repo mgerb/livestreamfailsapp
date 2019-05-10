@@ -23,6 +23,9 @@ enum MyIconType: String {
     case settings = "\u{e90a}"
     case tvFill = "\u{e90b}"
     case tv = "\u{e90c}"
+    case link = "\u{e90d}"
+    case userFill = "\u{e90e}"
+    case user = "\u{e90f}"
 }
 
 extension UILabel {

@@ -204,4 +204,12 @@ extension String {
         regex?.replaceMatches(in: value, options: .reportProgress, range: NSRange(location: 0,length: value.length), withTemplate: with)
         return String(value)
     }
+    
+    func getBaseUrl() -> String? {
+        let url = URL(string: self)
+        
+        let baseURL = url?.host
+        
+        return baseURL
+    }
 }

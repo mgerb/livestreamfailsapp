@@ -14,10 +14,18 @@ class CommentsHeaderCell: UITableViewHeaderFooterView {
 
     var redditViewItem: RedditViewItem?
 
+    lazy var titleStackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.spacing = CGFloat(5)
+        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        return view
+    }()
+    
+
     lazy var titleLabel: UILabel = {
         let label = Labels.new(font: .regularBold)
         label.numberOfLines = 0
-        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
     
@@ -27,7 +35,9 @@ class CommentsHeaderCell: UITableViewHeaderFooterView {
         return label
     }()
 
-    lazy var authorLabel = Labels.new(font: .small)
+    lazy var titleContainerView = UIStackView()
+    lazy var linkLabel = MyIconLabel(icon: .link, color: Config.colors.secondaryFont)
+    lazy var authorLabel = MyIconLabel(icon: .user)
     lazy var scoreLabel = Labels.new(color: .secondary)
     lazy var commentLabel = Labels.new(color: .secondary)
     lazy var commentBubble = Icons.getLabel(icon: .comment, size: Config.regularFont.pointSize, color: Config.colors.secondaryFont)
@@ -41,31 +51,40 @@ class CommentsHeaderCell: UITableViewHeaderFooterView {
         
         self.contentView.addSubview(self.topBorder)
         self.contentView.addSubview(self.bottomBorder)
-        self.contentView.addSubview(self.titleLabel)
-        self.contentView.addSubview(self.nsfwLabel)
+        self.contentView.addSubview(self.titleStackView)
         self.contentView.addSubview(self.authorLabel)
         self.contentView.addSubview(self.scoreLabel)
         self.contentView.addSubview(self.commentLabel)
         self.contentView.addSubview(self.commentBubble)
+        self.contentView.addSubview(self.linkLabel)
 
+        self.titleStackView.addArrangedSubview(self.titleContainerView)
+        self.titleStackView.addArrangedSubview(self.linkLabel)
+        
+        self.titleContainerView.addSubview(self.titleLabel)
+        self.titleContainerView.addSubview(self.nsfwLabel)
+        
         self.scoreLabel.snp.makeConstraints { make in
             make.top.equalTo(self.contentView).offset(Config.BaseDimensions.cellPadding)
             make.right.equalTo(self.contentView).offset(-Config.BaseDimensions.cellPadding)
         }
         
-        self.titleLabel.snp.makeConstraints { make in
+        self.titleStackView.snp.makeConstraints { make in
             make.top.left.equalTo(self.contentView).offset(Config.BaseDimensions.cellPadding)
-            // needs low prio to not cause auto layout warning
             make.bottom.equalTo(self.authorLabel.snp.top).offset(-15).priorityLow()
             make.right.lessThanOrEqualTo(self.scoreLabel.snp.left).offset(-Config.BaseDimensions.cellPadding)
         }
         
+        self.titleLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         self.nsfwLabel.snp.makeConstraints { make in
-            make.left.top.equalTo(self.titleLabel)
+            make.top.left.equalToSuperview()
             make.height.equalTo(self.nsfwLabel.intrinsicContentSize.height + 3)
             make.width.equalTo(self.nsfwLabel.intrinsicContentSize.width + 5)
         }
-        
+
         self.authorLabel.snp.makeConstraints { make in
             make.left.equalTo(self.contentView).offset(Config.BaseDimensions.cellPadding)
             make.bottom.equalTo(self.contentView).offset(-Config.BaseDimensions.cellPadding)
@@ -102,6 +121,7 @@ class CommentsHeaderCell: UITableViewHeaderFooterView {
         self.nsfwLabel.isHidden = !redditViewItem.redditLink.over_18
         self.scoreLabel.text = redditViewItem.redditLink.score.commaRepresentation
         self.commentLabel.text = redditViewItem.redditLink.num_comments.commaRepresentation
+        self.linkLabel.text = redditViewItem.redditLink.url?.getBaseUrl()
     }
     
     func getBorder() -> UIView {

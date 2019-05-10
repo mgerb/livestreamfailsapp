@@ -20,6 +20,13 @@ class TitleView: UIView, VideoView, RedditViewItemDelegate {
         return view
     }()
     
+    lazy var titleStackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.spacing = CGFloat(5)
+        return view
+    }()
+    
     lazy var labelContainerView: UIView = {
         let view = UIView()
         return view
@@ -31,6 +38,8 @@ class TitleView: UIView, VideoView, RedditViewItemDelegate {
         return label
     }()
     
+    lazy var linkStackView = MyIconLabel(icon: .link, color: Config.colors.secondaryFont)
+
     lazy var nsfwLabel: UILabel = {
         let label = Labels.newAccent(color: .red)
         label.text = "NSFW"
@@ -52,9 +61,12 @@ class TitleView: UIView, VideoView, RedditViewItemDelegate {
         self.labelContainerView.addSubview(self.titleLabel)
         self.labelContainerView.addSubview(self.nsfwLabel)
         
-        self.stackView.addArrangedSubview(self.labelContainerView)
+        self.stackView.addArrangedSubview(self.titleStackView)
         self.stackView.addArrangedSubview(self.thumbnail)
         
+        self.titleStackView.addArrangedSubview(self.labelContainerView)
+        self.titleStackView.addArrangedSubview(self.linkStackView)
+
         self.thumbnail.snp.makeConstraints { make in
             make.height.width.equalTo(50).priority(999)
         }
@@ -86,6 +98,8 @@ class TitleView: UIView, VideoView, RedditViewItemDelegate {
         self.nsfwLabel.isHidden = !redditViewItem.redditLink.over_18
         self.thumbnail.isHidden = !redditViewItem.failedToLoadVideo
         self.setTitleLabelColor(redditViewItem: redditViewItem)
+        self.linkStackView.isHidden = !redditViewItem.failedToLoadVideo
+        self.linkStackView.text = redditViewItem.redditLink.url?.getBaseUrl()
 
         if redditViewItem.failedToLoadVideo, let previewUrl = redditViewItem.redditLink.previewUrl {
             self.thumbnail.kf.setImage(with: URL(string: previewUrl.replaceEncoding()))
