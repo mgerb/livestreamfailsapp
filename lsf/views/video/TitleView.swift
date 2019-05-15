@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 class TitleView: UIView, VideoView, RedditViewItemDelegate {
 

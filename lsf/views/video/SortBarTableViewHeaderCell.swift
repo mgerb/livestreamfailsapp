@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 protocol SortBarTableViewHeaderCellDelegate {
     func sortBarDidUpdate(sortBy: RedditLinkSortBy)
@@ -18,6 +19,13 @@ class SortBarTableViewHeaderCell: UITableViewHeaderFooterView {
     
     static let height = CGFloat(40)
     var delegate: SortBarTableViewHeaderCellDelegate?
+    
+    lazy var stackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .horizontal
+        view.spacing = 30
+        return view
+    }()
     
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -32,32 +40,41 @@ class SortBarTableViewHeaderCell: UITableViewHeaderFooterView {
             let button = UIButton()
             button.setTitle($0, for: .normal)
             button.titleLabel?.font = Config.regularBoldFont
+            button.setTitleColor(Config.colors.primaryFont, for: .normal)
             button.layer.cornerRadius = 5
             button.addTarget(self, action: #selector(self.buttonPress), for: .touchUpInside)
             button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
             return button
         }
     }()
-    
-    lazy var flexView: UIView = {
+
+    lazy var selectedView: UIView = {
         let view = UIView()
-        
-        view.flex.direction(.row).alignItems(.center).define { flex in
-            for (index, button) in self.buttons.enumerated() {
-                let newItem = flex.addItem(button).height(25)
-                if index != 0 {
-                    newItem.marginLeft(30)
-                }
-            }
-        }
-        
+        view.backgroundColor = .black
         return view
     }()
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        self.addSubview(self.scrollView)
-        self.scrollView.addSubview(self.flexView)
+        self.contentView.addSubview(self.scrollView)
+        self.scrollView.addSubview(self.stackView)
+        self.scrollView.addSubview(self.selectedView)
+        
+        self.buttons.forEach {
+            self.stackView.addArrangedSubview($0)
+        }
+        
+        self.scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        self.stackView.snp.makeConstraints { make in
+            make.top.bottom.centerY.equalToSuperview()
+            make.left.equalToSuperview().offset(10)
+            make.right.equalToSuperview().offset(-10)
+        }
+
+        self.scrollView.contentSize = CGSize(width: self.stackView.frame.width + 20, height: SortBarTableViewHeaderCell.height)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -66,14 +83,6 @@ class SortBarTableViewHeaderCell: UITableViewHeaderFooterView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        self.scrollView.pin.all()
-        self.flexView.pin.all().marginLeft(10).marginRight(10)
-        
-        self.flexView.flex.layout(mode: .adjustWidth)
-        
-        self.scrollView.contentSize = CGSize(width: self.flexView.frame.width + 20, height: SortBarTableViewHeaderCell.height)
-        
         self.updateSelectedButtons()
     }
     
@@ -91,13 +100,18 @@ class SortBarTableViewHeaderCell: UITableViewHeaderFooterView {
     }
     
     private func updateSelectedButtons() {
-        self.buttons.forEach {
-            if $0.titleLabel?.text?.lowercased() == self.delegate?.activeRedditLinkSortBy().rawValue {
-                $0.backgroundColor = Config.colors.blue
-                $0.setTitleColor(Config.colors.white, for: .normal)
-            } else {
-                $0.backgroundColor = .clear
-                $0.setTitleColor(Config.colors.primaryFont, for: .normal)
+        self.buttons.forEach { btn in
+            if btn.titleLabel?.text?.lowercased() == self.delegate?.activeRedditLinkSortBy().rawValue {
+                self.selectedView.snp.remakeConstraints { make in
+                    make.left.equalTo(btn).offset(-10)
+                    make.right.equalTo(btn).offset(10)
+                    make.bottom.equalToSuperview()
+                    make.height.equalTo(2)
+                }
+
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.layoutIfNeeded()
+                })
             }
         }
     }

@@ -15,12 +15,12 @@ class RedditAlertController: UIAlertController {
     convenience init(redditViewItem: RedditViewItem) {
         self.init(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        let openClipUrl = UIAlertAction(title: "Open Clip Link", style: .default) { (action:UIAlertAction) in
+        let openClipUrl = UIAlertAction(title: "Open Direct Link", style: .default) { (action:UIAlertAction) in
             guard let urlString = redditViewItem.redditLink.url, let url = URL(string: urlString) else { return }
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
         
-        let copyClipUrl = UIAlertAction(title: "Copy Clip Link", style: .default) { (action:UIAlertAction) in
+        let copyClipUrl = UIAlertAction(title: "Copy Direct Link", style: .default) { (action:UIAlertAction) in
             UIPasteboard.general.string = redditViewItem.redditLink.url
         }
         
