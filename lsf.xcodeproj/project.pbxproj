@@ -164,7 +164,7 @@
 		A288A12B215344D000000733 /* MyPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlayerView.swift; sourceTree = "<group>"; };
 		A28E619321F55E96004B53A7 /* NVActivityIndicatorView_iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NVActivityIndicatorView_iOS.framework; path = Carthage/Build/iOS/NVActivityIndicatorView_iOS.framework; sourceTree = "<group>"; };
 		A28E619721F56368004B53A7 /* CommentsLoadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsLoadingCell.swift; sourceTree = "<group>"; };
-		A29CD0022119363900A5A6EC /* haiku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = haiku.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A29CD0022119363900A5A6EC /* lsf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = lsf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A29CD0052119363900A5A6EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A29CD00C2119363C00A5A6EC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A29CD00F2119363C00A5A6EC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -355,7 +355,7 @@
 		A29CCFF92119363900A5A6EC = {
 			isa = PBXGroup;
 			children = (
-				A29CD0042119363900A5A6EC /* haiku */,
+				A29CD0042119363900A5A6EC /* lsf */,
 				A29CD0032119363900A5A6EC /* Products */,
 				A20A709921E8176C00BD3D0C /* Frameworks */,
 			);
@@ -364,12 +364,12 @@
 		A29CD0032119363900A5A6EC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A29CD0022119363900A5A6EC /* haiku.app */,
+				A29CD0022119363900A5A6EC /* lsf.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A29CD0042119363900A5A6EC /* haiku */ = {
+		A29CD0042119363900A5A6EC /* lsf */ = {
 			isa = PBXGroup;
 			children = (
 				A2B63F3F227171D300296DC8 /* util */,
@@ -387,7 +387,7 @@
 				A29CD0112119363C00A5A6EC /* Info.plist */,
 				A29CD00E2119363C00A5A6EC /* LaunchScreen.storyboard */,
 			);
-			path = haiku;
+			path = lsf;
 			sourceTree = "<group>";
 		};
 		A2B63F3F227171D300296DC8 /* util */ = {
@@ -440,9 +440,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A29CD0012119363900A5A6EC /* haiku */ = {
+		A29CD0012119363900A5A6EC /* lsf */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A29CD0142119363C00A5A6EC /* Build configuration list for PBXNativeTarget "haiku" */;
+			buildConfigurationList = A29CD0142119363C00A5A6EC /* Build configuration list for PBXNativeTarget "lsf" */;
 			buildPhases = (
 				A29CCFFE2119363900A5A6EC /* Sources */,
 				A29CCFFF2119363900A5A6EC /* Frameworks */,
@@ -453,9 +453,9 @@
 			);
 			dependencies = (
 			);
-			name = haiku;
+			name = lsf;
 			productName = haiku;
-			productReference = A29CD0022119363900A5A6EC /* haiku.app */;
+			productReference = A29CD0022119363900A5A6EC /* lsf.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -474,7 +474,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A29CCFFD2119363900A5A6EC /* Build configuration list for PBXProject "haiku" */;
+			buildConfigurationList = A29CCFFD2119363900A5A6EC /* Build configuration list for PBXProject "lsf" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -487,7 +487,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A29CD0012119363900A5A6EC /* haiku */,
+				A29CD0012119363900A5A6EC /* lsf */,
 			);
 		};
 /* End PBXProject section */
@@ -701,7 +701,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = haiku/Info.plist;
+				INFOPLIST_FILE = lsf/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -728,7 +728,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = haiku/Info.plist;
+				INFOPLIST_FILE = lsf/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -745,7 +745,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A29CCFFD2119363900A5A6EC /* Build configuration list for PBXProject "haiku" */ = {
+		A29CCFFD2119363900A5A6EC /* Build configuration list for PBXProject "lsf" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A29CD0122119363C00A5A6EC /* Debug */,
@@ -754,7 +754,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A29CD0142119363C00A5A6EC /* Build configuration list for PBXNativeTarget "haiku" */ = {
+		A29CD0142119363C00A5A6EC /* Build configuration list for PBXNativeTarget "lsf" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A29CD0152119363C00A5A6EC /* Debug */,
