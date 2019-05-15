@@ -196,9 +196,11 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     }
     
     func setWhiteBackgroundLayout() {
-        DispatchQueue.main.async {
-            if self.contentOffset.y < 0 {
-                self.whiteBackgroundLayer.pinFrame.all().marginTop(abs(self.contentOffset.y))
+        if self.contentOffset.y < 0 {
+            // TODO: revisit this - seems to work okay now though
+            self.whiteBackgroundLayer.snp.remakeConstraints { make in
+                make.left.right.bottom.equalToSuperview().priority(999)
+                make.top.equalToSuperview().offset(abs(self.contentOffset.y)).priority(999)
             }
         }
     }
