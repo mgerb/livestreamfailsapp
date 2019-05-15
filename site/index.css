@@ -1,0 +1,41 @@
+html {
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #fafafa;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.grid {
+  max-width: 1200px;
+  display: grid;
+  grid-template-rows: 1fr;
+  align-items: center;
+  grid-gap: 1em;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.screenshot {
+  text-align: right;
+}
+
+.screenshot img {
+  object-fit: contain;
+  max-height: 800px;
+  height: auto;
+  width: 100%;
+}
+
+.description {
+  align-self: center;
+}
