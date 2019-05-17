@@ -163,6 +163,10 @@ extension BaseVideoTableViewController: RedditViewItemDelegate, RedditAlertContr
     func didHideItem(redditViewItem: RedditViewItem) {
         let target: [RedditViewItem] = self.data.compactMap { $0.redditLink.id == redditViewItem.redditLink.id ? nil : $0 }
 
+        if (try? GlobalPlayer.shared.activeRedditViewItem.value())??.redditLink.id == redditViewItem.redditLink.id {
+            GlobalPlayer.shared.pause()
+        }
+        
         let changeset = StagedChangeset(source: self.data, target: target)
         self.tableView.reload(using: changeset, with: .fade) { data in
             self.data = data
