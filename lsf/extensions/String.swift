@@ -51,13 +51,8 @@ extension String {
         }
     }
 
-    /// TODO:
-    var neatclipUrl: String? {
-        return nil
-    }
-    
     var isNeatclipUrl: Bool {
-        return false
+        return self.contains("neatclip.com")
     }
 
     /// extract url from markdown

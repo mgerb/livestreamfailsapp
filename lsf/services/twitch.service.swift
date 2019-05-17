@@ -48,8 +48,6 @@ class TwitchService {
                     if let source = preferredSource as? String {
                         // grab the thumbnail url from the primary source always
                         if let thumbnailUrl = self.grabThumnailUrl(clipUrl: primarySource) {
-                            print(source)
-                            print(thumbnailUrl)
                             closure((URL(string: source), URL(string: thumbnailUrl)))
                             return
                         }

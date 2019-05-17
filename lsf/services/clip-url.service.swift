@@ -117,9 +117,8 @@ class ClipUrlService: NSObject {
         }
     }
     
-    // TODO:
     private func getNeatClipUrl(_ urlString: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
-        closure((nil, nil))
+        self.getUrlsFromHtml(urlString) { closure($0) }
     }
     
     private func getLiveStreamFailsUrl(_ urlString: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
@@ -130,7 +129,7 @@ class ClipUrlService: NSObject {
         self.getUrlsFromHtml(urlString) { closure($0) }
     }
     
-    /// fetch html page and parse source URL's from video element
+    /// fetch html page and parse source URL's from meta tags
     private func getUrlsFromHtml(_ urlString: String, closure: @escaping (_ urlTuple: (URL?, URL?)) -> Void) {
         let queue = DispatchQueue(label: "ClipUrlService.getUrlsFromHtml", qos: .utility, attributes: [.concurrent])
         Alamofire.request(urlString).validate().response(queue: queue, responseSerializer: DataRequest.stringResponseSerializer(), completionHandler: { res in
@@ -141,23 +140,20 @@ class ClipUrlService: NSObject {
                 do {
                     let html = try SwiftSoup.parse(val)
                     
-                    let videoElem = try html.getElementsByTag("video")
-                    let sourceElem = try html.getElementsByTag("source")
+                    var vUrl = try html.getElementsByAttributeValue("property", "og:video:url")
 
-                    // for streamable src attribute is on "video" element - for lsf it's on the "source" element
-                    let video = sourceElem.isEmpty() ? try videoElem.first()?.attr("src") : try sourceElem.first()?.attr("src")
-                    let thumbnail = try videoElem.first()?.attr("poster")
+                    if vUrl.first() == nil {
+                        vUrl = try html.getElementsByAttributeValue("property", "og:video")
+                    }
+                    
+                    let iUrl = try html.getElementsByAttributeValue("property", "og:image")
 
-                    // streamable links start with "//" and without https
-                    // trim the "//" and add "https" to beginning of string if it doesn't exist
-                    if
-                        let video = video?.trimmingCharacters(in: CharacterSet.init(charactersIn: "/")),
-                        let thumbnail = thumbnail?.trimmingCharacters(in: CharacterSet.init(charactersIn: "/")) {
-                        videoUrl = URL(string: video.hasPrefix("https://") ? video : "https://\(video)")
-                        thumbnailUrl = URL(string: thumbnail.hasPrefix("https://") ? thumbnail : "https://\(thumbnail)")
+                    if let vUrl = try vUrl.first()?.attr("content"), let iUrl = try iUrl.first()?.attr("content") {
+                        videoUrl = URL(string: vUrl)
+                        thumbnailUrl = URL(string: iUrl)
                     }
                 } catch {
-                    // do nothing
+                    print(error)
                 }
             case .failure(let error):
                 print(error)
