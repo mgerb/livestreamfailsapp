@@ -5,9 +5,6 @@ github "onevcat/Kingfisher" ~> 4.0
 github "ReactiveX/RxSwift" ~> 4.0
 github "ranesr/SwiftIcons" ~> 2.3.2
 github "realm/realm-cocoa"
-github "layoutBox/FlexLayout"
-github "layoutBox/PinLayout"
-github "SwiftyJSON/SwiftyJSON" ~> 4.0
 github "scinfu/SwiftSoup"
 github "saoudrizwan/Disk"
 github "PiXeL16/RevealingSplashView"

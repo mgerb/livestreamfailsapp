@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import Alamofire
 import XCDYouTubeKit
+import Alamofire
 import SwiftSoup
 
 /// service to get direct video url for different service providers
