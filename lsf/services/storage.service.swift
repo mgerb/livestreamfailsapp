@@ -76,6 +76,25 @@ extension StorageService {
 
 // UserDefaults stuff
 extension StorageService {
+    
+    func clearHiddenPosts() {
+        UserDefaults.standard.removeObject(forKey: "hiddenPosts")
+    }
+    
+    /// store hidden posts
+    func storeHiddenPost(redditLink: RedditLink) {
+        var hiddenPosts: [String: Any]
+        hiddenPosts = UserDefaults.standard.dictionary(forKey: "hiddenPosts") ?? [:]
+        hiddenPosts[redditLink.id] = true
+        UserDefaults.standard.set(hiddenPosts, forKey: "hiddenPosts")
+    }
+    
+    /// check if post has been hidden by user
+    func getHiddenPost(redditLink: RedditLink) -> Bool {
+        let hiddenPosts = UserDefaults.standard.dictionary(forKey: "hiddenPosts") ?? [:]
+        return (hiddenPosts[redditLink.id] as? Bool) == true
+    }
+
     /// store reddit link ID if user has watched it
     func storeWatchedRedditLink(redditLink: RedditLink) {
         UserDefaults.standard.set(true, forKey: "wrl:\(redditLink.id)")

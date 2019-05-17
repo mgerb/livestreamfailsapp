@@ -42,7 +42,7 @@ class VideoTableViewController: BaseVideoTableViewController {
             GlobalPlayer.shared.pause()
         }
         
-        RedditService.shared.getHaikus(after: after, sortBy: self.redditLinkSortBy, sortByTop: self.redditLinkSortByTop){ redditLinks in
+        RedditService.shared.getRedditLinks(after: after, sortBy: self.redditLinkSortBy, sortByTop: self.redditLinkSortByTop){ redditLinks in
             let redditViewItems: [RedditViewItem] = redditLinks.compactMap { RedditViewItem($0, context: .home) }
             
             DispatchQueue.main.async {

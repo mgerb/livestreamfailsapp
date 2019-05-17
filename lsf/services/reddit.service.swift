@@ -126,7 +126,7 @@ class RedditService: RequestAdapter, RequestRetrier {
     }
 
     // returns a list of youtube ID's from youtube haiku
-    func getHaikus(after: String?, sortBy: RedditLinkSortBy, sortByTop: RedditLinkSortByTop?, closure: @escaping (_ data: [RedditLink]) -> Void) {
+    func getRedditLinks(after: String?, sortBy: RedditLinkSortBy, sortByTop: RedditLinkSortByTop?, closure: @escaping (_ data: [RedditLink]) -> Void) {
         let url = "https://reddit.com/r/livestreamfail/\(sortBy)/.json"
         var parameters = [
             "limit": String(self.haikuLimit)
@@ -166,8 +166,24 @@ class RedditService: RequestAdapter, RequestRetrier {
                 }
     
                 // filter nsfw links
-                closure(links.filter { UserSettings.shared.nsfw || !$0.over_18 })
+                closure(self.filterRedditLinks(links: links))
         })
+    }
+    
+    private func filterRedditLinks(links: [RedditLink]) -> [RedditLink] {
+        return links.filter {
+            // show show link if nsfw is turned off and post is nsfw
+            if !UserSettings.shared.nsfw && $0.over_18 {
+                return false
+            }
+            
+            // show show link if has been hidden by user
+            if StorageService.shared.getHiddenPost(redditLink: $0) {
+                return false
+            }
+
+            return true
+        }
     }
     
     func getComments(permalink: String, params: Parameters = [:], closure: @escaping ((_ data: [RedditListingType]?) -> Void)) {

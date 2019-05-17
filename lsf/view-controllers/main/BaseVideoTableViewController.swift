@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import RxSwift
+import DifferenceKit
 
 class BaseVideoTableViewController: UIViewController, UITableViewDataSource {
     
@@ -70,6 +71,12 @@ class BaseVideoTableViewController: UIViewController, UITableViewDataSource {
                     self.view.addSubview(self.commentsTableView!)
                 }
             }
+        }).disposed(by: self.disposeBag)
+        
+        Subjects.shared.moreButtonAction.subscribe(onNext: { redditViewItem in
+            let alertController = RedditAlertController(redditViewItem: redditViewItem)
+            alertController.delegate = self
+            self.present(alertController, animated: true, completion: nil)
         }).disposed(by: self.disposeBag)
     }
 }
@@ -138,7 +145,8 @@ extension BaseVideoTableViewController: UITableViewDelegate, UIScrollViewDelegat
 }
 
 // my custom delegates
-extension BaseVideoTableViewController: RedditViewItemDelegate {
+extension BaseVideoTableViewController: RedditViewItemDelegate, RedditAlertControllerDelegate {
+
     func failedToLoadVideo(redditViewItem: RedditViewItem) {
         let index = self.data.firstIndex { $0.redditLink.id == redditViewItem.redditLink.id }
         if let index = index {
@@ -151,4 +159,13 @@ extension BaseVideoTableViewController: RedditViewItemDelegate {
     }
     
     func didMarkAsWatched(redditViewItem: RedditViewItem) {}
+    
+    func didHideItem(redditViewItem: RedditViewItem) {
+        let target: [RedditViewItem] = self.data.compactMap { $0.redditLink.id == redditViewItem.redditLink.id ? nil : $0 }
+
+        let changeset = StagedChangeset(source: self.data, target: target)
+        self.tableView.reload(using: changeset, with: .fade) { data in
+            self.data = data
+        }
+    }
 }

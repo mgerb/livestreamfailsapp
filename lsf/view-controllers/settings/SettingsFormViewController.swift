@@ -25,12 +25,21 @@ class SettingsFormViewController: FormViewController {
         }
     }
     
+    let clearHiddenPostsButton: ButtonRowOf<String> = ButtonRow() { row in
+        row.title = "Reset Hidden Clips"
+        row.cellStyle = .value1
+        row.onCellSelection { _, _  in
+            StorageService.shared.clearHiddenPosts()
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.navigationItem.title = "Settings"
         
-        self.form +++ Section(header: "Videos", footer: "Increasing the video quality significantly increases data used.")
+        self.form
+            +++ Section(header: "Videos", footer: "Increasing the video quality significantly increases data used.")
             <<< SwitchRow()  { row in
                 row.title = "Show NSFW content"
                 row.value = UserSettings.shared.nsfw
@@ -38,6 +47,7 @@ class SettingsFormViewController: FormViewController {
                     UserSettings.shared.nsfw = sw.value ?? false
                 }
             }
+            <<< self.clearHiddenPostsButton
             <<< PushRow<String>() { row in
                 row.title = "Preferred Video Quality"
                 row.value = UserSettings.shared.videoQuality.rawValue
@@ -47,6 +57,7 @@ class SettingsFormViewController: FormViewController {
                         UserSettings.shared.videoQuality = quality
                     }
                 }
+
             +++ Section("Caching")
             <<< SwitchRow() { row in
                 row.title = "Cache Videos"
