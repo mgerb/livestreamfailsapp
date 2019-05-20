@@ -39,17 +39,28 @@ class SettingsFormViewController: FormViewController {
         self.navigationItem.title = "Settings"
         
         self.form
-            +++ Section(header: "Videos", footer: "Increasing the video quality significantly increases data used.")
-            <<< self.clearHiddenPostsButton
+            +++ Section(header: "Video quality preferences", footer: "Increasing the video quality significantly increases data used.")
             <<< PushRow<String>() { row in
-                row.title = "Preferred Video Quality"
-                row.value = UserSettings.shared.videoQuality.rawValue
+                row.title = "Wifi Data"
+                row.value = UserSettings.shared.wifiVideoQuality.rawValue
                 row.options = VideoQuality.allCases.map { $0.rawValue }
                 }.onChange { change in
                     if let val = change.value, let quality = VideoQuality(rawValue: val) {
-                        UserSettings.shared.videoQuality = quality
+                        UserSettings.shared.wifiVideoQuality = quality
                     }
                 }
+            <<< PushRow<String>() { row in
+                row.title = "Cellular Data"
+                row.value = UserSettings.shared.cellVideoQuality.rawValue
+                row.options = VideoQuality.allCases.map { $0.rawValue }
+                }.onChange { change in
+                    if let val = change.value, let quality = VideoQuality(rawValue: val) {
+                        UserSettings.shared.cellVideoQuality = quality
+                    }
+            }
+            
+            +++ Section()
+            <<< self.clearHiddenPostsButton
 
             +++ Section("Caching")
             <<< SwitchRow() { row in

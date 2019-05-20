@@ -37,7 +37,7 @@ class TwitchService {
                     // grab the preferred video source url based on quality
                     var preferredSource = try qualityOptions.filter {
                         let quality: String = try $0.value(for: "quality")
-                        return quality == UserSettings.shared.videoQuality.rawValue
+                        return quality == UserSettings.shared.getPreferredVideoQuality()
                     }.first?["source"]
                     
                     // set preferred source to primary source if not found

@@ -34,11 +34,18 @@ class UserSettings: Object, Codable {
     }()
     
     enum CodingKeys: String, CodingKey {
-        case videoQuality = "videoQuality"
         case cacheVideos = "cacheVideos"
+        case cellVideoQuality = "cellVideoQuality"
+        case wifiVideoQuality = "wifiVideoQuality"
     }
 
-    var videoQuality = VideoQuality._480 {
+    var wifiVideoQuality = VideoQuality._480 {
+        didSet {
+            self.syncSettings()
+        }
+    }
+    
+    var cellVideoQuality = VideoQuality._480 {
         didSet {
             self.syncSettings()
         }
@@ -54,6 +61,19 @@ class UserSettings: Object, Codable {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(self) {
             UserDefaults.standard.set(encoded, forKey: UserSettings.storageKey)
+        }
+    }
+    
+    func getPreferredVideoQuality() -> String {
+        let wifi = self.isConnectedToWifi()
+        return (wifi ? self.wifiVideoQuality : self.cellVideoQuality).rawValue
+    }
+    
+    func isConnectedToWifi() -> Bool {
+        if let r = Reachability() {
+            return r.connection == .wifi
+        } else {
+            return false
         }
     }
 }

@@ -57,6 +57,7 @@
 		A2DE2DB621FAA578003F66D1 /* clip-url.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DE2DB521FAA578003F66D1 /* clip-url.service.swift */; };
 		A2E2A124226806A500E5FA92 /* SettingsFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E2A123226806A500E5FA92 /* SettingsFormViewController.swift */; };
 		A2E7018221F823BD00029C75 /* twitch.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E7018121F823BD00029C75 /* twitch.service.swift */; };
+		A2EB008F22936CBE00AD78C2 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EB008E22936CBE00AD78C2 /* Reachability.swift */; };
 		A2ED75BE227539CF00AE9C26 /* VideoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2ED75BD227539CF00AE9C26 /* VideoTableViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -113,6 +114,7 @@
 		A2DE2DB521FAA578003F66D1 /* clip-url.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "clip-url.service.swift"; sourceTree = "<group>"; };
 		A2E2A123226806A500E5FA92 /* SettingsFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFormViewController.swift; sourceTree = "<group>"; };
 		A2E7018121F823BD00029C75 /* twitch.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = twitch.service.swift; sourceTree = "<group>"; };
+		A2EB008E22936CBE00AD78C2 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		A2ED75BD227539CF00AE9C26 /* VideoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -302,6 +304,7 @@
 			isa = PBXGroup;
 			children = (
 				A25285A921615AC700DCA537 /* CachingPlayerItem.swift */,
+				A2EB008E22936CBE00AD78C2 /* Reachability.swift */,
 			);
 			path = libs;
 			sourceTree = "<group>";
@@ -463,6 +466,7 @@
 				A23EE92B228133FD00F35F4B /* FavoriteTableViewController.swift in Sources */,
 				A2D70E8C21EED67C00F69F0C /* CommentsTextView.swift in Sources */,
 				A249FC912275FA6D00666498 /* VideoTableViewCell.swift in Sources */,
+				A2EB008F22936CBE00AD78C2 /* Reachability.swift in Sources */,
 				A2D38BD522597F7300D53289 /* icons.swift in Sources */,
 				A21D3C08228524A300E5471E /* MyIconLabel.swift in Sources */,
 				A2397906224B0A7E00844E83 /* labels.swift in Sources */,
