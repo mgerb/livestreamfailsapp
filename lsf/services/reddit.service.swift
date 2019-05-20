@@ -173,7 +173,11 @@ class RedditService: RequestAdapter, RequestRetrier {
     private func filterRedditLinks(links: [RedditLink]) -> [RedditLink] {
         return links.filter {
             // show show link if nsfw is turned off and post is nsfw
-            if !UserSettings.shared.nsfw && $0.over_18 {
+//            if !UserSettings.shared.nsfw && $0.over_18 {
+//                return false
+//            }
+            // filter all nsfw posts for now
+            if $0.over_18 {
                 return false
             }
             

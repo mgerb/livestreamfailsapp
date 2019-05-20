@@ -40,13 +40,6 @@ class SettingsFormViewController: FormViewController {
         
         self.form
             +++ Section(header: "Videos", footer: "Increasing the video quality significantly increases data used.")
-            <<< SwitchRow()  { row in
-                row.title = "Show NSFW content"
-                row.value = UserSettings.shared.nsfw
-                row.onChange() { sw in
-                    UserSettings.shared.nsfw = sw.value ?? false
-                }
-            }
             <<< self.clearHiddenPostsButton
             <<< PushRow<String>() { row in
                 row.title = "Preferred Video Quality"

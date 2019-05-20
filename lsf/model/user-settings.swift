@@ -34,17 +34,10 @@ class UserSettings: Object, Codable {
     }()
     
     enum CodingKeys: String, CodingKey {
-        case nsfw = "nsfw"
         case videoQuality = "videoQuality"
         case cacheVideos = "cacheVideos"
     }
 
-    var nsfw: Bool = false {
-        didSet {
-            self.syncSettings()
-        }
-    }
-    
     var videoQuality = VideoQuality._480 {
         didSet {
             self.syncSettings()
