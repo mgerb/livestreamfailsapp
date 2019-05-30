@@ -71,6 +71,15 @@ class SettingsFormViewController: FormViewController {
                 }
             }
             <<< self.cacheButtonRow
+            
+            +++ Section()
+            <<< ButtonRow() { row in
+                row.title = "Login"
+                row.cellStyle = .value1
+                row.onCellSelection { _, _  in
+                    print("login")
+                }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -28,7 +28,7 @@ enum RedditLinkSortByTop: String, CaseIterable {
     case all = "all"
 }
 
-class RedditService: RequestAdapter, RequestRetrier {
+class RedditService {
     
     // use custom headers to allow NSFW content
     // it seems reddit blocks default iOS headers
@@ -38,92 +38,7 @@ class RedditService: RequestAdapter, RequestRetrier {
     ]
     static let shared = RedditService()
     let haikuLimit = 25
-    let client_id = "Y2NoNa4zUyLbCA"
-    let password = ""
-    let oauthUrl = "https://www.reddit.com/api/v1/access_token"
-    var accessToken: String?
-    var expires_in: Date?
-    var redditAuthentication: RedditAuthentication?
-    
-    /// separate Alamofire instance for authenticated requests
-    let oauthClient = SessionManager()
-    private let lock = NSLock()
-    private var requestsToRetry: [RequestRetryCompletion] = []
-    private var isRefreshingOauth = false
-
-    init() {
-        self.oauthClient.retrier = self
-        self.oauthClient.adapter = self
-        self.redditAuthentication = StorageService.shared.getRedditAuthentication()
-    }
-
-    /// intercept request before it's sent - attach authorization here
-    func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
-        var urlRequest = urlRequest
-        urlRequest.setValue(self.headers["User-Agent"], forHTTPHeaderField: "User-Agent")
-        urlRequest.setValue("Bearer \(self.redditAuthentication?.access_token ?? "invalidtoken")", forHTTPHeaderField: "Authorization")
-        return urlRequest
-    }
-    
-    /// if we get a 401 (unauthenticated) - get new auth token and then retry failed requests
-    func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
-        self.lock.lock() ; defer { self.lock.unlock() }
-
-        if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 {
-            self.requestsToRetry.append(completion)
-            
-            if !self.isRefreshingOauth {
-                self.setupOauth { [weak self] succeeded in
-                    guard let strongSelf = self else { return }
-                    
-                    strongSelf.lock.lock() ; defer { strongSelf.lock.unlock() }
-
-                    // only continue requests if auth request succeeds
-                    strongSelf.requestsToRetry.forEach { $0(succeeded, 0.0) }
-                    strongSelf.requestsToRetry.removeAll()
-                }
-            }
-        } else {
-            completion(false, 0.0)
-        }
-    }
-    
-    func setupOauth(completion: ((_ success: Bool) -> Void)?) {
-
-        self.isRefreshingOauth = true
-        
-        let credentials = "\(self.client_id):\(self.password)"
-        
-        let headers = [
-            "User-Agent": self.headers["User-Agent"]!,
-            "Authorization": "Basic \(credentials.toBase64())"
-        ]
-        
-        let params = [
-            "grant_type": "https://oauth.reddit.com/grants/installed_client",
-            "device_id": "\(UUID.init().uuidString)"
-        ]
-        
-        Alamofire.request(self.oauthUrl, method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: headers).responseData{ response in
-            defer {
-                self.isRefreshingOauth = false
-            }
-            switch response.result {
-            case .success(let res):
-                if let data = try? JSONDecoder().decode(RedditAuthentication.self, from: res) {
-                    StorageService.shared.storeRedditAuthentication(auth: data)
-                    self.redditAuthentication = data
-                    completion?(true)
-                } else {
-                    completion?(false)
-                }
-                break
-            case .failure(let err):
-                completion?(false)
-                print(err)
-            }
-        }
-    }
+    lazy var redditAuth = RedditAuth(userAgent: self.headers["User-Agent"]!)
 
     // returns a list of youtube ID's from youtube haiku
     func getRedditLinks(after: String?, sortBy: RedditLinkSortBy, sortByTop: RedditLinkSortByTop?, closure: @escaping (_ data: [RedditLink]) -> Void) {
@@ -276,7 +191,7 @@ class RedditService: RequestAdapter, RequestRetrier {
             "limit_children": true
         ]
 
-        self.oauthClient.request("https://oauth.reddit.com/api/morechildren", parameters: params).validate().responseData { response in
+        self.redditAuth.oauthClient.request("https://oauth.reddit.com/api/morechildren", parameters: params).validate().responseData { response in
             switch response.result {
             case .success(let value):
                 do {
