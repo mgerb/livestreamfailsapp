@@ -13,11 +13,13 @@ import SafariServices
 
 class MyNavigation {
     public static let shared = MyNavigation()
-    let rootViewController = UIApplication.shared.keyWindow!.rootViewController
+    let rootViewController = {
+        return UIApplication.shared.keyWindow?.rootViewController
+    }
     
     func presentWebView(url: URL) {
         let webview = SFSafariViewController(url: url)
-        self.rootViewController?.present(webview, animated: true)
+        self.rootViewController()?.present(webview, animated: true)
     }
 
     func presentVideoPlayer(redditViewItem: RedditViewItem) {
@@ -27,7 +29,7 @@ class MyNavigation {
                 let player = AVPlayer(playerItem: itemCopy)
                 let playerViewController = AVPlayerViewController()
                 playerViewController.player = player
-                self.rootViewController?.present(playerViewController, animated: true) {
+                self.rootViewController()?.present(playerViewController, animated: true) {
                     playerViewController.player?.play()
                 }
             }

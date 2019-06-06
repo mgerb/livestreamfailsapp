@@ -33,10 +33,15 @@ class SettingsFormViewController: FormViewController {
         }
     }
 
+    lazy var loginSection = Section(RedditService.shared.user?.name ?? "")
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-
         self.navigationItem.title = "Settings"
+        self.setForm()
+    }
+    
+    func setForm() {
         
         self.form
             +++ Section(header: "Video quality preferences", footer: "Increasing the video quality significantly increases data used.")
@@ -48,7 +53,7 @@ class SettingsFormViewController: FormViewController {
                     if let val = change.value, let quality = VideoQuality(rawValue: val) {
                         UserSettings.shared.wifiVideoQuality = quality
                     }
-                }
+            }
             <<< PushRow<String>() { row in
                 row.title = "Cellular Data"
                 row.value = UserSettings.shared.cellVideoQuality.rawValue
@@ -61,7 +66,7 @@ class SettingsFormViewController: FormViewController {
             
             +++ Section()
             <<< self.clearHiddenPostsButton
-
+            
             +++ Section("Caching")
             <<< SwitchRow() { row in
                 row.title = "Cache Videos"
@@ -72,12 +77,21 @@ class SettingsFormViewController: FormViewController {
             }
             <<< self.cacheButtonRow
             
-            +++ Section()
+            +++ self.loginSection
             <<< ButtonRow() { row in
-                row.title = "Login"
+                row.title = RedditService.shared.user == nil ? "Login" : "Logout"
                 row.cellStyle = .value1
                 row.onCellSelection { _, _  in
-                    print("login")
+                    if RedditService.shared.user != nil {
+                        RedditService.shared.logout()
+                        row.title = "Login"
+                        self.loginSection.header?.title = ""
+                        self.loginSection.reload()
+                        row.reload()
+                    } else {
+                        let controller = RedditAuthViewController()
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    }
                 }
         }
     }

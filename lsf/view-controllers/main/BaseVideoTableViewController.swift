@@ -65,7 +65,7 @@ class BaseVideoTableViewController: UIViewController, UITableViewDataSource {
         Subjects.shared.showCommentsAction.subscribe(onNext: { redditViewItem in
             if self.isViewLoaded && self.view?.window != nil {
                 self.commentsTableView?.dismiss()
-                if let frame = MyNavigation.shared.rootViewController?.view.frame {
+                if let frame = MyNavigation.shared.rootViewController()?.view.frame {
                     let totalNavItemHeight = (self.navigationController?.navigationBar.frame.height ?? 0) + (self.tabBarController?.tabBar.frame.height ?? 0)
                     self.commentsTableView = CommentsTableView(frame: frame, redditViewItem: redditViewItem, totalNavItemHeight: totalNavItemHeight)
                     self.view.addSubview(self.commentsTableView!)

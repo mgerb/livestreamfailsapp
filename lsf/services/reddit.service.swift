@@ -5,9 +5,10 @@ import Marshal
 
 class RedditAuthentication: Codable {
     let access_token: String
+    var refresh_token: String?
     let token_type: String
     let scope: String
-    let device_id: String
+    let device_id: String?
     let expires_in: Int
 }
 
@@ -38,8 +39,15 @@ class RedditService {
     ]
     static let shared = RedditService()
     let haikuLimit = 25
+    let oauthV1Url = "https://oauth.reddit.com"
     lazy var redditAuth = RedditAuth(userAgent: self.headers["User-Agent"]!)
+    
+    var user: RedditUser?
 
+    init() {
+        self.setRedditUser()
+    }
+    
     // returns a list of youtube ID's from youtube haiku
     func getRedditLinks(after: String?, sortBy: RedditLinkSortBy, sortByTop: RedditLinkSortByTop?, closure: @escaping (_ data: [RedditLink]) -> Void) {
         let url = "https://reddit.com/r/livestreamfail/\(sortBy)/.json"
@@ -92,7 +100,7 @@ class RedditService {
 //                return false
 //            }
             // filter all nsfw posts for now
-            if $0.over_18 {
+            if $0.over_18 && !(self.user?.over_18 ?? false) {
                 return false
             }
             
@@ -191,7 +199,7 @@ class RedditService {
             "limit_children": true
         ]
 
-        self.redditAuth.oauthClient.request("https://oauth.reddit.com/api/morechildren", parameters: params).validate().responseData { response in
+        self.redditAuth.oauthClient.request("\(self.oauthV1Url)/api/morechildren", parameters: params).validate().responseData { response in
             switch response.result {
             case .success(let value):
                 do {
@@ -228,6 +236,38 @@ class RedditService {
                     print(error)
                     closure(false)
                 }
+        })
+    }
+}
+
+// user end points
+extension RedditService {
+    
+    /// /api/v1/me
+    /// get user info
+    func setRedditUser(completion: ((_ err: Bool) -> Void)? = nil) {
+        self.redditAuth.userOauthClient?.request("\(self.oauthV1Url)/api/v1/me").validate().responseData { resp in
+            switch resp.result {
+            case .success(let val):
+                let data = try? JSONParser.JSONObjectWithData(val)
+                self.user = try? RedditUser(object: data!)
+                completion?(false)
+            case .failure(let err):
+                print(err)
+                completion?(true)
+            }
+        }
+    }
+    
+    func logout() {
+        self.user = nil
+        self.redditAuth.userOauthClient = nil
+        StorageService.shared.clearRedditUserAuthentication()
+    }
+    
+    func login(code: String, completion: ((_ err: Bool) -> Void)? = nil) {
+        self.redditAuth.setupInitialUserOauth(code: code, completion: { _ in
+            self.setRedditUser(completion: completion)
         })
     }
 }

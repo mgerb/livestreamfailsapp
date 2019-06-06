@@ -118,6 +118,24 @@ extension StorageService {
         }
         return nil
     }
+    
+    func storeRedditUserAuthentication(auth: RedditAuthentication) {
+        if let encoded = try? JSONEncoder().encode(auth) {
+            UserDefaults.standard.set(encoded, forKey: "redditUserAuthentication")
+        }
+    }
+    
+    func getRedditUserAuthentication() -> RedditAuthentication? {
+        let authString = UserDefaults.standard.data(forKey: "redditUserAuthentication")
+        if let authString = authString {
+            return try? JSONDecoder().decode(RedditAuthentication.self, from: authString)
+        }
+        return nil
+    }
+    
+    func clearRedditUserAuthentication() {
+        UserDefaults.standard.removeObject(forKey: "redditUserAuthentication")
+    }
 }
 
 // realm reddit storage

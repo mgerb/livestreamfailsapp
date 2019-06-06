@@ -10,14 +10,14 @@ import Alamofire
 
 class RedditInterceptor: RequestAdapter, RequestRetrier {
     
-    var accessToken: String?
+    var redditAuthentication: RedditAuthentication?
     private let userAgent: String
     private let lock = NSLock()
     private var requestsToRetry: [RequestRetryCompletion] = []
     private var isRefreshingOauth = false
-    private let handlerFunc: (((_ accessToken: String?) -> Void)?) -> Void
+    private let handlerFunc: (_ code: String?, ((_ auth: RedditAuthentication?) -> Void)?) -> Void
     
-    init(userAgent: String, handlerFunc: @escaping (((_ accessToken: String?) -> Void)?) -> Void) {
+    init(userAgent: String, handlerFunc: @escaping (_ code: String?, ((_ auth: RedditAuthentication?) -> Void)?) -> Void) {
         self.userAgent = userAgent
         self.handlerFunc = handlerFunc
     }
@@ -26,7 +26,7 @@ class RedditInterceptor: RequestAdapter, RequestRetrier {
     func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
         var urlRequest = urlRequest
         urlRequest.setValue(self.userAgent, forHTTPHeaderField: "User-Agent")
-        urlRequest.setValue("Bearer \(self.accessToken ?? "invalidtoken")", forHTTPHeaderField: "Authorization")
+        urlRequest.setValue("Bearer \(self.redditAuthentication?.access_token ?? "invalidtoken")", forHTTPHeaderField: "Authorization")
         return urlRequest
     }
     
@@ -39,16 +39,16 @@ class RedditInterceptor: RequestAdapter, RequestRetrier {
             
             if !self.isRefreshingOauth {
                 self.isRefreshingOauth = true
-                self.handlerFunc { [weak self] accessToken in
+                self.handlerFunc(self.redditAuthentication?.refresh_token) { [weak self] auth in
                     self?.isRefreshingOauth = false
                     guard let strongSelf = self else { return }
                     
                     strongSelf.lock.lock() ; defer { strongSelf.lock.unlock() }
                     
-                    strongSelf.accessToken = accessToken
+                    strongSelf.redditAuthentication = auth
                     
                     // only continue requests if auth request succeeds
-                    strongSelf.requestsToRetry.forEach { $0(accessToken != nil, 0.0) }
+                    strongSelf.requestsToRetry.forEach { $0(auth != nil, 0.0) }
                     strongSelf.requestsToRetry.removeAll()
                 }
             }
