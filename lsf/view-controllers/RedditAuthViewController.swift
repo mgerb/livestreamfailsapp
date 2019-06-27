@@ -11,6 +11,8 @@ import WebKit
 
 class RedditAuthViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     
+    var loginSuccess: (() -> Void)?
+    
     lazy var webview: WKWebView = {
         let view = WKWebView(frame: self.view.frame)
         if let url = URL(string: RedditService.shared.redditAuth.user_oauth_url()) {
@@ -30,11 +32,16 @@ class RedditAuthViewController: UIViewController, WKNavigationDelegate, WKUIDele
         if let url = webView.url, url.absoluteString.hasPrefix(RedditService.shared.redditAuth.redirect_uri) {
             let urlComponents = URLComponents(string: url.absoluteString)
             if let code = urlComponents?.queryItems?.first(where: { $0.name == "code" })?.value {
-                RedditService.shared.login(code: code)
-//                self.navigationController?.popViewController(animated: true)
+                RedditService.shared.login(code: code) { success in
+                    if success {
+                        self.navigationController?.popViewController(animated: true)
+                        self.loginSuccess?()
+                    }
+                }
             }
         }
         
         decisionHandler(.allow)
     }
+    
 }

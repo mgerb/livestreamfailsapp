@@ -245,16 +245,16 @@ extension RedditService {
     
     /// /api/v1/me
     /// get user info
-    func setRedditUser(completion: ((_ err: Bool) -> Void)? = nil) {
+    func setRedditUser(completion: ((_ success: Bool) -> Void)? = nil) {
         self.redditAuth.userOauthClient?.request("\(self.oauthV1Url)/api/v1/me").validate().responseData { resp in
             switch resp.result {
             case .success(let val):
                 let data = try? JSONParser.JSONObjectWithData(val)
                 self.user = try? RedditUser(object: data!)
-                completion?(false)
+                completion?(true)
             case .failure(let err):
                 print(err)
-                completion?(true)
+                completion?(false)
             }
         }
     }
@@ -265,7 +265,7 @@ extension RedditService {
         StorageService.shared.clearRedditUserAuthentication()
     }
     
-    func login(code: String, completion: ((_ err: Bool) -> Void)? = nil) {
+    func login(code: String, completion: ((_ success: Bool) -> Void)? = nil) {
         self.redditAuth.setupInitialUserOauth(code: code, completion: { _ in
             self.setRedditUser(completion: completion)
         })

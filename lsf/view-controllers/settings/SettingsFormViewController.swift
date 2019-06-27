@@ -90,6 +90,12 @@ class SettingsFormViewController: FormViewController {
                         row.reload()
                     } else {
                         let controller = RedditAuthViewController()
+                        controller.loginSuccess = {
+                            row.title = "Logout"
+                            self.loginSection.header?.title = RedditService.shared.user?.name
+                            self.loginSection.reload()
+                            row.reload()
+                        }
                         self.navigationController?.pushViewController(controller, animated: true)
                     }
                 }
