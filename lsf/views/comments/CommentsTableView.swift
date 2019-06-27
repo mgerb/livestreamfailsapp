@@ -18,6 +18,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     private let footerHeight: CGFloat = 800
     let redditViewItem: RedditViewItem
     let totalNavItemHeight: CGFloat
+    var estimatedHeightCache = [String: CGFloat]()
     
     lazy var bgView: UIView = {
         let view = UIView()
@@ -131,9 +132,20 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         }
         return UITableViewAutomaticDimension
     }
-    
+
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        if let comment = self.data[indexPath.row] as? RedditListingType, case .redditComment(let c) = comment {
+            return self.estimatedHeightCache[c.id] ?? UITableViewAutomaticDimension
+        }
         return UITableViewAutomaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if self.data.indices.contains(indexPath.row) {
+            if let comment = self.data[indexPath.row] as? RedditListingType, case .redditComment(let c) = comment {
+                self.estimatedHeightCache[c.id] = cell.frame.height
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
