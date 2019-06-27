@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import MGSwipeTableCell
 
 class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
 
@@ -135,9 +136,10 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         if let comment = self.data[indexPath.row] as? RedditListingType, case .redditComment(let c) = comment {
-            return self.estimatedHeightCache[c.id] ?? UITableViewAutomaticDimension
+            return self.estimatedHeightCache[c.id] ?? 25
         }
-        return UITableViewAutomaticDimension
+        // TODO: remove hard coded height - 25 seems to work ok for now
+        return 25
     }
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -159,6 +161,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
                 } else {
                     let cell = self.dequeueReusableCell(withIdentifier: "CommentsViewCellContent", for: indexPath) as! CommentsViewCellContent
                     cell.setRedditComment(c: comment)
+                    cell.delegate = self
                     return cell
                 }
             case .redditMore(let more):
@@ -304,5 +307,40 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         }
         
         self.reloadRows(at: indexPaths, with: .fade)
+    }
+}
+
+extension CommentsTableView: MGSwipeTableCellDelegate {
+    
+    func swipeTableCell(_ cell: MGSwipeTableCell, swipeButtonsFor direction: MGSwipeDirection, swipeSettings: MGSwipeSettings, expansionSettings: MGSwipeExpansionSettings) -> [UIView]? {
+        
+        swipeSettings.keepButtonsSwiped = false
+        swipeSettings.transition = MGSwipeTransition.clipCenter
+        expansionSettings.fillOnTrigger = false
+        expansionSettings.buttonIndex = 0
+        expansionSettings.threshold = 1.0
+        expansionSettings.expansionColor = Config.colors.red
+        expansionSettings.expansionLayout = .center
+        expansionSettings.triggerAnimation.easingFunction = MGSwipeEasingFunction.cubicInOut
+
+        if direction == MGSwipeDirection.rightToLeft {
+            return [MGSwipeButton(title: "", icon: Icons.getImage(icon: .arrowUp, size: 30, color: Config.colors.white), backgroundColor: Config.colors.blue, padding: 35, callback: { cell in
+                // TODO: up/down/vote
+                return true
+            })]
+        } else if direction == MGSwipeDirection.leftToRight {
+            return [MGSwipeButton(title: "more", backgroundColor: Config.colors.tealBlue, padding: 30, callback: { cell in
+                // TODO: action sheet
+                return true
+            })]
+        }
+        
+        return nil
+    }
+    
+    func swipeTableCell(_ cell: MGSwipeTableCell, didChange state: MGSwipeState, gestureIsActive: Bool) {
+        if state == .expandingLeftToRight || state == .expandingRightToLeft {
+            Util.hapticFeedback()
+        }
     }
 }

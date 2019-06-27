@@ -8,8 +8,9 @@
 
 import Foundation
 import UIKit
+import MGSwipeTableCell
 
-class CommentsViewCell: UITableViewCell {
+class CommentsViewCell: MGSwipeTableCell {
     
     public var redditComment: RedditCommentProtocol?
 

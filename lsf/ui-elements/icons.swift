@@ -64,7 +64,7 @@ class Icons {
         
         var attributes = [NSAttributedStringKey: Any]()
         attributes[NSAttributedStringKey.font] = UIFont(name: "icomoon", size: size)
-        attributes[NSAttributedStringKey.strokeColor] = color
+        attributes[NSAttributedStringKey.foregroundColor] = color
         
         let attributedString = NSAttributedString(string: icon.rawValue, attributes: attributes)
         
