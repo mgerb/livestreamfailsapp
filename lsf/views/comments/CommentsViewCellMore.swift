@@ -46,7 +46,9 @@ class CommentsViewCellMore: CommentsViewCell {
 
         self.label.text = text
         
-        self.label.snp.updateConstraints { make in
+        self.label.snp.remakeConstraints { make in
+            make.top.equalTo(self.contentView).offset(Config.BaseDimensions.cellPadding).priorityLow()
+            make.bottom.right.equalTo(self.contentView).offset(-Config.BaseDimensions.cellPadding).priorityLow()
             make.left.equalTo(self.contentView).offset((c.depth * 10) + Config.BaseDimensions.cellPadding)
         }
     }
