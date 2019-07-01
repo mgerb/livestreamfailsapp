@@ -29,7 +29,7 @@ class RedditAuth {
     let response_type = "code"
     let state = "random_string"
     let duration = "permanent"
-    let scope = "identity%20save%20submit%20vote%20report"
+    let scope = "identity%20save%20submit%20vote%20report%20read"
     let access_token_url = "https://www.reddit.com/api/v1/access_token"
     var userOauthClient: SessionManager?
     

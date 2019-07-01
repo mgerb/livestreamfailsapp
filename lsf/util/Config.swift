@@ -17,6 +17,10 @@ class Colors {
     let bg1: UIColor = .white
     let bg2: UIColor = UIColor(hexString: "#c8c7cc")
     let bg3: UIColor = UIColor(hexString: "#ebedef")
+    let bg4: UIColor = UIColor(hexString: "#d1d1d1")
+
+    let upvote: UIColor = UIColor(red: 204 / 255, green: 55 / 255, blue: 0 / 255, alpha: 1)
+    let downvote: UIColor = UIColor(red: 90 / 255, green: 117 / 255, blue: 204 / 255, alpha: 1)
 
     // ios color palette
     let red = UIColor(red: 255 / 255, green: 59 / 255, blue: 48 / 255, alpha: 1)

@@ -35,4 +35,14 @@ class MyNavigation {
             }
         })
     }
+    
+    func presentAlert(title: String?, message: String?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        self.rootViewController()?.present(alert, animated: true)
+    }
+    
+    func presetLoginAlert() {
+        self.presentAlert(title: nil, message: "Please login to vote")
+    }
 }

@@ -63,6 +63,7 @@
 		A2E7018221F823BD00029C75 /* twitch.service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E7018121F823BD00029C75 /* twitch.service.swift */; };
 		A2EB008F22936CBE00AD78C2 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EB008E22936CBE00AD78C2 /* Reachability.swift */; };
 		A2ED75BE227539CF00AE9C26 /* VideoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2ED75BD227539CF00AE9C26 /* VideoTableViewController.swift */; };
+		A2F893B222C9947F00437944 /* CommentsAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F893B122C9947F00437944 /* CommentsAlertController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -124,6 +125,7 @@
 		A2E7018121F823BD00029C75 /* twitch.service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = twitch.service.swift; sourceTree = "<group>"; };
 		A2EB008E22936CBE00AD78C2 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		A2ED75BD227539CF00AE9C26 /* VideoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTableViewController.swift; sourceTree = "<group>"; };
+		A2F893B122C9947F00437944 /* CommentsAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsAlertController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +221,7 @@
 				A247504521EACBE600C0F712 /* CommentsHeaderCell.swift */,
 				A28E619721F56368004B53A7 /* CommentsLoadingCell.swift */,
 				A2D70E8B21EED67C00F69F0C /* CommentsTextView.swift */,
+				A2F893B122C9947F00437944 /* CommentsAlertController.swift */,
 			);
 			path = comments;
 			sourceTree = "<group>";
@@ -494,6 +497,7 @@
 				A247504221EA6F1A00C0F712 /* CommentsTableView.swift in Sources */,
 				A28E619821F56368004B53A7 /* CommentsLoadingCell.swift in Sources */,
 				A249FC8B2275F9D600666498 /* TitleView.swift in Sources */,
+				A2F893B222C9947F00437944 /* CommentsAlertController.swift in Sources */,
 				A2DCC62121EC2CAA00E08453 /* NSAttributedString.swift in Sources */,
 				A23286FE229F808F007CBF28 /* reddit-interceptor.swift in Sources */,
 				A25285B02165955800DCA537 /* UIScrollView.swift in Sources */,

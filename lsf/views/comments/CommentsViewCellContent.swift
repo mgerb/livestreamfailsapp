@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SnapKit
 
-class CommentsViewCellContent: CommentsViewCell {
+class CommentsViewCellContent: CommentsViewCell, RedditCommentDelegate {
 
     lazy var authorLabel: UILabel = {
         let label = Labels.new(font: .regularBold)
@@ -80,6 +80,9 @@ class CommentsViewCellContent: CommentsViewCell {
         self.timeStampLabel.text = " · " + c.humanTimeStamp
         self.scoreLabel.text = c.score.commaRepresentation
         
+        c.delegate = self
+        self.setupUpvoteDownvote(comment: c)
+        
         self.authorLabel.snp.remakeConstraints { make in
             make.top.equalTo(self.contentView).offset(Config.BaseDimensions.cellPadding)
             make.left.equalTo(self.contentView).offset((c.depth * 10) + Config.BaseDimensions.cellPadding)
@@ -87,6 +90,22 @@ class CommentsViewCellContent: CommentsViewCell {
                 make.bottom.equalTo(self.contentView).offset(-Config.BaseDimensions.cellPadding)
             }
         }
-
+    }
+    
+    func setupUpvoteDownvote(comment: RedditComment) {
+        if comment.likes == true {
+            self.scoreLabel.textColor = Config.colors.upvote
+            self.scoreLabel.text = (comment.score + 1).commaRepresentation
+        } else if comment.likes == false {
+            self.scoreLabel.textColor = Config.colors.downvote
+            self.scoreLabel.text = (comment.score - 1).commaRepresentation
+        } else {
+            self.scoreLabel.textColor = Config.colors.primaryFont
+            self.scoreLabel.text = comment.score.commaRepresentation
+        }
+    }
+    
+    func didUpdateLikes(comment: RedditComment) {
+        self.setupUpvoteDownvote(comment: comment)
     }
 }

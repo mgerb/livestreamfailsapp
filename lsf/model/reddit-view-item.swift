@@ -26,6 +26,7 @@ enum RedditViewItemPlayerState {
 protocol RedditViewItemDelegate {
     func failedToLoadVideo(redditViewItem: RedditViewItem)
     func didMarkAsWatched(redditViewItem: RedditViewItem)
+    func didUpdateLikes(redditViewItem: RedditViewItem)
 }
 
 class RedditViewItem {
@@ -35,7 +36,7 @@ class RedditViewItem {
     static var cacheManager: [RedditViewItem] = []
     
     let delegate = MulticastDelegate<RedditViewItemDelegate>()
-    let redditLink: RedditLink
+    var redditLink: RedditLink
     let disposeBag = DisposeBag()
 
     /// context of where item is being used - either home or favorites page
@@ -294,6 +295,31 @@ class RedditViewItem {
             title = "            " + title
         }
         return title
+    }
+
+    func upvote() {
+        if !RedditService.shared.isLoggedIn() {
+            MyNavigation.shared.presetLoginAlert()
+        } else {
+            self.redditLink.likes = self.redditLink.likes == true ? nil : true
+            self.vote(dir: self.redditLink.likes == true ? 1 : 0)
+        }
+    }
+    
+    func downvote() {
+        if !RedditService.shared.isLoggedIn() {
+            MyNavigation.shared.presetLoginAlert()
+        } else {
+            self.redditLink.likes = self.redditLink.likes == false ? nil : false
+            self.vote(dir: self.redditLink.likes == false ? -1 : 0)
+        }
+    }
+    
+    private func vote(dir: Int) {
+        RedditService.shared.vote(id: self.redditLink.name, dir: dir, completion: nil)
+        self.delegate.invoke(invocation: { d in
+            d.didUpdateLikes(redditViewItem: self)
+        })
     }
 }
 

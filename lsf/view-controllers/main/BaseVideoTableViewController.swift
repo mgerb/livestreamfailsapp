@@ -45,7 +45,6 @@ class BaseVideoTableViewController: UIViewController, UITableViewDataSource {
         self.tableView.register(SortBarTableViewHeaderCell.self, forHeaderFooterViewReuseIdentifier: "SortBarTableViewHeaderCell")
         
         self.setupSubjectSubscriptions()
-        self.fetchHaikus()
     }
     
     @objc func fetchInitial(_ sender: Any? = nil) {
@@ -171,5 +170,9 @@ extension BaseVideoTableViewController: RedditViewItemDelegate, RedditAlertContr
         self.tableView.reload(using: changeset, with: .fade) { data in
             self.data = data
         }
+    }
+    
+    func didUpdateLikes(redditViewItem: RedditViewItem) {
+        
     }
 }

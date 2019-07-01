@@ -21,6 +21,14 @@ class RedditAlertController: UIAlertController {
     convenience init(redditViewItem: RedditViewItem) {
         self.init(title: nil, message: nil, preferredStyle: .actionSheet)
         
+        let upvote = UIAlertAction(title: "Upvote", style: .default) { (action:UIAlertAction) in
+            redditViewItem.upvote()
+        }
+        
+        let downvote = UIAlertAction(title: "Downvote", style: .default) { (action:UIAlertAction) in
+            redditViewItem.downvote()
+        }
+        
         let reportClipUrl = UIAlertAction(title: "Report", style: .destructive) { (action:UIAlertAction) in
             guard let url = URL(string: self.getRedditLink(permaLink: redditViewItem.redditLink.permalink)) else { return }
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -52,6 +60,8 @@ class RedditAlertController: UIAlertController {
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
         }
         
+        self.addAction(upvote)
+        self.addAction(downvote)
         self.addAction(openClipUrl)
         self.addAction(copyClipUrl)
         self.addAction(openInReddit)

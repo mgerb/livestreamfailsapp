@@ -52,7 +52,7 @@ struct RedditListing: Unmarshaling {
     let before: String?
     let after: String?
     let dist: Int?
-    let modhash: String
+    let modhash: String?
     let children: [RedditThing]?
     
     init(object: MarshaledObject) throws {
@@ -83,6 +83,7 @@ struct RedditLink: Unmarshaling {
     let visited: Bool
     let num_comments: Int
     let stickied: Bool
+    var likes: Bool?
 
     // the reddit data structure for preview is more nested objects
     // but we only need one preview thumbnail so we mutate the
@@ -117,6 +118,7 @@ struct RedditLink: Unmarshaling {
         self.visited = try object.value(for: "visited")
         self.num_comments = try object.value(for: "num_comments")
         self.stickied = try object.value(for: "stickied")
+        self.likes = try object.value(for: "likes")
         
         self.fallbackUrl = try? object.value(for: "media").value(for: "reddit_video").value(for: "fallback_url")
         
@@ -157,6 +159,7 @@ struct RedditLink: Unmarshaling {
         self.previewWidth = rrp.previewWidth
         self.dateAdded = rrp.dateAdded
         self.fallbackUrl = rrp.fallbackUrl
+        self.likes = rrp.likes
     }
 }
 
@@ -168,7 +171,12 @@ protocol RedditCommentProtocol: class {
     var isHidden: Bool { get set }
 }
 
+protocol RedditCommentDelegate {
+    func didUpdateLikes(comment: RedditComment)
+}
+
 final class RedditComment: RedditCommentProtocol, Unmarshaling {
+    var delegate: RedditCommentDelegate?
     let id: String
     let parent_id: String
     let name: String
@@ -182,6 +190,12 @@ final class RedditComment: RedditCommentProtocol, Unmarshaling {
     let created: Float
     let created_utc: Float
     let permalink: String?
+    /// if user up/down voted
+    var likes: Bool? {
+        didSet {
+            self.delegate?.didUpdateLikes(comment: self)
+        }
+    }
     let replies: RedditThing?
     
     // self defined values not on reddit json
@@ -205,6 +219,7 @@ final class RedditComment: RedditCommentProtocol, Unmarshaling {
         self.permalink = try object.value(for: "permalink")
         // empty replies are returned as an empty string for whatever reason
         self.replies = try? object.value(for: "replies")
+        self.likes = try? object.value(for: "likes")
     }
 
     /// check if author is "[deleted]"
@@ -263,6 +278,13 @@ final class RedditComment: RedditCommentProtocol, Unmarshaling {
         }
         
         return output
+    }
+    
+    func getPermalink() -> URL? {
+        if let p = self.permalink, let url = URL(string: "https://reddit.com" + p) {
+            return url
+        }
+        return nil
     }
 }
 

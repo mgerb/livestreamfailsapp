@@ -25,6 +25,10 @@ class VideoTableViewController: BaseVideoTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Live Stream Fails"
+        // make sure user is set up with oauth clients before initial fetch
+        RedditService.shared.setRedditUser(completion: { _ in
+            self.fetchHaikus()
+        })
     }
     
     override func viewWillLayoutSubviews() {

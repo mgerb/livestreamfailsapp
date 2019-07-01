@@ -35,22 +35,35 @@ class RedditService {
     // it seems reddit blocks default iOS headers
     // user agent description here: https://github.com/reddit-archive/reddit/wiki/api
     let headers = [
-        "User-Agent": "ios:\(String(describing: Bundle.main.bundleIdentifier)):\(Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String ?? "1.0.0")"
+        "User-Agent": "ios:\(String(describing: Bundle.main.bundleIdentifier)):\((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? "1.0.0")"
     ]
     static let shared = RedditService()
     let haikuLimit = 25
     let oauthV1Url = "https://oauth.reddit.com"
     lazy var redditAuth = RedditAuth(userAgent: self.headers["User-Agent"]!)
+    let defaultClient = SessionManager()
     
     var user: RedditUser?
 
-    init() {
-        self.setRedditUser()
+    public func isLoggedIn() -> Bool {
+        return self.user?.name != nil
     }
     
+    private func getDefaultClient() -> SessionManager {
+        return (self.isLoggedIn() && self.redditAuth.userOauthClient != nil) ? self.redditAuth.userOauthClient! : self.defaultClient
+    }
+    
+    private func getDefaultOauthClient() -> SessionManager {
+        return self.isLoggedIn() && self.redditAuth.userOauthClient != nil ? self.redditAuth.userOauthClient! : self.redditAuth.oauthClient
+    }
+    
+    private func getBaseUrl() -> String {
+        return self.isLoggedIn() ? self.oauthV1Url : "https://reddit.com"
+    }
+
     // returns a list of youtube ID's from youtube haiku
     func getRedditLinks(after: String?, sortBy: RedditLinkSortBy, sortByTop: RedditLinkSortByTop?, closure: @escaping (_ data: [RedditLink]) -> Void) {
-        let url = "https://reddit.com/r/livestreamfail/\(sortBy)/.json"
+        let url = "\(self.getBaseUrl())/r/livestreamfail/\(sortBy).json"
         var parameters = [
             "limit": String(self.haikuLimit)
         ]
@@ -64,7 +77,7 @@ class RedditService {
         }
 
         let queue = DispatchQueue(label: "RedditService.getHaikus", qos: .utility, attributes: [.concurrent])
-        Alamofire.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: self.headers).validate()
+        self.getDefaultClient().request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil).validate()
             .response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { response in
                 var links: [RedditLink] = []
 
@@ -114,13 +127,13 @@ class RedditService {
     }
     
     func getComments(permalink: String, params: Parameters = [:], closure: @escaping ((_ data: [RedditListingType]?) -> Void)) {
-        let url = "https://www.reddit.com\(permalink).json"
+        let url = "\(self.getBaseUrl())\(permalink).json"
         var params = params
         if params["limit"] == nil {
             params["limit"] = "100"
         }
         let queue = DispatchQueue(label: "RedditService.getComments", qos: .utility, attributes: [.concurrent])
-        Alamofire.request(url, method: .get, parameters: params, encoding: URLEncoding.default, headers: self.headers).validate()
+        self.getDefaultClient().request(url, method: .get, parameters: params, encoding: URLEncoding.default, headers: self.headers).validate()
             .response(queue: queue, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { response in
                 switch response.result {
                 case .success(let value):
@@ -199,7 +212,7 @@ class RedditService {
             "limit_children": true
         ]
 
-        self.redditAuth.oauthClient.request("\(self.oauthV1Url)/api/morechildren", parameters: params).validate().responseData { response in
+        self.getDefaultOauthClient().request("\(self.oauthV1Url)/api/morechildren", parameters: params).validate().responseData { response in
             switch response.result {
             case .success(let value):
                 do {
@@ -246,6 +259,10 @@ extension RedditService {
     /// /api/v1/me
     /// get user info
     func setRedditUser(completion: ((_ success: Bool) -> Void)? = nil) {
+        if self.redditAuth.userOauthClient == nil {
+            completion?(false)
+            return
+        }
         self.redditAuth.userOauthClient?.request("\(self.oauthV1Url)/api/v1/me").validate().responseData { resp in
             switch resp.result {
             case .success(let val):
@@ -257,6 +274,26 @@ extension RedditService {
                 completion?(false)
             }
         }
+    }
+    
+    /// dir - 1 for up -1 for down 0 for other
+    func vote(id: String, dir: Int, completion: ((_ success: Bool) -> Void)?) {
+        let params: [String: Any] = [
+            "id": id,
+            "dir": dir,
+        ]
+        self.redditAuth.userOauthClient?
+            .request("\(self.oauthV1Url)/api/vote", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil)
+            .validate().responseData{ response in
+                let data = try? JSONParser.JSONObjectWithData(response.data!)
+                switch response.result {
+                case .success(_):
+                    completion?(true)
+                case .failure(let err):
+                    print(err)
+                    completion?(false)
+                }
+            }
     }
     
     func logout() {

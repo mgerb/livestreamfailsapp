@@ -10,8 +10,8 @@ import Foundation
 import UIKit
 import RxSwift
 
-class InfoView: UIView, VideoView {
-    
+class InfoView: UIView, VideoView, RedditViewItemDelegate {
+
     var redditViewItem: RedditViewItem?
     let disposeBag = DisposeBag()
     let rxUnsubscribe = PublishSubject<Void>()
@@ -24,8 +24,10 @@ class InfoView: UIView, VideoView {
         return Icons.getLabel(icon: .dots, target: self, action: #selector(moreButtonAction))
     }()
     
+    lazy var scoreIcon = Icons.getLabel(icon: .arrowUp, target: self, action: #selector(scoreButtonAction))
+    
     lazy var scoreLabel: UILabel = {
-        let label = Labels.new(font: .small)
+        let label = Labels.new(font: .small, target: self, action: #selector(scoreButtonAction))
         return label
     }()
     
@@ -45,9 +47,8 @@ class InfoView: UIView, VideoView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let upIcon = Icons.getLabel(icon: .arrowUp)
-        
-        self.addSubview(upIcon)
+
+        self.addSubview(self.scoreIcon)
         self.addSubview(self.scoreLabel)
         self.addSubview(self.commentBubble)
         self.addSubview(self.commentsButton)
@@ -55,15 +56,15 @@ class InfoView: UIView, VideoView {
         self.addSubview(self.moreButton)
         self.addSubview(self.likeButton)
         
-        upIcon.snp.makeConstraints { make in
+        self.scoreIcon.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(5)
             make.top.equalToSuperview().offset(Config.BaseDimensions.cellPadding)
             make.bottom.equalToSuperview().offset(-20)
         }
         
         self.scoreLabel.snp.makeConstraints { make in
-            make.top.bottom.equalTo(upIcon)
-            make.left.equalTo(upIcon.snp.right)
+            make.top.bottom.equalTo(self.scoreIcon)
+            make.left.equalTo(self.scoreIcon.snp.right)
         }
         
         self.commentBubble.snp.makeConstraints { make in
@@ -82,12 +83,12 @@ class InfoView: UIView, VideoView {
         }
         
         self.likeButton.snp.makeConstraints { make in
-            make.top.bottom.equalTo(upIcon)
+            make.top.bottom.equalTo(self.scoreIcon)
             make.right.equalToSuperview().offset(-Config.BaseDimensions.cellPadding)
         }
         
         self.moreButton.snp.makeConstraints { make in
-            make.top.bottom.equalTo(upIcon)
+            make.top.bottom.equalTo(self.scoreIcon)
             make.right.equalTo(self.likeButton.snp.left).offset(-5)
         }
     }
@@ -98,6 +99,7 @@ class InfoView: UIView, VideoView {
 
     func setRedditItem(redditViewItem: RedditViewItem) {
         self.redditViewItem = redditViewItem
+        self.redditViewItem?.delegate.add(delegate: self)
         self.rxUnsubscribe.onNext(())
         _ = self.redditViewItem?.favorited.takeUntil(self.rxUnsubscribe.asObservable()).subscribe(onNext: { favorited in
             self.setFavoriteButton(favorited)
@@ -107,6 +109,7 @@ class InfoView: UIView, VideoView {
             self.scoreLabel.text = redditViewItem.redditLink.score.commaRepresentation
             self.commentsButton.text = redditViewItem.redditLink.num_comments.commaRepresentation
             self.timeStampLabel.text = redditViewItem.humanTimeStampExtended
+            self.setupUpvoteDownvote(redditViewItem: redditViewItem)
         }
     }
     
@@ -144,5 +147,38 @@ class InfoView: UIView, VideoView {
         if let redditViewItem = self.redditViewItem {
             Subjects.shared.showCommentsAction.onNext(redditViewItem)
         }
+    }
+    
+    @objc func scoreButtonAction() {
+        if let redditViewItem = self.redditViewItem {
+            redditViewItem.upvote()
+            Util.hapticFeedback()
+        }
+    }
+    
+    func setupUpvoteDownvote(redditViewItem: RedditViewItem) {
+        if redditViewItem.redditLink.likes == true {
+            self.scoreLabel.textColor = Config.colors.upvote
+            self.scoreIcon.textColor = Config.colors.upvote
+            self.scoreLabel.text = (redditViewItem.redditLink.score + 1).commaRepresentation
+        } else if redditViewItem.redditLink.likes == false {
+            self.scoreLabel.textColor = Config.colors.downvote
+            self.scoreIcon.textColor = Config.colors.downvote
+            self.scoreLabel.text = (redditViewItem.redditLink.score - 1).commaRepresentation
+        } else {
+            self.scoreLabel.textColor = Config.colors.primaryFont
+            self.scoreIcon.textColor = Config.colors.primaryFont
+            self.scoreLabel.text = redditViewItem.redditLink.score.commaRepresentation
+        }
+    }
+
+    func failedToLoadVideo(redditViewItem: RedditViewItem) {
+    }
+    
+    func didMarkAsWatched(redditViewItem: RedditViewItem) {
+    }
+    
+    func didUpdateLikes(redditViewItem: RedditViewItem) {
+        self.setupUpvoteDownvote(redditViewItem: redditViewItem)
     }
 }

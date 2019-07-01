@@ -121,4 +121,8 @@ class TitleView: UIView, VideoView, RedditViewItemDelegate {
     func setTitleLabelColor(redditViewItem: RedditViewItem) {
         self.titleLabel.textColor = redditViewItem.markedAsWatched && redditViewItem.context == .home ? Config.colors.secondaryFont : Config.colors.primaryFont
     }
+    
+    func didUpdateLikes(redditViewItem: RedditViewItem) {
+        
+    }
 }

@@ -126,7 +126,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
                     return UITableViewAutomaticDimension
                 }
             } else if case .redditMore(let more) = listing {
-                return more.isHidden ? 0 : UITableViewAutomaticDimension
+                return more.isHidden || more.isContinueThread ? 0 : UITableViewAutomaticDimension
             }
         default:
             return UITableViewAutomaticDimension
@@ -136,7 +136,7 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         if let comment = self.data[indexPath.row] as? RedditListingType, case .redditComment(let c) = comment {
-            return self.estimatedHeightCache[c.id] ?? 25
+            return c.isHidden ? 0 : (self.estimatedHeightCache[c.id] ?? 25)
         }
         // TODO: remove hard coded height - 25 seems to work ok for now
         return 25
@@ -313,29 +313,34 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
 extension CommentsTableView: MGSwipeTableCellDelegate {
     
     func swipeTableCell(_ cell: MGSwipeTableCell, swipeButtonsFor direction: MGSwipeDirection, swipeSettings: MGSwipeSettings, expansionSettings: MGSwipeExpansionSettings) -> [UIView]? {
-        
+
         swipeSettings.keepButtonsSwiped = false
         swipeSettings.transition = MGSwipeTransition.clipCenter
         expansionSettings.fillOnTrigger = false
         expansionSettings.buttonIndex = 0
         expansionSettings.threshold = 1.0
-        expansionSettings.expansionColor = Config.colors.red
+        expansionSettings.expansionColor = Config.colors.blue
         expansionSettings.expansionLayout = .center
         expansionSettings.triggerAnimation.easingFunction = MGSwipeEasingFunction.cubicInOut
 
         if direction == MGSwipeDirection.rightToLeft {
-            return [MGSwipeButton(title: "", icon: Icons.getImage(icon: .arrowUp, size: 30, color: Config.colors.white), backgroundColor: Config.colors.blue, padding: 35, callback: { cell in
-                // TODO: up/down/vote
+            let button = MGSwipeButton(title: "", icon: Icons.getImage(icon: .dots, size: 30, color: Config.colors.white), backgroundColor: Config.colors.bg4, padding: 35, callback: { cell in
                 return true
-            })]
-        } else if direction == MGSwipeDirection.leftToRight {
-            return [MGSwipeButton(title: "more", backgroundColor: Config.colors.tealBlue, padding: 30, callback: { cell in
-                // TODO: action sheet
-                return true
-            })]
+            })
+            return [button]
         }
-        
+
         return nil
+    }
+
+    func swipeTableCell(_ cell: MGSwipeTableCell, tappedButtonAt index: Int, direction: MGSwipeDirection, fromExpansion: Bool) -> Bool {
+        if let indexPath = self.indexPath(for: cell) {
+            if let comment = self.data[indexPath.row] as? RedditListingType, case RedditListingType.redditComment(let c) = comment {
+                let alert = CommentsAlertController(comment: c)
+                MyNavigation.shared.rootViewController()?.present(alert, animated: true, completion: nil)
+            }
+        }
+        return true
     }
     
     func swipeTableCell(_ cell: MGSwipeTableCell, didChange state: MGSwipeState, gestureIsActive: Bool) {

@@ -14,6 +14,7 @@ class FavoritesTableViewController: BaseVideoTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.fetchHaikus()
         self.navigationItem.title = "Favorites"
         Subjects.shared.favoriteButtonAction.subscribe(onNext: { _ in
             self.fetchHaikus()
