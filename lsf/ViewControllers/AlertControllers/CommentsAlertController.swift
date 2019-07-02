@@ -47,6 +47,15 @@ class CommentsAlertController: UIAlertController {
             }
         }
         
+        let reply = UIAlertAction(title: "Reply", style: .default) { action in
+            let commentsReplyViewController = CommentsReplyViewController()
+            commentsReplyViewController.setRedditComment(comment: comment)
+            let navController = UINavigationController(rootViewController: commentsReplyViewController)
+            navController.modalTransitionStyle = .coverVertical
+            MyNavigation.shared.rootViewController()?.present(navController, animated: true, completion: nil)
+        }
+        
+        self.addAction(reply)
         self.addAction(cancel)
         self.addAction(upvote)
         self.addAction(downvote)

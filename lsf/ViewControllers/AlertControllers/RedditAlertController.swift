@@ -39,19 +39,19 @@ class RedditAlertController: UIAlertController {
             self.delegate?.didHideItem(redditViewItem: redditViewItem)
         }
         
-        let openClipUrl = UIAlertAction(title: "Open Direct Link", style: .default) { (action:UIAlertAction) in
-            guard let urlString = redditViewItem.redditLink.url, let url = URL(string: urlString) else { return }
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
+//        let openClipUrl = UIAlertAction(title: "Open Direct Link", style: .default) { (action:UIAlertAction) in
+//            guard let urlString = redditViewItem.redditLink.url, let url = URL(string: urlString) else { return }
+//            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+//        }
         
         let copyClipUrl = UIAlertAction(title: "Copy Direct Link", style: .default) { (action:UIAlertAction) in
             UIPasteboard.general.string = redditViewItem.redditLink.url
         }
         
-        let openInReddit = UIAlertAction(title: "Open Reddit Link", style: .default) { (action:UIAlertAction) in
-            guard let url = URL(string: self.getRedditLink(permaLink: redditViewItem.redditLink.permalink)) else { return }
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
+//        let openInReddit = UIAlertAction(title: "Open Reddit Link", style: .default) { (action:UIAlertAction) in
+//            guard let url = URL(string: self.getRedditLink(permaLink: redditViewItem.redditLink.permalink)) else { return }
+//            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+//        }
         
         let copyRedditLink = UIAlertAction(title: "Copy Reddit Link", style: .default) { (action:UIAlertAction) in
             UIPasteboard.general.string = self.getRedditLink(permaLink: redditViewItem.redditLink.permalink)
@@ -62,9 +62,9 @@ class RedditAlertController: UIAlertController {
         
         self.addAction(upvote)
         self.addAction(downvote)
-        self.addAction(openClipUrl)
+//        self.addAction(openClipUrl)
         self.addAction(copyClipUrl)
-        self.addAction(openInReddit)
+//        self.addAction(openInReddit)
         self.addAction(copyRedditLink)
         self.addAction(cancel)
         self.addAction(reportClipUrl)

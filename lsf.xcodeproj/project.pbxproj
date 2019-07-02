@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A200E49622CB035500BC5A66 /* CommentsReplyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200E49522CB035500BC5A66 /* CommentsReplyViewController.swift */; };
+		A200E49822CB062000BC5A66 /* CommentsBodyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200E49722CB062000BC5A66 /* CommentsBodyView.swift */; };
 		A2043987227005D8007130AC /* RealmRedditModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2043986227005D8007130AC /* RealmRedditModel.swift */; };
 		A21D3C08228524A300E5471E /* MyIconLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21D3C07228524A300E5471E /* MyIconLabel.swift */; };
 		A21E2E22225A482B00B212F3 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A21E2E21225A482600B212F3 /* icomoon.ttf */; };
@@ -66,6 +68,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A200E49522CB035500BC5A66 /* CommentsReplyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsReplyViewController.swift; sourceTree = "<group>"; };
+		A200E49722CB062000BC5A66 /* CommentsBodyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsBodyView.swift; sourceTree = "<group>"; };
 		A2043986227005D8007130AC /* RealmRedditModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmRedditModel.swift; sourceTree = "<group>"; };
 		A21D3C07228524A300E5471E /* MyIconLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyIconLabel.swift; sourceTree = "<group>"; };
 		A21E2E21225A482600B212F3 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
@@ -144,6 +148,14 @@
 				A269478321CEF93000A07F69 /* RedditAlertController.swift */,
 			);
 			path = AlertControllers;
+			sourceTree = "<group>";
+		};
+		A200E49422CB034100BC5A66 /* Comments */ = {
+			isa = PBXGroup;
+			children = (
+				A200E49522CB035500BC5A66 /* CommentsReplyViewController.swift */,
+			);
+			path = Comments;
 			sourceTree = "<group>";
 		};
 		A2397904224B0A4F00844E83 /* UIElements */ = {
@@ -227,6 +239,7 @@
 				A247504521EACBE600C0F712 /* CommentsHeaderCell.swift */,
 				A28E619721F56368004B53A7 /* CommentsLoadingCell.swift */,
 				A2D70E8B21EED67C00F69F0C /* CommentsTextView.swift */,
+				A200E49722CB062000BC5A66 /* CommentsBodyView.swift */,
 			);
 			path = Comments;
 			sourceTree = "<group>";
@@ -301,6 +314,7 @@
 		A2D0EF6C21CEB1F4002F1134 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				A200E49422CB034100BC5A66 /* Comments */,
 				A200E49222CAF65B00BC5A66 /* AlertControllers */,
 				A27E877A21E10394002501F1 /* Main */,
 				A27E877B21E10474002501F1 /* Settings */,
@@ -461,6 +475,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A29CD0062119363900A5A6EC /* AppDelegate.swift in Sources */,
+				A200E49822CB062000BC5A66 /* CommentsBodyView.swift in Sources */,
 				A25285AA21615AC800DCA537 /* CachingPlayerItem.swift in Sources */,
 				A25285B8216ACADD00DCA537 /* Config.swift in Sources */,
 				A2DE2DB621FAA578003F66D1 /* ClipUrlService.swift in Sources */,
@@ -487,6 +502,7 @@
 				A2B7C2442198C211008DB7E6 /* RedditViewItemModel.swift in Sources */,
 				A23EE92D2281342A00F35F4B /* BaseVideoTableViewController.swift in Sources */,
 				A23EE92B228133FD00F35F4B /* FavoriteTableViewController.swift in Sources */,
+				A200E49622CB035500BC5A66 /* CommentsReplyViewController.swift in Sources */,
 				A2D70E8C21EED67C00F69F0C /* CommentsTextView.swift in Sources */,
 				A26F393E22A8A8C300A48A9B /* RedditAuthWebViewController.swift in Sources */,
 				A249FC912275FA6D00666498 /* VideoTableViewCell.swift in Sources */,
