@@ -8,7 +8,7 @@
 
 import Alamofire
 
-class RedditInterceptor: RequestAdapter, RequestRetrier {
+class RedditInterceptorService: RequestAdapter, RequestRetrier {
     
     var redditAuthentication: RedditAuthentication?
     private let userAgent: String

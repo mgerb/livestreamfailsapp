@@ -11,7 +11,7 @@ import UIKit
 import RxSwift
 import SwiftIcons
 
-class PlayerView: UIView, VideoView {
+class PlayerView: UIView {
     
     var redditViewItem: RedditViewItem?
     

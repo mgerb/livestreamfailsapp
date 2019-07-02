@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-class RedditAuthViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
+class RedditAuthWebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     
     var loginSuccess: (() -> Void)?
     

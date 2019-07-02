@@ -8,7 +8,7 @@
 
 import Alamofire
 
-class RedditAuth {
+class RedditAuthService {
     
     // non user based oauth
     let userAgent: String
@@ -16,7 +16,7 @@ class RedditAuth {
     private let non_user_oauth_url = "https://www.reddit.com/api/v1/access_token"
     lazy var oauthClient: SessionManager = {
         let client = SessionManager()
-        let redditInterceptor = RedditInterceptor(userAgent: self.userAgent, handlerFunc: self.setupNonUserOauthHandler)
+        let redditInterceptor = RedditInterceptorService(userAgent: self.userAgent, handlerFunc: self.setupNonUserOauthHandler)
         redditInterceptor.redditAuthentication = StorageService.shared.getRedditAuthentication()
         client.retrier = redditInterceptor
         client.adapter = redditInterceptor
@@ -45,7 +45,7 @@ class RedditAuth {
     func setUserOauthClient() {
         if let auth = StorageService.shared.getRedditUserAuthentication() {
             let client = SessionManager()
-            let redditInterceptor = RedditInterceptor(userAgent: self.userAgent, handlerFunc: self.setupUserOauthHandler)
+            let redditInterceptor = RedditInterceptorService(userAgent: self.userAgent, handlerFunc: self.setupUserOauthHandler)
             redditInterceptor.redditAuthentication = auth
             client.retrier = redditInterceptor
             client.adapter = redditInterceptor

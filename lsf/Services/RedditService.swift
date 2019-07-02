@@ -40,7 +40,7 @@ class RedditService {
     static let shared = RedditService()
     let haikuLimit = 25
     let oauthV1Url = "https://oauth.reddit.com"
-    lazy var redditAuth = RedditAuth(userAgent: self.headers["User-Agent"]!)
+    lazy var redditAuth = RedditAuthService(userAgent: self.headers["User-Agent"]!)
     let defaultClient = SessionManager()
     
     var user: RedditUser?

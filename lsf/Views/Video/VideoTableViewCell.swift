@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class VideoTableViewCell: UITableViewCell, VideoView, RedditViewItemDelegate {
+class VideoTableViewCell: UITableViewCell, RedditViewItemDelegate {
     
     // TODO:
     static func getEstimatedHeight() -> CGFloat {

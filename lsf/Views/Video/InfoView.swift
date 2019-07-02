@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import RxSwift
 
-class InfoView: UIView, VideoView, RedditViewItemDelegate {
+class InfoView: UIView, RedditViewItemDelegate {
 
     var redditViewItem: RedditViewItem?
     let disposeBag = DisposeBag()
