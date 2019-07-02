@@ -8,6 +8,7 @@
 
 import Foundation
 import Marshal
+import DifferenceKit
 
 enum RedditKind: String {
     case listing = "Listing"
@@ -175,7 +176,8 @@ protocol RedditCommentDelegate {
     func didUpdateLikes(comment: RedditComment)
 }
 
-final class RedditComment: RedditCommentProtocol, Unmarshaling {
+final class RedditComment: RedditCommentProtocol, Unmarshaling, Differentiable {
+
     var delegate: RedditCommentDelegate?
     let id: String
     let parent_id: String
@@ -286,9 +288,17 @@ final class RedditComment: RedditCommentProtocol, Unmarshaling {
         }
         return nil
     }
+    
+    var differenceIdentifier: String {
+        return self.id
+    }
+    
+    func isContentEqual(to source: RedditComment) -> Bool {
+        return self.id == source.id
+    }
 }
 
-final class RedditMore: RedditCommentProtocol, Unmarshaling {
+final class RedditMore: RedditCommentProtocol, Unmarshaling, Differentiable {
     let id: String
     let parent_id: String
     let name: String
@@ -309,4 +319,13 @@ final class RedditMore: RedditCommentProtocol, Unmarshaling {
     var isContinueThread: Bool {
         return self.id == "_"
     }
+    
+    var differenceIdentifier: String {
+        return self.id
+    }
+    
+    func isContentEqual(to source: RedditMore) -> Bool {
+        return self.id == source.id
+    }
+    
 }

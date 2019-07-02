@@ -8,8 +8,9 @@
 
 import Foundation
 import UIKit
+import DifferenceKit
 
-extension String {
+extension String: Differentiable {
     
     /// check if matches regex pattern
     func matches(pattern: String) -> Bool {

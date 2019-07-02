@@ -10,12 +10,13 @@ import Foundation
 import UIKit
 import SnapKit
 import MGSwipeTableCell
+import DifferenceKit
 
 class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
 
     var didLoad = false
     var didFinishInitialAnimation = false
-    var data: [Any] = ["loading"]
+    var data: [AnyDifferentiable] = [AnyDifferentiable("loading")]
     private let footerHeight: CGFloat = 800
     let redditViewItem: RedditViewItem
     let totalNavItemHeight: CGFloat
@@ -82,10 +83,23 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         }
     }
 
+    private func transformComments(_ comments: [RedditListingType]) -> [AnyDifferentiable] {
+        return comments.compactMap {
+            switch $0 {
+            case .redditComment(let c):
+                return AnyDifferentiable(c)
+            case .redditMore(let m):
+                return AnyDifferentiable(m)
+            default:
+                return nil
+            }
+        }
+    }
+    
     func fetchComments () {
         RedditService.shared.getComments(permalink: self.redditViewItem.redditLink.permalink) { comments in
             if let comments = comments {
-                self.data = comments.count > 0 ? comments : ["no comments"]
+                self.data = comments.count > 0 ? self.transformComments(comments) : [AnyDifferentiable("no comments")]
                 self.didLoad = true
                 self.reloadData()
             }
@@ -112,22 +126,20 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
 
     // height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch self.data[indexPath.row] {
+        switch self.data[indexPath.row].base {
         case let s as String:
             if s == "loading" || s == "no comments" {
                 return UITableViewAutomaticDimension
             }
             break
-        case let listing as RedditListingType:
-            if case .redditComment(let comment) = listing {
-                if comment.isHidden {
-                    return 0
-                } else if comment.isCollapsed || comment.isDeleted {
-                    return UITableViewAutomaticDimension
-                }
-            } else if case .redditMore(let more) = listing {
-                return more.isHidden || more.isContinueThread ? 0 : UITableViewAutomaticDimension
+        case let comment as RedditComment:
+            if comment.isHidden {
+                return 0
+            } else if comment.isCollapsed || comment.isDeleted {
+                return UITableViewAutomaticDimension
             }
+        case let more as RedditMore:
+            return more.isHidden || more.isContinueThread ? 0 : UITableViewAutomaticDimension
         default:
             return UITableViewAutomaticDimension
         }
@@ -135,8 +147,8 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let comment = self.data[indexPath.row] as? RedditListingType, case .redditComment(let c) = comment {
-            return c.isHidden ? 0 : (self.estimatedHeightCache[c.id] ?? 25)
+        if let comment = self.data[indexPath.row].base as? RedditComment {
+            return comment.isHidden ? 0 : (self.estimatedHeightCache[comment.id] ?? 25)
         }
         // TODO: remove hard coded height - 25 seems to work ok for now
         return 25
@@ -144,39 +156,34 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if self.data.indices.contains(indexPath.row) {
-            if let comment = self.data[indexPath.row] as? RedditListingType, case .redditComment(let c) = comment {
-                self.estimatedHeightCache[c.id] = cell.frame.height
+            if let comment = self.data[indexPath.row].base as? RedditComment {
+                self.estimatedHeightCache[comment.id] = cell.frame.height
             }
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let listing = self.data[indexPath.row] as? RedditListingType {
-            
-            switch listing {
-            case .redditComment(let comment):
-                // return empty cell if hidden - improves performance tremendously
-                if comment.isHidden {
-                    return self.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath)
-                } else {
-                    let cell = self.dequeueReusableCell(withIdentifier: "CommentsViewCellContent", for: indexPath) as! CommentsViewCellContent
-                    cell.setRedditComment(c: comment)
-                    cell.delegate = self
-                    return cell
-                }
-            case .redditMore(let more):
-                let cell = self.dequeueReusableCell(withIdentifier: "CommentsViewCellMore", for: indexPath) as! CommentsViewCellMore
-                cell.setRedditComment(c: more)
+        
+        if let comment = self.data[indexPath.row].base as? RedditComment {
+            // return empty cell if hidden - improves performance tremendously
+            if comment.isHidden {
+                return self.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath)
+            } else {
+                let cell = self.dequeueReusableCell(withIdentifier: "CommentsViewCellContent", for: indexPath) as! CommentsViewCellContent
+                cell.setRedditComment(c: comment)
+                cell.delegate = self
                 return cell
-            default:
-                break
             }
-        }  else if let c = self.data[indexPath.row] as? String {
+        } else if let more = self.data[indexPath.row].base as? RedditMore {
+            let cell = self.dequeueReusableCell(withIdentifier: "CommentsViewCellMore", for: indexPath) as! CommentsViewCellMore
+            cell.setRedditComment(c: more)
+            return cell
+        } else if let c = self.data[indexPath.row].base as? String {
             let cell = self.dequeueReusableCell(withIdentifier: "CommentsLoadingCell", for: indexPath) as! CommentsLoadingCell
             c == "loading" ? cell.setLoading() : cell.setNoComments()
             return cell
         }
-        
+
         return self.dequeueReusableCell(withIdentifier: "CommentsLoadingCell", for: indexPath)
     }
 
@@ -221,16 +228,15 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let listing = self.data[indexPath.row] as? RedditListingType {
-            DispatchQueue.main.async {
-                if case .redditComment(let comment) = listing {
-                    self.redditCommentContentPressed(comment: comment, indexPath: indexPath)
-                } else if case .redditMore(let more) = listing {
-                    if more.isContinueThread {
-                        self.redditCommentContinueThreadPressed()
-                    } else {
-                        self.redditCommentMorePressed(more: more, indexPath: indexPath)
-                    }
+        
+        DispatchQueue.main.async {
+            if let comment = self.data[indexPath.row].base as? RedditComment {
+                self.redditCommentContentPressed(comment: comment, indexPath: indexPath)
+            } else if let more = self.data[indexPath.row].base as? RedditMore {
+                if more.isContinueThread {
+                    self.redditCommentContinueThreadPressed()
+                } else {
+                    self.redditCommentMorePressed(more: more, indexPath: indexPath)
                 }
             }
         }
@@ -240,31 +246,16 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
     func redditCommentMorePressed(more: RedditMore, indexPath: IndexPath) {
         RedditService.shared.getMoreComments(more: more, link_id: self.redditViewItem.redditLink.name) { comments in
             
-            // delete load more row if we don't get any comments back
-            if comments.count < 1 {
-                self.data.remove(at: indexPath.row)
-                self.beginUpdates()
-                self.deleteRows(at: [indexPath], with: .automatic)
-                self.endUpdates()
-                return
-            }
+            var target = self.data
             
-            var comments = comments
+            let comments = self.transformComments(comments)
+            target.remove(at: indexPath.row)
+            target.insert(contentsOf: comments, at: indexPath.row)
             
-            self.data[indexPath.row] = comments.remove(at: 0)
-            self.beginUpdates()
-            self.reloadRows(at: [indexPath], with: .automatic)
-            self.endUpdates()
-
-            // check if we still have comments left to insert
-            if comments.count > 0 {
-                self.data.insert(contentsOf: comments, at: indexPath.row + 1)
-                let indexPaths = (0...comments.count - 1).map { index in
-                    return IndexPath(row: indexPath.row + 1 + index, section: 0)
-                }
-                self.beginUpdates()
-                self.insertRows(at: indexPaths, with: .automatic)
-                self.endUpdates()
+            let changeset = StagedChangeset(source: self.data, target: target)
+            
+            self.reload(using: changeset, with: .fade) { data in
+                self.data = data
             }
         }
     }
@@ -284,25 +275,21 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
                 continue
             }
             
-            if let listing = self.data[i] as? RedditListingType {
-                var tempComment: RedditCommentProtocol?
-                
-                if case .redditComment(let c) = listing {
-                    tempComment = c
-                } else if case .redditMore(let more) = listing {
-                    tempComment = more
+            var tempComment: RedditCommentProtocol?
+
+            if let c = self.data[i].base as? RedditComment {
+                tempComment = c
+            } else if let more = self.data[i].base as? RedditMore {
+                tempComment = more
+            }
+
+            if let c = tempComment {
+                if c.depth > comment.depth {
+                    c.isHidden = comment.isCollapsed
+                    indexPaths.append(IndexPath(item: i, section: 0))
+                } else {
+                    break
                 }
-                
-                if let c = tempComment {
-                    if c.depth > comment.depth {
-                        c.isHidden = comment.isCollapsed
-                        indexPaths.append(IndexPath(item: i, section: 0))
-                    } else {
-                        break
-                    }
-                }
-            } else {
-                break
             }
         }
         
@@ -335,8 +322,8 @@ extension CommentsTableView: MGSwipeTableCellDelegate {
 
     func swipeTableCell(_ cell: MGSwipeTableCell, tappedButtonAt index: Int, direction: MGSwipeDirection, fromExpansion: Bool) -> Bool {
         if let indexPath = self.indexPath(for: cell) {
-            if let comment = self.data[indexPath.row] as? RedditListingType, case RedditListingType.redditComment(let c) = comment {
-                let alert = CommentsAlertController(comment: c)
+            if let comment = self.data[indexPath.row].base as? RedditComment {
+                let alert = CommentsAlertController(comment: comment)
                 MyNavigation.shared.rootViewController()?.present(alert, animated: true, completion: nil)
             }
         }
