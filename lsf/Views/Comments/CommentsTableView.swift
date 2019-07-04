@@ -304,20 +304,37 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         self.reloadRows(at: indexPaths, with: .fade)
     }
     
-    func commentAdded(parent: RedditComment, comment: RedditComment) {
+    func scrollToBottom(){
+        DispatchQueue.main.async {
+            let indexPath = IndexPath(row: self.data.count - 1, section: 0)
+            self.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
+    }
+    
+    func commentAdded(comment: RedditComment, parent: RedditComment?) {
         let index = self.data.firstIndex {
             if let c = $0.base as? RedditComment {
-                return c.id == parent.id
+                return c.id == parent?.id
             }
             return false
         }
-        
+
+        var target = self.data
         if let index = index {
-            var target = self.data
             target.insert(AnyDifferentiable(comment), at: index + 1)
-            let changeset = StagedChangeset(source: self.data, target: target)
-            self.reload(using: changeset, with: .fade) { data in
-                self.data = data
+        } else {
+            // check if showing the "no comments message"
+            if self.data.contains(where: { $0.base as? String != nil }) {
+                target = [AnyDifferentiable(comment)]
+            } else {
+                target.append(AnyDifferentiable(comment))
+            }
+        }
+        let changeset = StagedChangeset(source: self.data, target: target)
+        self.reload(using: changeset, with: .fade) { data in
+            self.data = data
+            if index == nil {
+                self.scrollToBottom()
             }
         }
     }
@@ -338,6 +355,28 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
                 self.data = data
             }
         }
+    }
+    
+    func addCommentAction(parent: RedditComment?) {
+        if !RedditService.shared.isLoggedIn() {
+            MyNavigation.shared.presetLoginAlert()
+            return
+        }
+        let commentsReplyViewController = CommentsReplyViewController(parentName: parent?.name ?? self.redditViewItem.redditLink.name, parentComment: parent)
+        commentsReplyViewController.success = { newComment in
+            self.commentAdded(comment: newComment, parent: parent)
+        }
+        let navController = UINavigationController(rootViewController: commentsReplyViewController)
+        navController.modalTransitionStyle = .coverVertical
+        MyNavigation.shared.rootViewController()?.present(navController, animated: true, completion: nil)
+    }
+    
+    func deleteCommentAction(comment: RedditComment) {
+        RedditService.shared.delete(name: comment.name, completion: { success in
+            if success {
+                self.commentDeleted(comment: comment)
+            }
+        })
     }
 }
 

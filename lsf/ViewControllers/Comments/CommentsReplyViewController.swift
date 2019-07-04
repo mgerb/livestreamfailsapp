@@ -12,11 +12,22 @@ import Eureka
 
 class CommentsReplyViewController: FormViewController {
     
-    var redditComment: RedditComment?
+    private let parentName: String
+    private var parentComment: RedditComment?
     var commentBodyView: CommentsBodyView?
     var section: Section?;
     var textAreaRow: TextAreaRow?
     var success: ((_ newComment: RedditComment) -> Void)?
+    
+    required init(parentName: String, parentComment: RedditComment?) {
+        self.parentName = parentName
+        self.parentComment = parentComment
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,16 +35,16 @@ class CommentsReplyViewController: FormViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(saveTapped))
 
         form +++ Section() { section in
-                var header = HeaderFooterView<CommentsBodyView>(.class)
-                header.height = {UITableViewAutomaticDimension}
-                header.onSetupView = { view, _ in
-                    if let comment = self.redditComment {
-                        view.backgroundColor = Config.colors.white
-                        view.setRedditComment(comment: comment)
+                if let comment = self.parentComment {
+                    var header = HeaderFooterView<CommentsBodyView>(.class)
+                    header.height = {UITableViewAutomaticDimension}
+                    header.onSetupView = { view, _ in
+                            view.backgroundColor = Config.colors.white
+                            view.setRedditComment(comment: comment)
                     }
+                    section.header = header
+                    self.section = section
                 }
-                section.header = header
-                self.section = section
             }
             <<< TextAreaRow("textAreaRow") {
                 $0.placeholder = "Reply..."
@@ -45,21 +56,19 @@ class CommentsReplyViewController: FormViewController {
         super.viewDidAppear(animated)
         self.textAreaRow?.cell.textView.becomeFirstResponder()
     }
-    
-    func setRedditComment(comment: RedditComment) {
-        self.redditComment = comment
-    }
-    
+
     @objc func cancelTapped() {
         self.dismiss(animated: true, completion: nil)
     }
     
     @objc func saveTapped() {
-        if let text = self.textAreaRow?.cell.textView.text, let comment = self.redditComment {
-            RedditService.shared.comment(name: comment.name, text: text, completion: { success, newComment in
+
+        self.textAreaRow?.cell.textView.resignFirstResponder()
+        if let text = self.textAreaRow?.cell.textView.text {
+            RedditService.shared.comment(name: self.parentName, text: text, completion: { success, newComment in
                 if success, let c = newComment {
-                    // depth isn't returned so we need to set based on parent
-                    newComment?.depth = comment.depth + 1
+                    // depth isn't returned so we need to set based on parent - set to 0 if link is parent
+                    newComment?.depth = (self.parentComment?.depth ?? -1) + 1
                     self.success?(c)
                     self.dismiss(animated: true, completion: nil)
                 } else {

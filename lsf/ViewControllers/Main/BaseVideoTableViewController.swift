@@ -61,13 +61,16 @@ class BaseVideoTableViewController: UIViewController, UITableViewDataSource {
     
     func setupSubjectSubscriptions() {
         // show comments list
-        Subjects.shared.showCommentsAction.subscribe(onNext: { redditViewItem in
+        Subjects.shared.showCommentsAction.subscribe(onNext: { (redditViewItem, openReplyModal) in
             if self.isViewLoaded && self.view?.window != nil {
                 self.commentsTableView?.dismiss()
                 if let frame = MyNavigation.shared.rootViewController()?.view.frame {
                     let totalNavItemHeight = (self.navigationController?.navigationBar.frame.height ?? 0) + (self.tabBarController?.tabBar.frame.height ?? 0)
                     self.commentsTableView = CommentsTableView(frame: frame, redditViewItem: redditViewItem, totalNavItemHeight: totalNavItemHeight)
                     self.view.addSubview(self.commentsTableView!)
+                    if openReplyModal {
+                        self.commentsTableView?.addCommentAction(parent: nil)
+                    }
                 }
             }
         }).disposed(by: self.disposeBag)

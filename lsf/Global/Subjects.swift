@@ -15,5 +15,5 @@ class Subjects {
     let moreButtonAction = PublishSubject<RedditViewItem>()
     let favoriteButtonAction = PublishSubject<RedditViewItem>()
     let fullScreenPlayerAction = PublishSubject<RedditViewItem>()
-    let showCommentsAction = PublishSubject<RedditViewItem>()
+    let showCommentsAction = PublishSubject<(RedditViewItem, Bool)>()
 }

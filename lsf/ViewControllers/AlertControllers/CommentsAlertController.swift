@@ -9,8 +9,8 @@
 import UIKit
 
 protocol CommentsAlertDelegate {
-    func commentAdded(parent: RedditComment, comment: RedditComment)
-    func commentDeleted(comment: RedditComment)
+    func deleteCommentAction(comment: RedditComment)
+    func addCommentAction(parent: RedditComment?)
 }
 
 class CommentsAlertController: UIAlertController {
@@ -55,26 +55,11 @@ class CommentsAlertController: UIAlertController {
         }
         
         let reply = UIAlertAction(title: "Reply", style: .default) { action in
-            if !RedditService.shared.isLoggedIn() {
-                MyNavigation.shared.presetLoginAlert()
-                return
-            }
-            let commentsReplyViewController = CommentsReplyViewController()
-            commentsReplyViewController.setRedditComment(comment: comment)
-            commentsReplyViewController.success = { newComment in
-                self.delegate?.commentAdded(parent: comment, comment: newComment)
-            }
-            let navController = UINavigationController(rootViewController: commentsReplyViewController)
-            navController.modalTransitionStyle = .coverVertical
-            MyNavigation.shared.rootViewController()?.present(navController, animated: true, completion: nil)
+            self.delegate?.addCommentAction(parent: comment)
         }
         
         let delete = UIAlertAction(title: "Delete", style: .destructive) { action in
-            RedditService.shared.delete(name: comment.name, completion: { success in
-                if success {
-                    self.delegate?.commentDeleted(comment: comment)
-                }
-            })
+            self.delegate?.deleteCommentAction(comment: comment)
         }
 
         self.addAction(upvote)

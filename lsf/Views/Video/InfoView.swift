@@ -119,21 +119,22 @@ class InfoView: UIView, RedditViewItemDelegate {
         self.likeButton.updateIcon(icon: icon, color: color)
     }
     
-    private func animateFavoriteButton() {
+    
+    private func animateFavoriteButton(button: UILabel) {
         // do popping animation on button and update color
         // TODO: see if possible to animate button color change
         let duration = 0.10
         UIView.animate(withDuration: duration, animations: {
-            self.likeButton.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+            button.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
         }, completion: { _ in
             UIView.animate(withDuration: duration) {
-                self.likeButton.transform = CGAffineTransform.identity
+                button.transform = CGAffineTransform.identity
             }
         })
     }
     
     @objc func likeButtonAction() {
-        self.animateFavoriteButton()
+        self.animateFavoriteButton(button: self.likeButton)
         self.redditViewItem?.toggleFavorite()
     }
     
@@ -145,12 +146,13 @@ class InfoView: UIView, RedditViewItemDelegate {
     
     @objc func commentsButtonAction() {
         if let redditViewItem = self.redditViewItem {
-            Subjects.shared.showCommentsAction.onNext(redditViewItem)
+            Subjects.shared.showCommentsAction.onNext((redditViewItem, false))
         }
     }
     
     @objc func scoreButtonAction() {
         if let redditViewItem = self.redditViewItem {
+            self.animateFavoriteButton(button: self.scoreIcon)
             redditViewItem.upvote()
             Util.hapticFeedback()
         }

@@ -57,11 +57,16 @@ class RedditAlertController: UIAlertController {
             UIPasteboard.general.string = self.getRedditLink(permaLink: redditViewItem.redditLink.permalink)
         }
         
+        let reply = UIAlertAction(title: "Reply", style: .default) { action in
+            Subjects.shared.showCommentsAction.onNext((redditViewItem, true))
+        }
+        
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction) in
         }
         
         self.addAction(upvote)
         self.addAction(downvote)
+        self.addAction(reply)
 //        self.addAction(openClipUrl)
         self.addAction(copyClipUrl)
 //        self.addAction(openInReddit)
