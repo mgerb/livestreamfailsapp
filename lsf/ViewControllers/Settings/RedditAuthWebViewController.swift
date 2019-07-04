@@ -26,6 +26,9 @@ class RedditAuthWebViewController: UIViewController, WKNavigationDelegate, WKUID
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(self.webview)
+        self.webview.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {

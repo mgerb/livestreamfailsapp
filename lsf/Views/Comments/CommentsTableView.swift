@@ -12,8 +12,7 @@ import SnapKit
 import MGSwipeTableCell
 import DifferenceKit
 
-class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
-
+class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, CommentsAlertDelegate {
     var didLoad = false
     var didFinishInitialAnimation = false
     var data: [AnyDifferentiable] = [AnyDifferentiable("loading")]
@@ -96,12 +95,21 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         }
     }
     
-    func fetchComments () {
+    func fetchComments (animate: Bool = false) {
         RedditService.shared.getComments(permalink: self.redditViewItem.redditLink.permalink) { comments in
             if let comments = comments {
-                self.data = comments.count > 0 ? self.transformComments(comments) : [AnyDifferentiable("no comments")]
-                self.didLoad = true
-                self.reloadData()
+                let comments = comments.count > 0 ? self.transformComments(comments) : [AnyDifferentiable("no comments")]
+                if animate {
+                    let changeset = StagedChangeset(source: self.data, target: comments)
+                    self.reload(using: changeset, with: .fade) { data in
+                        self.didLoad = true
+                        self.data = data
+                    }
+                } else {
+                    self.data = comments
+                    self.didLoad = true
+                    self.reloadData()
+                }
             }
         }
     }
@@ -295,6 +303,42 @@ class CommentsTableView: TapThroughTableView, UITableViewDelegate, UITableViewDa
         
         self.reloadRows(at: indexPaths, with: .fade)
     }
+    
+    func commentAdded(parent: RedditComment, comment: RedditComment) {
+        let index = self.data.firstIndex {
+            if let c = $0.base as? RedditComment {
+                return c.id == parent.id
+            }
+            return false
+        }
+        
+        if let index = index {
+            var target = self.data
+            target.insert(AnyDifferentiable(comment), at: index + 1)
+            let changeset = StagedChangeset(source: self.data, target: target)
+            self.reload(using: changeset, with: .fade) { data in
+                self.data = data
+            }
+        }
+    }
+    
+    func commentDeleted(comment: RedditComment) {
+        let index = self.data.firstIndex {
+            if let c = $0.base as? RedditComment {
+                return c.id == comment.id
+            }
+            return false
+        }
+        
+        if let index = index {
+            var target = self.data
+            target.remove(at: index)
+            let changeset = StagedChangeset(source: self.data, target: target)
+            self.reload(using: changeset, with: .fade) { data in
+                self.data = data
+            }
+        }
+    }
 }
 
 extension CommentsTableView: MGSwipeTableCellDelegate {
@@ -324,6 +368,7 @@ extension CommentsTableView: MGSwipeTableCellDelegate {
         if let indexPath = self.indexPath(for: cell) {
             if let comment = self.data[indexPath.row].base as? RedditComment {
                 let alert = CommentsAlertController(comment: comment)
+                alert.delegate = self
                 MyNavigation.shared.rootViewController()?.present(alert, animated: true, completion: nil)
             }
         }

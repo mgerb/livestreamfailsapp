@@ -14,7 +14,7 @@ class CommentsBodyView: UIView {
     lazy var mainStackView: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
-        view.spacing = 10
+        view.spacing = 5
         return view
     }()
     
@@ -71,6 +71,7 @@ class CommentsBodyView: UIView {
     func setRedditComment(comment: RedditComment) {
         self.body.isHidden = comment.isHidden || comment.isCollapsed || comment.isDeleted
         self.body.attributedText = comment.htmlBody
+        self.authorLabel.textColor = comment.author == RedditService.shared.user?.name ? Config.colors.upvote : Config.colors.primaryFont
         self.authorLabel.text = comment.author
         self.timeStampLabel.text = "· " + comment.humanTimeStamp
         self.scoreLabel.text = comment.score.commaRepresentation

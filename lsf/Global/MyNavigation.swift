@@ -13,8 +13,14 @@ import SafariServices
 
 class MyNavigation {
     public static let shared = MyNavigation()
+    private var alertController: UIAlertController?
+    
     let rootViewController = {
         return UIApplication.shared.keyWindow?.rootViewController
+    }
+    
+    let topViewController = {
+        return UIApplication.topViewController()
     }
     
     func presentWebView(url: URL) {
@@ -37,12 +43,39 @@ class MyNavigation {
     }
     
     func presentAlert(title: String?, message: String?) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        self.rootViewController()?.present(alert, animated: true)
+        self.hideAlert {
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            self.topViewController()?.present(alert, animated: true)
+        }
     }
     
     func presetLoginAlert() {
-        self.presentAlert(title: nil, message: "Please login to vote")
+        self.presentAlert(title: nil, message: "Please login to use this feature.")
+    }
+
+    func showLoadingAlert() {
+        self.hideAlert {
+            self.alertController = UIAlertController(title: nil, message: "Loading...", preferredStyle: .alert)
+            
+            let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+            loadingIndicator.hidesWhenStopped = true
+            loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorView.Style.gray
+            loadingIndicator.startAnimating();
+            
+            self.alertController!.view.addSubview(loadingIndicator)
+            self.topViewController()?.present(self.alertController!, animated: true, completion: nil)
+        }
+    }
+    
+    func hideAlert(completion: @escaping () -> Void) {
+        if let controller = self.alertController {
+            controller.dismiss(animated: true, completion: {
+                self.alertController = nil
+                completion()
+            })
+        } else {
+            completion()
+        }
     }
 }

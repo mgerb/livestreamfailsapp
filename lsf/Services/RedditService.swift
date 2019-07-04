@@ -282,18 +282,66 @@ extension RedditService {
             "id": id,
             "dir": dir,
         ]
-        self.redditAuth.userOauthClient?
-            .request("\(self.oauthV1Url)/api/vote", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil)
-            .validate().responseData{ response in
-                let data = try? JSONParser.JSONObjectWithData(response.data!)
-                switch response.result {
-                case .success(_):
-                    completion?(true)
-                case .failure(let err):
-                    print(err)
-                    completion?(false)
+        self.authenticatedPost(path: "/api/vote", params: params, completion: { success, _ in
+            completion?(success)
+        })
+    }
+    
+    func comment(name: String, text: String, completion: ((_ success: Bool, _ comment: RedditComment?) -> Void)?) {
+        let params: [String: Any] = [
+            "parent": name,
+            "text": text,
+            "api_type": "json",
+        ]
+        self.authenticatedPost(path: "/api/comment", params: params, completion: { success, data in
+            do {
+                if let data = data {
+                    let d = try JSONParser.JSONObjectWithData(data)
+                    let things: [MarshalDictionary] = try d.value(for: "json").value(for: "data").value(for: "things")
+                    let commentData: JSONObject = try things[0].value(for: "data")
+                    let newComment = try RedditComment(object: commentData)
+                    newComment.renderHtml()
+                    completion?(success, newComment)
+                } else {
+                    completion?(false, nil)
                 }
+            } catch {
+                print(error)
+                completion?(false, nil)
             }
+        })
+    }
+    
+    
+    func delete(name: String, completion: ((_ success: Bool) -> Void)?) {
+        let params: [String: Any] = [
+            "id": name,
+        ]
+        self.authenticatedPost(path: "/api/del", params: params, completion: { success, _ in
+            completion?(success)
+        })
+    }
+
+    // path example: /api/comment
+    private func authenticatedPost(path: String, params: [String: Any], completion: ((_ success: Bool, _ data: Data?) -> Void)?) {
+        if let client = self.redditAuth.userOauthClient {
+            MyNavigation.shared.showLoadingAlert()
+            client.request("\(self.oauthV1Url)\(path)", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil)
+                .validate().responseData{ response in
+                    MyNavigation.shared.hideAlert {
+                        switch response.result {
+                        case .success(let data):
+                            completion?(true, data)
+                        case .failure(let err):
+                            print(err)
+                            completion?(false, nil)
+                        }
+                    }
+            }
+        } else {
+            print("bad oauth client")
+            completion?(false, nil)
+        }
     }
     
     func logout() {

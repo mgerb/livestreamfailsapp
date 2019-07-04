@@ -186,7 +186,7 @@ final class RedditComment: RedditCommentProtocol, Unmarshaling, Differentiable {
     let author: String
     let body: String
     let body_html: String
-    let depth: Int
+    var depth: Int
     let ups: Int
     let score: Int
     let created: Float
@@ -213,7 +213,7 @@ final class RedditComment: RedditCommentProtocol, Unmarshaling, Differentiable {
         self.author = try object.value(for: "author")
         self.body = try object.value(for: "body")
         self.body_html = try object.value(for: "body_html")
-        self.depth = try object.value(for: "depth")
+        self.depth = (try? object.value(for: "depth")) ?? 0
         self.ups = try object.value(for: "ups")
         self.score = try object.value(for: "score")
         self.created = try object.value(for: "created")

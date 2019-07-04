@@ -49,6 +49,7 @@
 		A2A8143F2248720300A4E974 /* UserSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A8143E2248720300A4E974 /* UserSettingsModel.swift */; };
 		A2AD9CE6226ECDEA00A19C57 /* RedditModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AD9CE5226ECDEA00A19C57 /* RedditModel.swift */; };
 		A2B0098221F01E9200888476 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */; };
+		A2B25C7922CE74C9006BCB00 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B25C7822CE74C9006BCB00 /* UIApplication.swift */; };
 		A2B63F41227171EC00296DC8 /* MulticastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B63F40227171EC00296DC8 /* MulticastDelegate.swift */; };
 		A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */; };
 		A2B7C2442198C211008DB7E6 /* RedditViewItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2432198C211008DB7E6 /* RedditViewItemModel.swift */; };
@@ -112,6 +113,7 @@
 		A2A8143E2248720300A4E974 /* UserSettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsModel.swift; sourceTree = "<group>"; };
 		A2AD9CE5226ECDEA00A19C57 /* RedditModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditModel.swift; sourceTree = "<group>"; };
 		A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
+		A2B25C7822CE74C9006BCB00 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		A2B63F40227171EC00296DC8 /* MulticastDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulticastDelegate.swift; sourceTree = "<group>"; };
 		A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		A2B7C2432198C211008DB7E6 /* RedditViewItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditViewItemModel.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 				A2DCC62021EC2CAA00E08453 /* NSAttributedString.swift */,
 				A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */,
 				A2D5FC6E21F6CA220098A884 /* Date.swift */,
+				A2B25C7822CE74C9006BCB00 /* UIApplication.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -482,6 +485,7 @@
 				A249FC8D2275F9EC00666498 /* InfoView.swift in Sources */,
 				A249FC892275F99A00666498 /* PlayerView.swift in Sources */,
 				A247504621EACBE600C0F712 /* CommentsHeaderCell.swift in Sources */,
+				A2B25C7922CE74C9006BCB00 /* UIApplication.swift in Sources */,
 				A247504421EA726D00C0F712 /* TapThroughTableView.swift in Sources */,
 				A2ED75BE227539CF00AE9C26 /* VideoTableViewController.swift in Sources */,
 				A2043987227005D8007130AC /* RealmRedditModel.swift in Sources */,

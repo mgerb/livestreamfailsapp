@@ -12,7 +12,7 @@ class RedditAuthService {
     
     // non user based oauth
     let userAgent: String
-    private let non_user_client_id = "Y2NoNa4zUyLbCA"
+    private let non_user_client_id = "dkAT93TJpE0ouw"
     private let non_user_oauth_url = "https://www.reddit.com/api/v1/access_token"
     lazy var oauthClient: SessionManager = {
         let client = SessionManager()
@@ -29,7 +29,7 @@ class RedditAuthService {
     let response_type = "code"
     let state = "random_string"
     let duration = "permanent"
-    let scope = "identity%20save%20submit%20vote%20report%20read"
+    let scope = "identity%20save%20submit%20vote%20report%20read%20edit"
     let access_token_url = "https://www.reddit.com/api/v1/access_token"
     var userOauthClient: SessionManager?
     

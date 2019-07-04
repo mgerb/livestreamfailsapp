@@ -8,77 +8,64 @@
 
 import UIKit
 import SnapKit
+import Eureka
 
-class CommentsReplyViewController: UIViewController {
+class CommentsReplyViewController: FormViewController {
     
-    lazy var scrollView = UIScrollView()
-    lazy var stackView: UIStackView = {
-        let view = UIStackView()
-        view.axis = .vertical
-        view.spacing = 10
-        view.distribution = UIStackView.Distribution.fill
-        return view
-    }()
-    
-    lazy var commentBodyView = CommentsBodyView()
-    lazy var textView: UITextView = {
-        let view = UITextView()
-        view.font = Config.regularFont
-        return view
-    }()
+    var redditComment: RedditComment?
+    var commentBodyView: CommentsBodyView?
+    var section: Section?;
+    var textAreaRow: TextAreaRow?
+    var success: ((_ newComment: RedditComment) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(title: "Cancel", style: .done, target: self, action: #selector(self.cancel(sender:)))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(title: "Save", style: .done, target: self, action: #selector(self.save(sender:)))
-        self.view.backgroundColor = .white
-        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(cancelTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(saveTapped))
 
-        self.view.addSubview(self.scrollView)
-        self.stackView.addArrangedSubview(self.commentBodyView)
-        self.stackView.addArrangedSubview(self.textView)
-        self.scrollView.addSubview(self.stackView)
-        
-        self.setupConstraints()
+        form +++ Section() { section in
+                var header = HeaderFooterView<CommentsBodyView>(.class)
+                header.height = {UITableViewAutomaticDimension}
+                header.onSetupView = { view, _ in
+                    if let comment = self.redditComment {
+                        view.backgroundColor = Config.colors.white
+                        view.setRedditComment(comment: comment)
+                    }
+                }
+                section.header = header
+                self.section = section
+            }
+            <<< TextAreaRow("textAreaRow") {
+                $0.placeholder = "Reply..."
+                self.textAreaRow = $0
+            }
     }
-    
-    private func setupConstraints() {
-//        self.scrollView.backgroundColor = .red
-        self.stackView.backgroundColor = .blue
-        self.scrollView.snp.makeConstraints { make in
-//            make.edges.equalTo(self.view.safeAreaLayoutGuide)
-            make.edges.equalToSuperview()
-        }
-        
-        self.stackView.snp.makeConstraints { make in
-            make.height.equalToSuperview()
-            make.left.right.equalTo(self.view)
-//            make.top.bottom.equalTo(self.scrollView)
-//            make.left.right.equalTo(self.view)
-        }
-        
-        self.textView.snp.makeConstraints { make in
-            make.height.greaterThanOrEqualTo(20)
-        }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.textAreaRow?.cell.textView.becomeFirstResponder()
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        print("did layout")
-//        print(self.commentBodyView.frame.height)
-//        self.scrollView.contentSize = CGSize(width: self.scrollView.frame.width, height: self.view.frame.height + self.commentBodyView.frame.height)
-//    }
     
     func setRedditComment(comment: RedditComment) {
-        self.commentBodyView.setRedditComment(comment: comment)
-        
+        self.redditComment = comment
     }
     
-    @objc func cancel(sender: UIBarButtonItem) {
+    @objc func cancelTapped() {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @objc func save(sender: UIBarButtonItem) {
-        self.dismiss(animated: true, completion: nil)
+    @objc func saveTapped() {
+        if let text = self.textAreaRow?.cell.textView.text, let comment = self.redditComment {
+            RedditService.shared.comment(name: comment.name, text: text, completion: { success, newComment in
+                if success, let c = newComment {
+                    // depth isn't returned so we need to set based on parent
+                    newComment?.depth = comment.depth + 1
+                    self.success?(c)
+                    self.dismiss(animated: true, completion: nil)
+                } else {
+                    MyNavigation.shared.presentAlert(title: "Error", message: "Unable to leave a comment at this time.")
+                }
+            })
+        }
     }
 }
