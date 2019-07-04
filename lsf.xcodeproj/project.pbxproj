@@ -50,6 +50,7 @@
 		A2AD9CE6226ECDEA00A19C57 /* RedditModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2AD9CE5226ECDEA00A19C57 /* RedditModel.swift */; };
 		A2B0098221F01E9200888476 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */; };
 		A2B25C7922CE74C9006BCB00 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B25C7822CE74C9006BCB00 /* UIApplication.swift */; };
+		A2B25C7B22CEA486006BCB00 /* MyLoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B25C7A22CEA486006BCB00 /* MyLoadingViewController.swift */; };
 		A2B63F41227171EC00296DC8 /* MulticastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B63F40227171EC00296DC8 /* MulticastDelegate.swift */; };
 		A2B7C2422198A616008DB7E6 /* MyTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */; };
 		A2B7C2442198C211008DB7E6 /* RedditViewItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B7C2432198C211008DB7E6 /* RedditViewItemModel.swift */; };
@@ -114,6 +115,7 @@
 		A2AD9CE5226ECDEA00A19C57 /* RedditModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditModel.swift; sourceTree = "<group>"; };
 		A2B0098121F01E9200888476 /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
 		A2B25C7822CE74C9006BCB00 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
+		A2B25C7A22CEA486006BCB00 /* MyLoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLoadingViewController.swift; sourceTree = "<group>"; };
 		A2B63F40227171EC00296DC8 /* MulticastDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulticastDelegate.swift; sourceTree = "<group>"; };
 		A2B7C2412198A616008DB7E6 /* MyTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		A2B7C2432198C211008DB7E6 /* RedditViewItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditViewItemModel.swift; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				A200E49222CAF65B00BC5A66 /* AlertControllers */,
 				A27E877A21E10394002501F1 /* Main */,
 				A27E877B21E10474002501F1 /* Settings */,
+				A2B25C7A22CEA486006BCB00 /* MyLoadingViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -528,6 +531,7 @@
 				A25285B02165955800DCA537 /* UIScrollView.swift in Sources */,
 				A242E87C21E2867D004A8026 /* CommentsViewCell.swift in Sources */,
 				A249FC862275F6DB00666498 /* SortBarTableViewHeaderCell.swift in Sources */,
+				A2B25C7B22CEA486006BCB00 /* MyLoadingViewController.swift in Sources */,
 				A24818C0217815C8005B8819 /* Util.swift in Sources */,
 				A2D5FC6F21F6CA220098A884 /* Date.swift in Sources */,
 				A2B63F41227171EC00296DC8 /* MulticastDelegate.swift in Sources */,

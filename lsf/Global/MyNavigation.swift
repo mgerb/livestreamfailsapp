@@ -13,7 +13,7 @@ import SafariServices
 
 class MyNavigation {
     public static let shared = MyNavigation()
-    private var alertController: UIAlertController?
+    private var alertController: UIViewController?
     
     let rootViewController = {
         return UIApplication.shared.keyWindow?.rootViewController
@@ -56,14 +56,7 @@ class MyNavigation {
 
     func showLoadingAlert() {
         self.hideAlert {
-            self.alertController = UIAlertController(title: nil, message: "Loading...", preferredStyle: .alert)
-            
-            let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
-            loadingIndicator.hidesWhenStopped = true
-            loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorView.Style.gray
-            loadingIndicator.startAnimating();
-            
-            self.alertController!.view.addSubview(loadingIndicator)
+            self.alertController = MyLoadingViewController()
             self.topViewController()?.present(self.alertController!, animated: true, completion: nil)
         }
     }

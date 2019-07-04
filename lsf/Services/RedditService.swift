@@ -293,21 +293,24 @@ extension RedditService {
             "text": text,
             "api_type": "json",
         ]
+        MyNavigation.shared.showLoadingAlert()
         self.authenticatedPost(path: "/api/comment", params: params, completion: { success, data in
-            do {
-                if let data = data {
-                    let d = try JSONParser.JSONObjectWithData(data)
-                    let things: [MarshalDictionary] = try d.value(for: "json").value(for: "data").value(for: "things")
-                    let commentData: JSONObject = try things[0].value(for: "data")
-                    let newComment = try RedditComment(object: commentData)
-                    newComment.renderHtml()
-                    completion?(success, newComment)
-                } else {
+            MyNavigation.shared.hideAlert {
+                do {
+                    if let data = data {
+                        let d = try JSONParser.JSONObjectWithData(data)
+                        let things: [MarshalDictionary] = try d.value(for: "json").value(for: "data").value(for: "things")
+                        let commentData: JSONObject = try things[0].value(for: "data")
+                        let newComment = try RedditComment(object: commentData)
+                        newComment.renderHtml()
+                        completion?(success, newComment)
+                    } else {
+                        completion?(false, nil)
+                    }
+                } catch {
+                    print(error)
                     completion?(false, nil)
                 }
-            } catch {
-                print(error)
-                completion?(false, nil)
             }
         })
     }
@@ -317,25 +320,25 @@ extension RedditService {
         let params: [String: Any] = [
             "id": name,
         ]
+        MyNavigation.shared.showLoadingAlert()
         self.authenticatedPost(path: "/api/del", params: params, completion: { success, _ in
-            completion?(success)
+            MyNavigation.shared.hideAlert {
+                completion?(success)
+            }
         })
     }
 
     // path example: /api/comment
     private func authenticatedPost(path: String, params: [String: Any], completion: ((_ success: Bool, _ data: Data?) -> Void)?) {
         if let client = self.redditAuth.userOauthClient {
-            MyNavigation.shared.showLoadingAlert()
             client.request("\(self.oauthV1Url)\(path)", method: .post, parameters: params, encoding: URLEncoding.httpBody, headers: nil)
                 .validate().responseData{ response in
-                    MyNavigation.shared.hideAlert {
-                        switch response.result {
-                        case .success(let data):
-                            completion?(true, data)
-                        case .failure(let err):
-                            print(err)
-                            completion?(false, nil)
-                        }
+                    switch response.result {
+                    case .success(let data):
+                        completion?(true, data)
+                    case .failure(let err):
+                        print(err)
+                        completion?(false, nil)
                     }
             }
         } else {
