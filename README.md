@@ -1,6 +1,6 @@
 # Live Stream Fails
 
-This app was development in my attemps to learn native iOS app development with Swift. It was never released due to Apple's
+This app was developed in my attempts to learn native iOS app development with Swift. It was never released due to Apple's
 app store rejections.
 
 See more info here:
